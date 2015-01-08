@@ -20,7 +20,7 @@
 #include <vector>
 
 #define NB_OBSTACLE 15
-#define NB_FLOCK 10
+#define NB_FLOCK 1
 
 #define COLOR_PURSUER makecol(0,255,0)
 #define COLOR_FLOCK   makecol(255,0,0)
@@ -99,12 +99,11 @@ int main(void)
     FPSHandler *m_Fps = new FPSHandler(AIMED_FPS);
 
     //Game loop
-    int time = clock();
     BITMAP *buffer= create_bitmap(SCREEN_W, SCREEN_H);
     while(!key[KEY_ESC])
     {
         clear(buffer);
-        int timeelapse = 3.5;//clock() - time;
+        int timeelapse = 3.5;
 
         //Wall and info display
         rectfill(buffer,5,25,SCREEN_W-5,SCREEN_H-5, makecol(255,255,255));
@@ -115,7 +114,7 @@ int main(void)
         textprintf(buffer,font,90,10,makecol(255,255,255),"Pursue");
         circlefill(buffer,150,12,5,COLOR_HIDER);
         textprintf(buffer,font,160,10,makecol(255,255,255),"Hide");
-		textprintf(buffer, font, 200, 10, makecol(255,255,255),"FPS: %f - %d %% - Rest: %d",m_Fps->getFrameRate(),m_Fps->getPrecision(),m_Fps->getRestTime());
+		textprintf(buffer, font, 200, 10, makecol(255,255,255),"FPS: %f - Rest: %d",m_Fps->getFrameRate(),m_Fps->getRestTime());
 
         //Obstacle display
         for (std::vector<Obstacle>::iterator it = obstacles.begin(); it != obstacles.end(); it++)
@@ -140,11 +139,8 @@ int main(void)
             blit (buffer, screen, 0, 0, 0, 0,SCREEN_W-1,SCREEN_H-1);
         release_screen();
 
-        //temporisation
-        time = clock();
-
         //Adjust fps
-        m_Fps->Update();
+        m_Fps->update();
 
         rest(m_Fps->getRestTime());
     }
