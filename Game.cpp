@@ -52,9 +52,8 @@ void Game::exit()
 
 void Game::play()
 {
-	Player player(100,100);
 	Joystick joystick;
-	joystick.init();
+	Player player(100,100,&joystick);		 
 
 	while(!key[KEY_ESC])
 	{
@@ -65,13 +64,6 @@ void Game::play()
 		m_pMap->draw(m_pScreenBuffer);
 		player.draw(m_pScreenBuffer);
 
-		poll_joystick();//joy[0].button[1], joy[0].button[2]
-		float a=joy[0].button[8].b;
-		float b=joy[0].button[9].b;
-		float c=0;//joy[0].stick[0].axis[1].pos;
-		float d=0;//joy[0].stick[0].axis[1].d2;
-		textprintf(m_pScreenBuffer, font, 200, 10, makecol(255,255,255),
-			"1:%f - 2:%f - 3:%f - 4:%f ",a,b,c,d);
 
 		//Buffer's bliting on screen
 		acquire_screen();

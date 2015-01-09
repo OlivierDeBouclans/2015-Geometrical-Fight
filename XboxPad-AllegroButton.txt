@@ -1,3 +1,5 @@
+
+BUTTON:
 A:0
 B:1
 X:2
@@ -6,3 +8,9 @@ LB:4
 RB:5
 Back:6
 Start:7
+Stick left:8
+Stick right:9
+
+STICKS:
+Left:0 (x:0,y=1;RT&LT=2)
+Pad:1(x:0,y=1)

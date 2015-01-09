@@ -16,8 +16,8 @@
 #include "Vector2D.h"
 
 #define DEFAULT_MASS 1
-#define DEFAULT_MAX_SPEED 1
-#define DEFAULT_MAX_FORCE 1
+#define DEFAULT_MAX_SPEED 100
+#define DEFAULT_MAX_FORCE 100
 
 class MovingEntity: public Entity
 {
