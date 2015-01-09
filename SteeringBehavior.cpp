@@ -134,7 +134,7 @@ Vector2D SteeringBehavior::ObstacleAvoidance()
     for (std::vector<Obstacle>::iterator it = m_Obstacles->begin(); it != m_Obstacles->end(); it++)
     {
         Vector2D ToTarget = (*it).GetCoor() - m_owner->GetCoor();
-        double distance = ToTarget.Norm()-(*it).GetRadius();
+        double distance = ToTarget.Norm()-(*it).getRadius();
 
         if( distance < DetectionBox)
         {
@@ -144,7 +144,7 @@ Vector2D SteeringBehavior::ObstacleAvoidance()
 
             if( x >= 0)
             {
-                double expandedRadius = (*it).GetRadius();
+                double expandedRadius = (*it).getRadius();
 
                 if( y*y < expandedRadius*expandedRadius)
                 {
@@ -171,7 +171,7 @@ Vector2D SteeringBehavior::ObstacleAvoidance()
         double multiplier = 0.001 + 0.001*(DetectionBox - LocaleCoor.x) / DetectionBox;
         double BrakingWeight = 1;
 
-        Vector2D SteeringForceLocal( BrakingWeight / (ClosestObject.GetRadius() - LocaleCoor.x+0.0000001),(ClosestObject.GetRadius() - LocaleCoor.y) * multiplier);
+        Vector2D SteeringForceLocal( BrakingWeight / (ClosestObject.getRadius() - LocaleCoor.x+0.0000001),(ClosestObject.getRadius() - LocaleCoor.y) * multiplier);
 
         return SteeringForceLocal.VectorToGlobalSpace(m_owner->GetHead(),m_owner->GetSide());
     }
@@ -282,7 +282,7 @@ Vector2D SteeringBehavior::Hide()
     for (std::vector<Obstacle>::iterator it = m_Obstacles->begin(); it != m_Obstacles->end(); it++)
     {
         Vector2D ToTarget = ((*it).GetCoor() - m_HideEntity->GetCoor()).Normalize();
-        Point2D HidePoint = (*it).GetCoor() + ToTarget*( (*it).GetRadius() + HideDistance);
+        Point2D HidePoint = (*it).GetCoor() + ToTarget*( (*it).getRadius() + HideDistance);
 
         double distance = (m_owner->GetCoor() - HidePoint).NormSquared();
         if( distance < MinDistance)
@@ -356,7 +356,7 @@ Vector2D SteeringBehavior::Separation()
             //scale the force inversely proportional to the agent's distance
             //from its neighbor.
             double distance=ToAgent.NormSquared();
-            if( distance < (Radius+(*it)->GetRadius())*(Radius+(*it)->GetRadius()))
+            if( distance < (Radius+(*it)->getRadius())*(Radius+(*it)->getRadius()))
                     SteeringForce += ToAgent / distance;
         }
     }
@@ -381,7 +381,7 @@ Vector2D SteeringBehavior::Alignment()
             Vector2D ToAgent = m_owner->GetCoor() - (*it)->GetCoor();
 
             double distance=ToAgent.NormSquared();
-            if( distance < (Radius+(*it)->GetRadius())*(Radius+(*it)->GetRadius()))
+            if( distance < (Radius+(*it)->getRadius())*(Radius+(*it)->getRadius()))
             {
                 AverageHeading +=(*it)->GetHead();
                 NeighborCount++;
@@ -414,7 +414,7 @@ Vector2D SteeringBehavior::Cohesion()
             Vector2D ToAgent = m_owner->GetCoor() - (*it)->GetCoor();
 
             double distance=ToAgent.NormSquared();
-            if( distance < (Radius+(*it)->GetRadius())*(Radius+(*it)->GetRadius()))
+            if( distance < (Radius+(*it)->getRadius())*(Radius+(*it)->getRadius()))
             {
                 CenterOfMass = CenterOfMass + ( (*it)->GetCoor() - Point2D(0,0) );
                 NeighborCount++;

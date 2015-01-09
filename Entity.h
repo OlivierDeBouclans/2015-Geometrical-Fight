@@ -11,43 +11,29 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "Vector2D.h"
-#include "Allegro.h"
+#include "allegro.h"
+
+#define DEFAULT_COLOR makecol(128,128,128)
+#define DEFAULT_RADIUS 15
+#define DEFAULT_X -1
+#define DEFAULT_Y -1
 
 class Entity
 {
     public:
         //Constructor
-        Entity() {}
+		Entity(int X=DEFAULT_X, int Y=DEFAULT_Y);
         //Destructor
-        ~Entity() {};
+        ~Entity() {}
 
-        //Getter
-        const int& GetColor()    const { return m_color;  }
-        const int& Getx()        const { return m_coor.x; }
-        const int& Gety()        const { return m_coor.y; }
-        const int& GetRadius()   const { return m_radius; }
-        const Point2D& GetCoor() const { return m_coor;   }
-
-        //Setter
-        void SetColor(int val)    { m_color  = val; }
-        void Setx(int val)        { m_coor.x = val; }
-        void Sety(int val)        { m_coor.y = val; }
-        void SetRadius(int val)   { m_radius = val; }
-        void PlaceAt(const Point2D& val) { m_coor   = val; }
-
-        //Update the entity
-        virtual void Update(double Dt)=0;
         //Render the entity on the target
-        virtual void Draw( BITMAP * target)=0;
+        virtual void draw(BITMAP* target)=0;
 
-    protected:
-        Point2D m_coor; //coordinate
-        int m_color;    //color
-        int m_radius;   //colision radius
-
-    private:
-
+		//public attribute
+        int x; //x coordinate
+		int y; //x coordinate
+        int color;  //color
+		int radius; //collision radius
 };
 
 #endif // ENTITY_H
