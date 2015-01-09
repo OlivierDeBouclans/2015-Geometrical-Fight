@@ -28,8 +28,6 @@ void Game::init()
 	srand(time(NULL));	 //init random
 	allegro_init();
 	install_keyboard();
-	install_joystick(JOY_TYPE_AUTODETECT);
-
 
 	//Init screen
 	set_color_depth(32);
@@ -65,7 +63,7 @@ void Game::play()
 		player.draw(m_pScreenBuffer);
 
 
-		//Buffer's blitting on screen
+		//Buffer's bliting on screen
 		acquire_screen();
 			blit (m_pScreenBuffer, screen, 0, 0, 0, 0,SCREEN_W-1,SCREEN_H-1);
 		release_screen();
