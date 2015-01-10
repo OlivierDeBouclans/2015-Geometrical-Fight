@@ -28,21 +28,22 @@ void Player::draw(BITMAP* target)
 
 	triangle(target, ( (int) p3.x), ( (int) p3.y), ( (int) p1.x ), ( (int) p1.y), ( (int) p2.x ), ( (int) p2.y), color);
 	//rectfill(target,5,25,SCREEN_W-5,SCREEN_H-5, makecol(0,255,0));
-	textprintf(target, font, 200, 10, makecol(255,255,255),"%d - %d",m_pJoystick->stick_x,m_pJoystick->stick_y);
+	textprintf(target, font, 200, 10, makecol(255,255,255),"%d - %d - %f - %f",
+		m_pJoystick->stick_x,m_pJoystick->stick_y,vSpeed.x,vSpeed.y);
 }
 
 Vector2D Player::getSteeringForce()
 {
-	if(!m_pJoystick)
-		return Vector2D(0,0);
+	//if(!m_pJoystick)
+	//	return Vector2D(0,0);
 
 	m_pJoystick->update();
-
-	float x=m_pJoystick->stick_x;
-	float y=m_pJoystick->stick_y;
+																				   
+	int x=m_pJoystick->stick_x;
+	int y=m_pJoystick->stick_y;
 
 	Vector2D steeringForce=Vector2D(1,0)*x+Vector2D(0,1)*y;
 	steeringForce.Normalize();
 
-	return steeringForce/1000;
+	return steeringForce-(vSpeed*vSpeed.Norm());
 }
