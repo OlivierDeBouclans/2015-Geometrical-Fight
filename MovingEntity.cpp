@@ -30,9 +30,9 @@ void MovingEntity::update(double Dt)
 	vSpeed.Truncate(maxSpeed);
 
 	//update coordinate
-	Point2D coor=Point2D(x,y)+vSpeed*Dt;
-	x=coor.x;
-	y=coor.y;
+	Vector2D mouvement=vSpeed*Dt;
+	x+=mouvement.x<0?ceil(mouvement.x):floor(mouvement.x);
+	y+=mouvement.y<0?ceil(mouvement.y):floor(mouvement.y);
 
 	//Change orientation if speed>0
 	double n=vSpeed.NormSquared();

@@ -34,16 +34,16 @@ void Player::draw(BITMAP* target)
 
 Vector2D Player::getSteeringForce()
 {
-	//if(!m_pJoystick)
-	//	return Vector2D(0,0);
+	if(!m_pJoystick)
+		return Vector2D(0,0);
 
 	m_pJoystick->update();
 																				   
-	int x=m_pJoystick->stick_x;
-	int y=m_pJoystick->stick_y;
+	const int& x=m_pJoystick->stick_x;
+	const int& y=m_pJoystick->stick_y;
 
 	Vector2D steeringForce=Vector2D(1,0)*x+Vector2D(0,1)*y;
 	steeringForce.Normalize();
 
-	return steeringForce-(vSpeed*vSpeed.Norm());
+	return (steeringForce*2)-(vSpeed*vSpeed.Norm()*2);
 }
