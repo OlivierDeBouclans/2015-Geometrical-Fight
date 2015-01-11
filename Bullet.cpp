@@ -30,13 +30,16 @@ void Bullet::draw(BITMAP* target) const
 	int poly[8]={p1.x,p1.y,p2.x,p2.y,p3.x,p3.y,p4.x,p4.y};
 
 	polygon(target,4,poly,color);
-	Rect m_boundingRect=boundingRect();
-	rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
+
+	#ifdef DRAW_BOUNDING_RECT
+		Rect m_boundingRect=boundingRect();
+		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
+	#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-Vector2D Bullet::getSteeringForce() const
+Vector2D Bullet::getSteeringForce()
 {
 	return Vector2D(0,0);	
 }

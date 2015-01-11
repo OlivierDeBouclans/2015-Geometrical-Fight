@@ -10,57 +10,36 @@
 
 #include "SteeringBehavior.h"
 #include "MovingEntity.h"
+#include "Macros.h"
 
 #include <iostream>
 
-#define MAX_DOUBLE 99999999999999999
-
-#define FLEE_DISTANCE 100
-
-#define ARRIVE_RADIUS 300
-#define ARRIVE_BRAKE  10000
-
-#define WANDER_JITER 3.14/64
-
-#define OBSTACLE_MINDETECTION 100
-
-#define WALL_FEELERLENGTH 10
-
-#define HIDE_DISTANCE 50
-#define HIDE_DISTANCETOFLEE 5000
-
-#define FOLLOW_DISTANCE 50
-
-#define SEPARATION_RADIUS 100
-#define ALIGNMENT_RADIUS 100
-#define COHESION_RADIUS 100
-
 Vector2D SteeringBehavior::Seek(Point2D target)
 {
-    Vector2D desiredSpeed = (target - m_owner->GetCoor());
-    desiredSpeed = desiredSpeed.Normalize()* m_owner->GetMaxSpeed();
+    Vector2D desiredSpeed = (target - m_owner->getCoor());
+    desiredSpeed = desiredSpeed.Normalize()* m_owner->maxSpeed;
 
-    return desiredSpeed - m_owner->GetSpeed();
+    return desiredSpeed - m_owner->vSpeed;
 }
 
 Vector2D SteeringBehavior::Flee(Point2D target)
 {
     double FleeDistanceSquared = FLEE_DISTANCE*FLEE_DISTANCE;
-    Vector2D desiredSpeed = (m_owner->GetCoor() - target);
+    Vector2D desiredSpeed = (m_owner->getCoor() - target);
 
     if(desiredSpeed.NormSquared() > FleeDistanceSquared)
         return Vector2D(0,0);
 
-    desiredSpeed = desiredSpeed.Normalize()* m_owner->GetMaxSpeed();
+    desiredSpeed = desiredSpeed.Normalize()* m_owner->maxSpeed;
 
-    return desiredSpeed - m_owner->GetSpeed();
+    return desiredSpeed - m_owner->vSpeed;
 }
 
 Vector2D SteeringBehavior::Arrive(Point2D target)
 {
     double radius = ARRIVE_RADIUS;
 
-    Vector2D Totarget = target - m_owner->GetCoor();
+    Vector2D Totarget = target - m_owner->getCoor();
     double distance = Totarget.Norm();
 
     if( distance > radius )
@@ -68,37 +47,37 @@ Vector2D SteeringBehavior::Arrive(Point2D target)
 
     double Speed = distance / ARRIVE_BRAKE;
 
-    if(Speed > m_owner->GetMaxSpeed())
-        Speed = m_owner->GetMaxSpeed();
+    if(Speed > m_owner->maxSpeed)
+        Speed = m_owner->maxSpeed;
 
     Vector2D desiredSpeed = Totarget * Speed;
 
-    return desiredSpeed - m_owner->GetSpeed() ;
+    return desiredSpeed - m_owner->vSpeed ;
 }
 
 Vector2D SteeringBehavior::Pursue()
 {
-    Vector2D ToTarget = m_PursueEntity->GetCoor() - m_owner->GetCoor();
+    Vector2D ToTarget = m_PursueEntity->getCoor() - m_owner->getCoor();
 
-    double RelativeHeading = m_owner->GetHead() * m_PursueEntity->GetHead();
+    double RelativeHeading = m_owner->vHead * m_PursueEntity->vHead;
 
     //if ahead just go the the target position
-    if ((ToTarget * m_owner->GetHead() > 0) && (RelativeHeading < -0.95)) //acos(0.95)=18 degs
-        return Seek(m_PursueEntity->GetCoor());
+    if ((ToTarget * m_owner->vHead > 0) && (RelativeHeading < -0.95)) //acos(0.95)=18 degs
+        return Seek(m_PursueEntity->getCoor());
 
 
-    double LookAheadTime = ToTarget.Norm()*1.5 / (m_owner->GetMaxSpeed() + m_PursueEntity->GetSpeed().Norm());
+    double LookAheadTime = ToTarget.Norm()*1.5 / (m_owner->maxSpeed + m_PursueEntity->vSpeed.Norm());
     //now seek to the predicted future position of the evader
-    return Seek(m_PursueEntity->GetCoor() + m_PursueEntity->GetSpeed() * LookAheadTime);
+    return Seek(m_PursueEntity->getCoor() + m_PursueEntity->vSpeed * LookAheadTime);
 }
 
 Vector2D SteeringBehavior::Evade()
 {
-    Vector2D ToTarget = m_EvadeEntity->GetCoor() - m_owner->GetCoor();
+    Vector2D ToTarget = m_EvadeEntity->getCoor() - m_owner->getCoor();
 
-    double LookAheadTime = ToTarget.Norm() / (m_owner->GetMaxSpeed() + m_EvadeEntity->GetSpeed().Norm());
+    double LookAheadTime = ToTarget.Norm() / (m_owner->maxSpeed + m_EvadeEntity->vSpeed.Norm());
     //now seek to the predicted future position of the evader
-    return Flee(m_EvadeEntity->GetCoor() + m_EvadeEntity->GetSpeed() * LookAheadTime);
+    return Flee(m_EvadeEntity->getCoor() + m_EvadeEntity->vSpeed * LookAheadTime);
 }
 
 Vector2D SteeringBehavior::Wander()
@@ -108,88 +87,88 @@ Vector2D SteeringBehavior::Wander()
 
     WanderAngle += jitter*((rand()%1000)-500)/500;
 
-    Point2D m_WanderPoint(m_owner->GetCoor()+m_owner->GetHead()*m_WanderDistance+ m_owner->GetSide()*m_WanderRadius*sin(WanderAngle)+m_owner->GetHead()*m_WanderRadius*cos(WanderAngle));
+    Point2D m_WanderPoint(m_owner->getCoor()+m_owner->vHead*m_WanderDistance+ m_owner->vSide*m_WanderRadius*sin(WanderAngle)+m_owner->vHead*m_WanderRadius*cos(WanderAngle));
 
     return Seek(m_WanderPoint);
 }
 
-Vector2D SteeringBehavior::ObstacleAvoidance()
-{
-    double MinDetection = OBSTACLE_MINDETECTION;
-    double DetectionBox = MinDetection + MinDetection*m_owner->GetSpeed().NormSquared() / m_owner->GetMaxSpeed()*m_owner->GetMaxSpeed();
-
-    /*double locx = DetectionBox;
-    double locy = m_owner->GetRadius();
-
-    Point2D p = m_owner->GetCoor() + m_owner->GetHead()*locx + m_owner->GetSide()*locy;
-    Point2D p1 = m_owner->GetCoor() + m_owner->GetSide()*locy;
-    Point2D p2 = m_owner->GetCoor() + m_owner->GetHead()*locx;
-    int point[8]={m_owner->GetCoor().x,m_owner->GetCoor().y,p1.x,p1.y,p.x,p.y,p2.x,p2.y};
-    polygon(buffer, 4, point, makecol(0,255,0));*/
-
-    Obstacle ClosestObject(0,0,0);
-    double MinDistance = MAX_DOUBLE;
-    Point2D LocaleCoor(0,0);
-
-    for (std::vector<Obstacle>::iterator it = m_Obstacles->begin(); it != m_Obstacles->end(); it++)
-    {
-        Vector2D ToTarget = (*it).GetCoor() - m_owner->GetCoor();
-        double distance = ToTarget.Norm()-(*it).getRadius();
-
-        if( distance < DetectionBox)
-        {
-            Vector2D p = ToTarget.VectorToLocalSpace(m_owner->GetHead(),m_owner->GetSide());
-            int x= p.x;
-            int y= p.y;
-
-            if( x >= 0)
-            {
-                double expandedRadius = (*it).getRadius();
-
-                if( y*y < expandedRadius*expandedRadius)
-                {
-                    double SqrtPart = sqrt(expandedRadius*expandedRadius - y*y);
-
-                    double ip = x - SqrtPart;
-                    if (ip <= 0)
-                        ip = x + SqrtPart;
-
-                    if(ip < MinDistance)
-                    {
-                        MinDistance = ip;
-                        ClosestObject = (*it);
-                        LocaleCoor.x=x;
-                        LocaleCoor.y=y;
-                    }
-                }
-            }
-        }
-    }
-
-    if( MinDistance < DetectionBox)
-    {
-        double multiplier = 0.001 + 0.001*(DetectionBox - LocaleCoor.x) / DetectionBox;
-        double BrakingWeight = 1;
-
-        Vector2D SteeringForceLocal( BrakingWeight / (ClosestObject.getRadius() - LocaleCoor.x+0.0000001),(ClosestObject.getRadius() - LocaleCoor.y) * multiplier);
-
-        return SteeringForceLocal.VectorToGlobalSpace(m_owner->GetHead(),m_owner->GetSide());
-    }
-
-    return Vector2D(0,0);
-}
+//Vector2D SteeringBehavior::ObstacleAvoidance()
+//{
+//    double MinDetection = OBSTACLE_MINDETECTION;
+//    double DetectionBox = MinDetection + MinDetection*m_owner->vSpeed.NormSquared() / m_owner->maxSpeed*m_owner->maxSpeed;
+//
+//    /*double locx = DetectionBox;
+//    double locy = m_owner->radius;
+//
+//    Point2D p = m_owner->getCoor() + m_owner->vHead*locx + m_owner->vSide*locy;
+//    Point2D p1 = m_owner->getCoor() + m_owner->vSide*locy;
+//    Point2D p2 = m_owner->getCoor() + m_owner->vHead*locx;
+//    int point[8]={m_owner->getCoor().x,m_owner->getCoor().y,p1.x,p1.y,p.x,p.y,p2.x,p2.y};
+//    polygon(buffer, 4, point, makecol(0,255,0));*/
+//
+//    Obstacle ClosestObject(0,0,0);
+//    double MinDistance = MAX_DOUBLE;
+//    Point2D LocaleCoor(0,0);
+//
+//    for (std::vector<Obstacle>::iterator it = m_Obstacles->begin(); it != m_Obstacles->end(); it++)
+//    {
+//        Vector2D ToTarget = (*it).getCoor() - m_owner->getCoor();
+//        double distance = ToTarget.Norm()-(*it).radius;
+//
+//        if( distance < DetectionBox)
+//        {
+//            Vector2D p = ToTarget.VectorToLocalSpace(m_owner->vHead,m_owner->vSide);
+//            int x= p.x;
+//            int y= p.y;
+//
+//            if( x >= 0)
+//            {
+//                double expandedRadius = (*it).radius;
+//
+//                if( y*y < expandedRadius*expandedRadius)
+//                {
+//                    double SqrtPart = sqrt(expandedRadius*expandedRadius - y*y);
+//
+//                    double ip = x - SqrtPart;
+//                    if (ip <= 0)
+//                        ip = x + SqrtPart;
+//
+//                    if(ip < MinDistance)
+//                    {
+//                        MinDistance = ip;
+//                        ClosestObject = (*it);
+//                        LocaleCoor.x=x;
+//                        LocaleCoor.y=y;
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    if( MinDistance < DetectionBox)
+//    {
+//        double multiplier = 0.001 + 0.001*(DetectionBox - LocaleCoor.x) / DetectionBox;
+//        double BrakingWeight = 1;
+//
+//        Vector2D SteeringForceLocal( BrakingWeight / (ClosestObject.radius - LocaleCoor.x+0.0000001),(ClosestObject.radius - LocaleCoor.y) * multiplier);
+//
+//        return SteeringForceLocal.VectorToGlobalSpace(m_owner->vHead,m_owner->vSide);
+//    }
+//
+//    return Vector2D(0,0);
+//}
 
 Vector2D SteeringBehavior::WallAvoidance()
 {
     double FeelersLength = WALL_FEELERLENGTH;
     Point2D Feelers[3];
-    Feelers[0]=m_owner->GetCoor() + m_owner->GetHead()*FeelersLength - m_owner->GetSide()*FeelersLength;
-    Feelers[1]=m_owner->GetCoor() + m_owner->GetHead()*2*FeelersLength;
-    Feelers[2]=m_owner->GetCoor() + m_owner->GetHead()*FeelersLength + m_owner->GetSide()*FeelersLength;
+    Feelers[0]=m_owner->getCoor() + m_owner->vHead*FeelersLength - m_owner->vSide*FeelersLength;
+    Feelers[1]=m_owner->getCoor() + m_owner->vHead*2*FeelersLength;
+    Feelers[2]=m_owner->getCoor() + m_owner->vHead*FeelersLength + m_owner->vSide*FeelersLength;
 
-   /* line(buffer,m_owner->GetCoor().x,m_owner->GetCoor().y,Feelers[0].x,Feelers[0].y,makecol(255,255,255));
-    line(buffer,m_owner->GetCoor().x,m_owner->GetCoor().y,Feelers[1].x,Feelers[1].y,makecol(255,255,255));
-    line(buffer,m_owner->GetCoor().x,m_owner->GetCoor().y,Feelers[2].x,Feelers[2].y,makecol(255,255,255));*/
+   /* line(buffer,m_owner->getCoor().x,m_owner->getCoor().y,Feelers[0].x,Feelers[0].y,makecol(255,255,255));
+    line(buffer,m_owner->getCoor().x,m_owner->getCoor().y,Feelers[1].x,Feelers[1].y,makecol(255,255,255));
+    line(buffer,m_owner->getCoor().x,m_owner->getCoor().y,Feelers[2].x,Feelers[2].y,makecol(255,255,255));*/
 
     /** WALL SPECIFIC **/
     Point2D ScreenTL(10,30);
@@ -222,9 +201,9 @@ Vector2D SteeringBehavior::WallAvoidance()
         //run through each wall checking for any intersection points
         for (int w=0; w<4; w++)
         {
-            if (IP.Segment2segment(m_owner->GetCoor(),Feelers[flr],Walls[w][0], Walls[w][1]))
+            if (IP.Segment2segment(m_owner->getCoor(),Feelers[flr],Walls[w][0], Walls[w][1]))
             {
-                DistToThisIP = (m_owner->GetCoor() - IP).Norm();
+                DistToThisIP = (m_owner->getCoor() - IP).Norm();
                 //is this the closest found so far? If so keep a record
                 if (DistToThisIP < DistToClosestIP)
                 {
@@ -257,14 +236,14 @@ Vector2D SteeringBehavior::Interpose()
     //first we need to figure out where the two agents are going to be at
     //time T in the future. This is approximated by determining the time
     //taken to reach the midway point at the current time at max speed.
-    Vector2D MidPoint = ((m_InterposeEntity1->GetCoor()-Point2D(0,0)) + (m_InterposeEntity2->GetCoor()-Point2D(0,0))) / 2.0;
+    Vector2D MidPoint = ((m_InterposeEntity1->getCoor()-Point2D(0,0)) + (m_InterposeEntity2->getCoor()-Point2D(0,0))) / 2.0;
 
-    double TimeToReachMidPoint = (m_owner->GetCoor() - Point2D(MidPoint.x,MidPoint.y)).Norm() /m_owner->GetMaxSpeed();
+    double TimeToReachMidPoint = (m_owner->getCoor() - Point2D(MidPoint.x,MidPoint.y)).Norm() /m_owner->maxSpeed;
 
     //now we have T, we assume that agent A and agent B will continue on a
     //straight trajectory and extrapolate to get their future positions
-    Vector2D APos = (m_InterposeEntity1->GetCoor()-Point2D(0,0)) + m_InterposeEntity1->GetSpeed() * TimeToReachMidPoint;
-    Vector2D BPos = (m_InterposeEntity2->GetCoor()-Point2D(0,0)) + m_InterposeEntity2->GetSpeed() * TimeToReachMidPoint;
+    Vector2D APos = (m_InterposeEntity1->getCoor()-Point2D(0,0)) + m_InterposeEntity1->vSpeed * TimeToReachMidPoint;
+    Vector2D BPos = (m_InterposeEntity2->getCoor()-Point2D(0,0)) + m_InterposeEntity2->vSpeed * TimeToReachMidPoint;
     //calculate the midpoint of these predicted positions
     MidPoint = (APos + BPos) / 2.0;
 
@@ -272,34 +251,34 @@ Vector2D SteeringBehavior::Interpose()
     return Arrive(Point2D(MidPoint.x,MidPoint.y));
 }
 
-Vector2D SteeringBehavior::Hide()
-{
-    double HideDistance = HIDE_DISTANCE;
-
-    double MinDistance = MAX_DOUBLE;
-    Point2D ClosestHidePoint(0,0);
-
-    for (std::vector<Obstacle>::iterator it = m_Obstacles->begin(); it != m_Obstacles->end(); it++)
-    {
-        Vector2D ToTarget = ((*it).GetCoor() - m_HideEntity->GetCoor()).Normalize();
-        Point2D HidePoint = (*it).GetCoor() + ToTarget*( (*it).getRadius() + HideDistance);
-
-        double distance = (m_owner->GetCoor() - HidePoint).NormSquared();
-        if( distance < MinDistance)
-        {
-            ClosestHidePoint = HidePoint;
-            MinDistance = distance;
-        }
-    }
-
-   //if no suitable obstacles found then evade the target
-   /* if (MinDistance >= HIDE_DISTANCETOFLEE*HIDE_DISTANCETOFLEE)
-    {
-        return Evade(m_HideEntity);
-    }*/
-    //else use Arrive on the hiding spot
-    return Arrive(ClosestHidePoint);
-}
+//Vector2D SteeringBehavior::Hide()
+//{
+//    double HideDistance = HIDE_DISTANCE;
+//
+//    double MinDistance = MAX_DOUBLE;
+//    Point2D ClosestHidePoint(0,0);
+//
+//    for (std::vector<Obstacle>::iterator it = m_Obstacles->begin(); it != m_Obstacles->end(); it++)
+//    {
+//        Vector2D ToTarget = ((*it).getCoor() - m_HideEntity->getCoor()).Normalize();
+//        Point2D HidePoint = (*it).getCoor() + ToTarget*( (*it).radius + HideDistance);
+//
+//        double distance = (m_owner->getCoor() - HidePoint).NormSquared();
+//        if( distance < MinDistance)
+//        {
+//            ClosestHidePoint = HidePoint;
+//            MinDistance = distance;
+//        }
+//    }
+//
+//   //if no suitable obstacles found then evade the target
+//   /* if (MinDistance >= HIDE_DISTANCETOFLEE*HIDE_DISTANCETOFLEE)
+//    {
+//        return Evade(m_HideEntity);
+//    }*/
+//    //else use Arrive on the hiding spot
+//    return Arrive(ClosestHidePoint);
+//}
 
 Vector2D SteeringBehavior::FollowPath()
 {
@@ -307,7 +286,7 @@ Vector2D SteeringBehavior::FollowPath()
     static Point2D current=*m_path.begin();
     double MinDistance = FOLLOW_DISTANCE;
 
-    if((m_owner->GetCoor() - current).Norm() < MinDistance && i!=-1)
+    if((m_owner->getCoor() - current).Norm() < MinDistance && i!=-1)
         i++;
 
     if(i==m_path.size() && m_bPathIsClosed)
@@ -325,22 +304,24 @@ Vector2D SteeringBehavior::FollowPath()
         current=m_path.at(i);
         return Seek(current);
     }
+	
+	return Vector2D(0,0);
 }
 
 Vector2D SteeringBehavior::OffsetPursuit()
 {
     //calculate the offset’s position in world space
-    Point2D GlobOffset = m_PursueEntity->GetCoor()+m_PursueEntity->GetHead()*m_PursueOffset.x + m_PursueEntity->GetSide()*m_PursueOffset.y;
+    Point2D GlobOffset = m_PursueEntity->getCoor()+m_PursueEntity->vHead*m_PursueOffset.x + m_PursueEntity->vSide*m_PursueOffset.y;
 
-    Vector2D ToOffset = GlobOffset - m_owner->GetCoor();
+    Vector2D ToOffset = GlobOffset - m_owner->getCoor();
 
     //the look-ahead time is proportional to the distance between the m_PursueEntity
     //and the pursuer; and is inversely proportional to the sum of both
     //agents’ velocities
-    double LookAheadTime = ToOffset.Norm() / (m_owner->GetMaxSpeed() + m_PursueEntity->GetSpeed().Norm());
+    double LookAheadTime = ToOffset.Norm() / (m_owner->maxSpeed + m_PursueEntity->vSpeed.Norm());
 
     //now arrive at the predicted future position of the offset
-    return Arrive(GlobOffset + m_PursueEntity->GetSpeed() * LookAheadTime);
+    return Arrive(GlobOffset + m_PursueEntity->vSpeed * LookAheadTime);
 }
 
 Vector2D SteeringBehavior::Separation()
@@ -352,11 +333,11 @@ Vector2D SteeringBehavior::Separation()
     {
         if( (*it) != m_owner)
         {
-            Vector2D ToAgent = m_owner->GetCoor() - (*it)->GetCoor();
+            Vector2D ToAgent = m_owner->getCoor() - (*it)->getCoor();
             //scale the force inversely proportional to the agent's distance
             //from its neighbor.
             double distance=ToAgent.NormSquared();
-            if( distance < (Radius+(*it)->getRadius())*(Radius+(*it)->getRadius()))
+            if( distance < (Radius+(*it)->radius)*(Radius+(*it)->radius))
                     SteeringForce += ToAgent / distance;
         }
     }
@@ -378,12 +359,12 @@ Vector2D SteeringBehavior::Alignment()
     {
         if( (*it) != m_owner)
         {
-            Vector2D ToAgent = m_owner->GetCoor() - (*it)->GetCoor();
+            Vector2D ToAgent = m_owner->getCoor() - (*it)->getCoor();
 
             double distance=ToAgent.NormSquared();
-            if( distance < (Radius+(*it)->getRadius())*(Radius+(*it)->getRadius()))
+            if( distance < (Radius+(*it)->radius)*(Radius+(*it)->radius))
             {
-                AverageHeading +=(*it)->GetHead();
+                AverageHeading +=(*it)->vHead;
                 NeighborCount++;
             }
         }
@@ -392,7 +373,7 @@ Vector2D SteeringBehavior::Alignment()
     if (NeighborCount > 0)
     {
         AverageHeading /= (double)NeighborCount;
-        AverageHeading -= m_owner->GetHead();
+        AverageHeading -= m_owner->vHead;
     }
 
     return AverageHeading;
@@ -411,12 +392,12 @@ Vector2D SteeringBehavior::Cohesion()
     {
         if( (*it) != m_owner)
         {
-            Vector2D ToAgent = m_owner->GetCoor() - (*it)->GetCoor();
+            Vector2D ToAgent = m_owner->getCoor() - (*it)->getCoor();
 
             double distance=ToAgent.NormSquared();
-            if( distance < (Radius+(*it)->getRadius())*(Radius+(*it)->getRadius()))
+            if( distance < (Radius+(*it)->radius)*(Radius+(*it)->radius))
             {
-                CenterOfMass = CenterOfMass + ( (*it)->GetCoor() - Point2D(0,0) );
+                CenterOfMass = CenterOfMass + ( (*it)->getCoor() - Point2D(0,0) );
                 NeighborCount++;
             }
         }
@@ -433,7 +414,7 @@ Vector2D SteeringBehavior::Cohesion()
     return SteeringForce;
 }
 
-Vector2D SteeringBehavior::Calculate()
+Vector2D SteeringBehavior::getSteeringForce()
 {
     Vector2D SteeringForce(0,0);
     Vector2D force;
@@ -445,20 +426,20 @@ Vector2D SteeringBehavior::Calculate()
         if (!AccumulateForce(&SteeringForce, force))
             return SteeringForce;
     }
-    if (m_bObstacleAvoidance)
-    {
-        force = ObstacleAvoidance() * m_dObstacleAvoidance;
+    //if (m_bObstacleAvoidance)
+    //{
+    //    force = ObstacleAvoidance() * m_dObstacleAvoidance;
 
-        if (!AccumulateForce(&SteeringForce, force))
-            return SteeringForce;
-    }
-    if (m_bHide)
-    {
-        force = Hide() * m_dHide;
+    //    if (!AccumulateForce(&SteeringForce, force))
+    //        return SteeringForce;
+    //}
+    //if (m_bHide)
+    //{
+    //    force = Hide() * m_dHide;
 
-        if (!AccumulateForce(&SteeringForce, force))
-            return SteeringForce;
-    }
+    //    if (!AccumulateForce(&SteeringForce, force))
+    //        return SteeringForce;
+    //}
     if (m_bPursue)
     {
         force = Pursue() * m_dPursue;
@@ -532,7 +513,7 @@ bool SteeringBehavior::AccumulateForce(Vector2D *RunningTot, Vector2D ForceToAdd
     double MagnitudeSoFar = RunningTot->Norm();
 
     //calculate how much steering force remains to be used by this vehicle
-    double MagnitudeRemaining = m_owner->GetMaxForce() - MagnitudeSoFar;
+    double MagnitudeRemaining = m_owner->maxForce - MagnitudeSoFar;
 
     //return false if there is no more force left to use
     if (MagnitudeRemaining <= 0.0)
@@ -556,4 +537,20 @@ bool SteeringBehavior::AccumulateForce(Vector2D *RunningTot, Vector2D ForceToAdd
     }
 
     return true;
+}
+
+SteeringBehavior::SteeringBehavior(MovingEntity *owner/*=NULL*/):m_owner(owner)
+{
+	m_bPursue = false;
+	m_bEvade = false;
+	m_bWander = false;
+	//m_bObstacleAvoidance = false;
+	m_bWallAvoidance = false;
+	m_bInterpose = false;
+	m_bHide = false;
+	m_bFollowPath = false;
+	m_bOffsetPursuit = false;
+	m_bSeparation = false;
+	m_bAlignment = false;
+	m_bCohesion = false;
 }

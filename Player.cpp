@@ -3,20 +3,16 @@
 #include "Weapon.h"
 
 #include "allegro.h"
-
-#define min(a,b) a<b?a:b
-#define max(a,b) a>b?a:b
+#include "Macros.h"
 
 using namespace std;
 
 
-Player::Player(int x, int y, const Map* world, Joystick* joystick):MovingEntity(x,y), m_pJoystick(joystick)
+Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(joystick)
 {
 	color=makecol(0,255,0);
-	m_pJoystick->init();
 	m_pWeapon=new Weapon(this);
 	radius=PLAYER_RADIUS;
-	map=world;
 }
 
 
@@ -37,14 +33,19 @@ void Player::draw(BITMAP* target) const
 	Point2D p3=coor+(vSide/3)*radius;
 
 	triangle(target, ( (int) p3.x), ( (int) p3.y), ( (int) p1.x ), ( (int) p1.y), ( (int) p2.x ), ( (int) p2.y), color);
-	//rectfill(target,5,25,SCREEN_W-5,SCREEN_H-5, makecol(0,255,0));
+
 	/*textprintf(target, font, 200, 10, makecol(255,255,255),"%d",
 		m_pWeapon->m_pBullet.size());*/
+
+	#ifdef DRAW_BOUNDING_RECT
+		Rect m_boundingRect=boundingRect();
+		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
+	#endif
 
 	m_pWeapon->draw(target);
 }
 
-Vector2D Player::getSteeringForce() const
+Vector2D Player::getSteeringForce()
 {
 	if(!m_pJoystick)
 		return Vector2D(0,0);
@@ -62,10 +63,13 @@ Vector2D Player::getSteeringForce() const
 
 void Player::update(double dt)
 {
-	m_pJoystick->update();
+	if (m_pJoystick)
+	{
+		m_pJoystick->update();
+		if(m_pJoystick->a)
+			m_pWeapon->fire();
+	}
 
-	if(m_pJoystick->a)
-		m_pWeapon->fire();
 	m_pWeapon->update(dt);
 
 	MovingEntity::update(dt);
@@ -84,13 +88,13 @@ Rect Player::boundingRect() const
 	x1=min(x1,p3.x);
 
 	int x2=max(p1.x,p2.x);
-	x2=max(x1,p3.x);
+	x2=max(x2,p3.x);
 
 	int y1=min(p1.y,p2.y);
-	y1=min(x1,p3.y);
+	y1=min(y1,p3.y);
 
 	int y2=max(p1.y,p2.y);
-	y2=max(x1,p3.y);
+	y2=max(y2,p3.y);
 
 	Rect r;
 	r.x1=x1;

@@ -3,8 +3,7 @@
 #define Player_h__
 
 #include "movingentity.h"
-
-#define PLAYER_RADIUS 20
+#include "Macros.h"
 
 class Vector2D;
 class Joystick;
@@ -13,13 +12,15 @@ class Weapon;
 class Player:public MovingEntity
 {
 	public:
-		Player(int x, int y, const Map* world,Joystick* joystick=NULL);
+		Player(int x=DEFAULT_X, int y=DEFAULT_Y,Joystick* joystick=NULL);
 		~Player();
 
-		Vector2D getSteeringForce() const;
+		Vector2D getSteeringForce();
 		void draw(BITMAP* target) const;
 		Rect boundingRect() const;
 		void update(double dt);
+
+		void setJoystick(Joystick* joy) {m_pJoystick=joy;}
 
 	private:
 		Joystick* m_pJoystick;

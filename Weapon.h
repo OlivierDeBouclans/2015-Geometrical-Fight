@@ -4,8 +4,7 @@
 
 #include <vector>
 #include "allegro.h"
-
-#define DEFAULT_FIRE_RATE 100
+#include "Macros.h"
 
 class Bullet;
 class MovingEntity;

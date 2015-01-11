@@ -11,6 +11,7 @@ MovingEntity::MovingEntity(int x, int y) : Entity(x,y)
 	vSpeed   =Vector2D(0,0);
 	vHead    =Vector2D(rand() % 1000,rand() % 1000).Normalize();
 	vSide    =vHead.Ortho();
+	hp       =DEFAULT_HP;
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -12,11 +12,7 @@
 #define ENTITY_H
 
 #include "allegro.h"
-
-#define DEFAULT_COLOR makecol(128,128,128)
-#define DEFAULT_RADIUS 15
-#define DEFAULT_X -1
-#define DEFAULT_Y -1
+#include "Macros.h"
 
 class Map;
 
@@ -46,7 +42,9 @@ class Entity
 		int y; //x coordinate
         int color;  //color
 		int radius; //collision radius
-		const Map* map;
+		int hp;
+
+		Map* pMap;
 };
 
 #endif // ENTITY_H

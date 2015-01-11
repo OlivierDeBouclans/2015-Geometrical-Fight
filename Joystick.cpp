@@ -1,5 +1,6 @@
 #include "Joystick.h"
 #include "allegro.h"
+#include "Macros.h"
 
 
 Joystick::Joystick(void):a(_a), b(_b), x(_x), y(y), lb(_lb), rb(_rb), start(_start), back(_back), lt(_lt), rt(_rt), stick_x(_stick_x), stick_y(_stick_y), throttle(_throttle)

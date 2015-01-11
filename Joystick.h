@@ -1,15 +1,6 @@
 #ifndef Joystick_h__
 #define Joystick_h__
 
-#define BUTTON_A 0
-#define BUTTON_B 1
-#define BUTTON_X 2
-#define BUTTON_Y 3
-#define BUTTON_LB 4
-#define BUTTON_RB 5
-#define BUTTON_BACK 6
-#define BUTTON_START 7
-
 class Joystick
 {
 	public:

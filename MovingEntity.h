@@ -14,10 +14,7 @@
 
 #include "Entity.h"
 #include "Vector2D.h"
-
-#define DEFAULT_MASS 80
-#define DEFAULT_MAX_SPEED 100
-#define DEFAULT_MAX_FORCE 100
+#include "Macros.h"
 
 class MovingEntity: public Entity
 {
@@ -27,8 +24,9 @@ class MovingEntity: public Entity
         //Destructor
         ~MovingEntity() {}
 
-        
-        virtual Vector2D getSteeringForce() const =0;
+        Point2D getCoor() {return Point2D(x,y);}
+
+        virtual Vector2D getSteeringForce()=0;
 
         /**----------------------------------------------------------------------
         // @Function: Update

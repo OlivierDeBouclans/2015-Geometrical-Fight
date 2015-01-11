@@ -3,12 +3,13 @@
 #define Map_h__
 
 #include "allegro.h"
-
-#define BORDER_WIDTH 10
-#define OFFSET_X 200
-#define OFFSET_Y 50
-
 #include "Entity.h"
+#include "Macros.h"
+#include <vector>
+
+class MovingEntity;
+class Player;
+class Joystick;
 
 class Map
 {
@@ -18,13 +19,26 @@ class Map
 
 		void draw(BITMAP* target) const;
 		bool collide(Entity* e) const;
+		void update(double dt);
 
 		static bool collide(Rect r1, Rect r2);
+
+		void addPlayer();
+		void addEnemies();
+
+		void hitEnemy(int EnemyIndex);
+
+		Joystick* joystick;
+		std::vector<MovingEntity*> vEnemies;
 
 	protected:
 		int m_iWidth;
 		int m_iHeight;
 		Rect m_boundingRect;
+
+		double m_dLastSpawn;
+
+		Player* m_pPlayer;
 
 
 };

@@ -29,31 +29,17 @@
 
 #include "Vector2D.h"
 #include "Allegro.h"
-#include "Obstacle.h"
 
 #include <vector>
 
 class MovingEntity;
+class Map;
 
 class SteeringBehavior
 {
     public:
         //Constructor
-        SteeringBehavior(MovingEntity *owner):m_owner(owner)
-        {
-            m_bPursue = false;
-            m_bEvade = false;
-            m_bWander = false;
-            m_bObstacleAvoidance = false;
-            m_bWallAvoidance = false;
-            m_bInterpose = false;
-            m_bHide = false;
-            m_bFollowPath = false;
-            m_bOffsetPursuit = false;
-            m_bSeparation = false;
-            m_bAlignment = false;
-            m_bCohesion = false;
-        }
+        SteeringBehavior(MovingEntity *owner=NULL);
         //Destructor
         ~SteeringBehavior() {}
 
@@ -64,18 +50,21 @@ class SteeringBehavior
         Vector2D Pursue();
         Vector2D Evade();
         Vector2D Wander();
-        Vector2D ObstacleAvoidance();
+        //Vector2D ObstacleAvoidance();
         Vector2D WallAvoidance();
         Vector2D Interpose();
-        Vector2D Hide();
+        //Vector2D Hide();
         Vector2D FollowPath();
         Vector2D OffsetPursuit();
         Vector2D Separation();
         Vector2D Alignment();
         Vector2D Cohesion();
 
-        //Calculate the resultant foce of all behaviors
-        Vector2D Calculate();
+        //Calculate the resultant force of all behaviors
+        Vector2D getSteeringForce();
+
+		void setOwner(MovingEntity* owner) {m_owner=owner;}
+		void setMap(Map* world) {m_pMap=world;}
 
         //Activation for each behavior
         void  OnPursue(MovingEntity *target, double weight=1)
@@ -97,12 +86,12 @@ class SteeringBehavior
                 m_WanderDistance = WanderDistance;
                 m_WanderRadius = WanderRadius;
             }
-        void  OnObstacleAvoidance(std::vector<Obstacle> *Obstacles, double weight=1)
+       /* void  OnObstacleAvoidance(std::vector<Obstacle> *Obstacles, double weight=1)
             {
                 m_bObstacleAvoidance = true;
                 m_dObstacleAvoidance = weight;
                 m_Obstacles=Obstacles;
-            }
+            }*/
         void  OnWallAvoidance(double weight=1)
             {
                 m_bWallAvoidance = true;
@@ -115,12 +104,12 @@ class SteeringBehavior
                 m_InterposeEntity1 = AgentA;
                 m_InterposeEntity2 = AgentB;
             }
-        void  OnHide(MovingEntity *target, double weight=1)
+       /* void  OnHide(MovingEntity *target, double weight=1)
             {
                 m_bHide = true;
                 m_dHide = weight;
                 m_HideEntity = target;
-            }
+            }*/
         void  OnFollowPath(std::vector<Point2D> Path, bool closed, double weight=1)
             {
                 m_bFollowPath = true;
@@ -189,10 +178,10 @@ class SteeringBehavior
         double m_dAlignment;
         double m_dCohesion;
 
-
+		Map* m_pMap;
         MovingEntity *m_owner;                  //pointer to owner
-        std::vector<Obstacle> *m_Obstacles;     //list of obstacles
-        std::vector<MovingEntity*> *m_Entities; //list of moving entity
+       // std::vector<Obstacle> *m_Obstacles;     //list of obstacles
+		std::vector<MovingEntity*> *m_Entities;     //list of obstacles
 
         MovingEntity *m_PursueEntity;       //Entity to pursue
         Vector2D m_PursueOffset;            //Offset for pursuit
@@ -203,7 +192,7 @@ class SteeringBehavior
         MovingEntity *m_InterposeEntity2;   //Entities to interpose
         MovingEntity *m_HideEntity;         //Entity to hide from
         std::vector<Point2D> m_path;        //List of points to follow
-        bool m_bPathIsClosed;               //Path is closed for paht follow
+        bool m_bPathIsClosed;               //Path is closed for path follow
 };
 
 #endif // STEERINGBEHAVIOR_H

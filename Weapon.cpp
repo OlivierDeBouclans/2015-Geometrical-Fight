@@ -21,11 +21,21 @@ void Weapon::update(double dt)
 	for(unsigned int i=0;i<m_pBullet.size();i++)
 		{
 			m_pBullet[i].update(dt);
-			if(m_pOwner->map->collide(&m_pBullet[i]))
+
+			int s=m_pOwner->pMap->vEnemies.size();
+			unsigned int j;
+			for(j=0;j<s;j++)
+			{
+				if(Map::collide(m_pOwner->pMap->vEnemies[j]->boundingRect(),m_pBullet[i].boundingRect()))
 				{
-					m_pBullet[i].vSpeed=Vector2D(0,0);
 					m_pBullet.erase(m_pBullet.begin()+i);
+					m_pOwner->pMap->hitEnemy(j);
+					break;
 				}
+			}
+
+			if(j==s&&m_pOwner->pMap->collide(&m_pBullet[i]))
+					m_pBullet.erase(m_pBullet.begin()+i);
 		}
 }
 

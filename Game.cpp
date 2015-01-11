@@ -2,6 +2,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Joystick.h"
+#include "Enemy.h"
 
 #include "allegro.h"
 
@@ -53,17 +54,17 @@ void Game::exit()
 void Game::play()
 {
 	Joystick joystick;
-	Player player(400,400,m_pMap,&joystick);		 
+	joystick.init();
+	m_pMap->joystick=&joystick;
+	m_pMap->addPlayer();
 
 	while(!key[KEY_ESC])
 	{
 		clear(m_pScreenBuffer);
-		int timeelapse = 3.5;
-		player.update(1);
 
+		m_pMap->addEnemies();
+		m_pMap->update(1);
 		m_pMap->draw(m_pScreenBuffer);
-		player.draw(m_pScreenBuffer);
-
 
 		//Buffer's bliting on screen
 		acquire_screen();

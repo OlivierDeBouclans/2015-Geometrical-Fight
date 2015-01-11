@@ -3,9 +3,7 @@
 #define Bullet_h__
 
 #include "movingentity.h"
-
-#define BULLET_SPEED 15
-#define BULLET_SIZE 10
+#include "Macros.h"
 
 class Vector2D;
 
@@ -16,7 +14,7 @@ class Bullet:public MovingEntity
 		~Bullet();
 
 		void draw(BITMAP* target) const;
-		Vector2D getSteeringForce() const;
+		Vector2D getSteeringForce();
 		Rect boundingRect() const;
 
 		void launch(const MovingEntity& owner);
