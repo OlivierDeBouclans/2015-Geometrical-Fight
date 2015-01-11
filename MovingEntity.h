@@ -28,16 +28,16 @@ class MovingEntity: public Entity
         ~MovingEntity() {}
 
         
-        virtual Vector2D getSteeringForce()=0;
+        virtual Vector2D getSteeringForce() const =0;
 
         /**----------------------------------------------------------------------
         // @Function: Update
         // @Description: Update the speed,position and direction of the entity
         // according to the elapsed time between each update
         //----------------------------------------------------------------------**/
-        void update(double Dt);
+        virtual void update(double Dt);
 
-		virtual void draw(BITMAP* target)=0;
+		virtual void draw(BITMAP* target) const=0;
 
 		//Public attributes
         double mass;                        //Mass

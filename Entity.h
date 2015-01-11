@@ -18,6 +18,17 @@
 #define DEFAULT_X -1
 #define DEFAULT_Y -1
 
+class Map;
+
+struct Rect
+{
+	int x1;
+	int y1;
+
+	int x2;
+	int y2;
+};
+
 class Entity
 {
     public:
@@ -27,13 +38,15 @@ class Entity
         ~Entity() {}
 
         //Render the entity on the target
-        virtual void draw(BITMAP* target)=0;
+        virtual void draw(BITMAP* target) const=0;
+		virtual Rect boundingRect() const=0;
 
 		//public attribute
         int x; //x coordinate
 		int y; //x coordinate
         int color;  //color
 		int radius; //collision radius
+		const Map* map;
 };
 
 #endif // ENTITY_H

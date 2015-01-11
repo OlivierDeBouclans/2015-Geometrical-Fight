@@ -6,6 +6,7 @@ Joystick::Joystick(void):a(_a), b(_b), x(_x), y(y), lb(_lb), rb(_rb), start(_sta
 {
 }
 
+//////////////////////////////////////////////////////////////////////////
 
 Joystick::~Joystick(void)
 {

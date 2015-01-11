@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="FPSHandler.h" />
     <ClInclude Include="Game.h" />
@@ -84,6 +85,7 @@
     <ClInclude Include="MovingEntity.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Vector2D.h" />
+    <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp" />
@@ -95,6 +97,8 @@
     <ClCompile Include="MovingEntity.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Vector2D.cpp" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

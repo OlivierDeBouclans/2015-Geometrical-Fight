@@ -20,32 +20,32 @@ class Joystick
 		void update();
 
 		//Const reference
-		const bool& a;
-		const bool& b;
-		const bool& x;
-		const bool& y;
-		const bool& lb;
-		const bool& rb;
-		const bool& start;
-		const bool& back;
-		const bool& lt;
-		const bool& rt;
+		const int& a;
+		const int& b;
+		const int& x;
+		const int& y;
+		const int& lb;
+		const int& rb;
+		const int& start;
+		const int& back;
+		const int& lt;
+		const int& rt;
 
 		const int& stick_x;
 		const int& stick_y;
 		const int& throttle;	
 
 	private:
-		bool _a;
-		bool _b;
-		bool _x;
-		bool _y;
-		bool _lb;
-		bool _rb;
-		bool _start;
-		bool _back;
-		bool _lt;
-		bool _rt;
+		int _a;
+		int _b;
+		int _x;
+		int _y;
+		int _lb;
+		int _rb;
+		int _start;
+		int _back;
+		int _lt;
+		int _rt;
 		
 		int _stick_x;
 		int _stick_y;

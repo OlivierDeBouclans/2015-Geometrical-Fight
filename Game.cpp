@@ -10,7 +10,7 @@
 
 Game::Game(void)
 {
-	m_pMap=new Map();
+	m_pMap=new Map(800,600);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ void Game::exit()
 void Game::play()
 {
 	Joystick joystick;
-	Player player(100,100,&joystick);		 
+	Player player(400,400,m_pMap,&joystick);		 
 
 	while(!key[KEY_ESC])
 	{
