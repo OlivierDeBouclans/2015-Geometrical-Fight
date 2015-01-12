@@ -13,7 +13,12 @@
 
 #define DEFAULT_DELAY_SPAWN 1500
 
-#define DEFAULT_HP 5
+/************************************************************************/
+/*SYSTEM MACROS                                                       */
+/************************************************************************/
+
+#define SCREEN_WIDTH  1600
+#define SCREEN_HEIGHT 900
 
 /************************************************************************/
 /* ENTITIES DEFAUTL STATS                                               */
@@ -55,9 +60,11 @@
 /* MAP MACROS                                                           */
 /************************************************************************/
 
-#define BORDER_WIDTH 10
-#define OFFSET_X 200
-#define OFFSET_Y 50
+#define BORDER_WIDTH 7
+#define OFFSET_X 17
+#define OFFSET_Y 17
+#define MAP_WIDTH  1300  
+#define MAP_HEIGHT 860
 
 /************************************************************************/
 /* JOYSTICK MACRO                                                       */

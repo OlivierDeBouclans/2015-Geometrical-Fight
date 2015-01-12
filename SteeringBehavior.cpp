@@ -63,7 +63,7 @@ Vector2D SteeringBehavior::Pursue()
     double RelativeHeading = m_owner->vHead * m_PursueEntity->vHead;
 
     //if ahead just go the the target position
-    if ((ToTarget * m_owner->vHead > 0) && (RelativeHeading < -0.95)) //acos(0.95)=18 degs
+    if ((ToTarget * m_owner->vHead > 0) && (RelativeHeading < -0.95)) //acos(0.95)=18 degrees
         return Seek(m_PursueEntity->getCoor());
 
 

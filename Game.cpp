@@ -11,7 +11,7 @@
 
 Game::Game(void)
 {
-	m_pMap=new Map(800,600);
+	m_pMap=new Map(MAP_WIDTH, MAP_HEIGHT);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ void Game::init()
 
 	//Init screen
 	set_color_depth(32);
-	if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, 1280, 720, 0, 0))
+	if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0))
 	{
 		allegro_message(allegro_error);
 		return;

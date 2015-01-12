@@ -22,7 +22,7 @@ void Weapon::update(double dt)
 		{
 			m_pBullet[i].update(dt);
 
-			int s=m_pOwner->pMap->vEnemies.size();
+			unsigned int s=m_pOwner->pMap->vEnemies.size();
 			unsigned int j;
 			for(j=0;j<s;j++)
 			{
