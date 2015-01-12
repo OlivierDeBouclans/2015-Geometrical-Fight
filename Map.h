@@ -6,6 +6,7 @@
 #include "Entity.h"
 #include "Macros.h"
 #include <vector>
+#include "Vector2D.h"
 
 class MovingEntity;
 class Player;
@@ -27,6 +28,11 @@ class Map
 		void addEnemies();
 
 		void hitEnemy(int EnemyIndex);
+
+		Point2D getTopLeft() {return Point2D(OFFSET_X,OFFSET_Y);}
+		Point2D getTopRight() {return Point2D(OFFSET_X+m_iWidth,OFFSET_Y);}
+		Point2D getBotLeft() {return Point2D(OFFSET_X,OFFSET_Y+m_iHeight);}
+		Point2D getBotRight() {return Point2D(OFFSET_X+m_iWidth,OFFSET_Y+m_iHeight);}
 
 		Joystick* joystick;
 		std::vector<MovingEntity*> vEnemies;

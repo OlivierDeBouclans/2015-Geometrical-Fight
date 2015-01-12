@@ -9,6 +9,7 @@ Bullet::Bullet(int x, int y): MovingEntity(x,y)
 {
 	color=makecol(255,255,0);
 	radius=BULLET_SIZE;
+	maxSpeed=5;
 }
 
 //////////////////////////////////////////////////////////////////////////

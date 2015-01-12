@@ -11,6 +11,7 @@
 #include "SteeringBehavior.h"
 #include "MovingEntity.h"
 #include "Macros.h"
+#include "Map.h"
 
 #include <iostream>
 
@@ -169,12 +170,12 @@ Vector2D SteeringBehavior::WallAvoidance()
    /* line(buffer,m_owner->getCoor().x,m_owner->getCoor().y,Feelers[0].x,Feelers[0].y,makecol(255,255,255));
     line(buffer,m_owner->getCoor().x,m_owner->getCoor().y,Feelers[1].x,Feelers[1].y,makecol(255,255,255));
     line(buffer,m_owner->getCoor().x,m_owner->getCoor().y,Feelers[2].x,Feelers[2].y,makecol(255,255,255));*/
-
+							
     /** WALL SPECIFIC **/
-    Point2D ScreenTL(10,30);
-    Point2D ScreenTR(SCREEN_W-10,30);
-    Point2D ScreenBL(10,SCREEN_H-10);
-    Point2D ScreenBR(SCREEN_W-10,SCREEN_H-10);
+    Point2D ScreenTL=m_pMap->getTopLeft();
+    Point2D ScreenTR=m_pMap->getTopRight();
+    Point2D ScreenBL=m_pMap->getBotLeft();
+    Point2D ScreenBR=m_pMap->getBotRight();
 
     Point2D Walls[4][2];
     Walls[0][0]=ScreenTL; Walls[0][1]=ScreenTR;

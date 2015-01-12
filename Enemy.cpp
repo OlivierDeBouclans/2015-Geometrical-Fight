@@ -8,11 +8,12 @@ Enemy::Enemy(int x, int y, Map* world): MovingEntity(x,y)
 	color=makecol(0,0,255);
 	radius=ENEMY_RADIUS;
 	pMap=world;
+	maxSpeed=1.5;
 
 	steeringBehavior.setOwner(this);
 	steeringBehavior.setMap(pMap);
-	steeringBehavior.OnWander(1,1);
-	//steeringBehavior.OnWallAvoidance();
+	steeringBehavior.OnWander(30+rand()%10,200+rand()%50);
+	steeringBehavior.OnWallAvoidance();
 }
 
 
@@ -45,7 +46,7 @@ void Enemy::draw(BITMAP* target) const
 
 Vector2D Enemy::getSteeringForce()
 {
-	return steeringBehavior.getSteeringForce()/100;
+	return steeringBehavior.getSteeringForce();
 }
 
 //////////////////////////////////////////////////////////////////////////

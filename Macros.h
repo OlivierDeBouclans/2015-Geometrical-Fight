@@ -12,7 +12,7 @@
 #define DEFAULT_X -1
 #define DEFAULT_Y -1
 
-#define BULLET_SPEED 15
+#define BULLET_SPEED 5
 #define BULLET_SIZE 10
 
 #define DEFAULT_DELAY_SPAWN 1500
@@ -23,9 +23,9 @@
 /* MOVING ENTITY MACROS                                                 */
 /************************************************************************/
 
-#define DEFAULT_MASS 80
-#define DEFAULT_MAX_SPEED 100
-#define DEFAULT_MAX_FORCE 100
+#define DEFAULT_MASS 50
+#define DEFAULT_MAX_SPEED 3
+#define DEFAULT_MAX_FORCE 5000
 
 /************************************************************************/
 /* MAP MACROS                                                           */

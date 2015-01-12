@@ -89,6 +89,7 @@ void Map::addEnemies()
 	int y=rand()%m_iHeight+OFFSET_Y;
 	Enemy *e=new Enemy(x,y,this);
 	vEnemies.push_back(e);
+	//e->steeringBehavior.OnPursue(m_pPlayer);
 }
 
 //////////////////////////////////////////////////////////////////////////
