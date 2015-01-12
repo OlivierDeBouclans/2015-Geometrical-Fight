@@ -2,10 +2,6 @@
 #ifndef Macros_h__
 #define Macros_h__
 
-#define DEFAULT_RADIUS 15
-#define ENEMY_RADIUS 25
-#define PLAYER_RADIUS 20
-
 #define DEFAULT_FIRE_RATE 100
 
 #define DEFAULT_COLOR makecol(128,128,128)
@@ -18,6 +14,34 @@
 #define DEFAULT_DELAY_SPAWN 1500
 
 #define DEFAULT_HP 5
+
+/************************************************************************/
+/* ENTITIES DEFAUTL STATS                                               */
+/************************************************************************/
+
+#define PLAYER_RADIUS 15
+#define PLAYER_SPEED 3
+#define PLAYER_COL makecol(0,255,0)
+#define PLAYER_HEALTH 100
+#define PLAYER_DEFENSE 1.2
+#define PLAYER_FIRE_DAMAGE 10
+#define PLAYER_CONTACT_DAMAGE 1
+
+#define TRACKER_RADIUS 15
+#define TRACKER_SPEED 2
+#define TRACKER_COL	makecol(255,0,0)
+#define TRACKER_HEALTH 30
+#define TRACKER_DEFENSE 1
+#define TRACKER_FIRE_DAMAGE 0
+#define TRACKER_CONTACT_DAMAGE 10
+
+#define DREAMER_RADIUS 20
+#define DREAMER_SPEED 1
+#define DREAMER_COL makecol(0,0,255)
+#define DREAMER_HEALTH 50
+#define DREAMER_DEFENSE 1.5
+#define DREAMER_FIRE_DAMAGE 0
+#define DREAMER_CONTACT_DAMAGE 20
 
 /************************************************************************/
 /* MOVING ENTITY MACROS                                                 */

@@ -42,7 +42,11 @@ class Entity
 		int y; //x coordinate
         int color;  //color
 		int radius; //collision radius
-		int hp;
+
+		int   health;
+		float defense;
+		float fireDamage;
+		float contactDamage;
 
 		Map* pMap;
 };

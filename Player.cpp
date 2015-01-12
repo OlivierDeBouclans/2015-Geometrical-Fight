@@ -10,9 +10,15 @@ using namespace std;
 
 Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(joystick)
 {
-	color=makecol(0,255,0);
 	m_pWeapon=new Weapon(this);
-	radius=PLAYER_RADIUS;
+	
+	radius        =PLAYER_RADIUS;
+	maxSpeed      =PLAYER_SPEED;
+	color         =PLAYER_COL;
+	health        =PLAYER_HEALTH;
+	defense       =PLAYER_DEFENSE;
+	fireDamage    =PLAYER_FIRE_DAMAGE;
+	contactDamage =PLAYER_CONTACT_DAMAGE;
 }
 
 

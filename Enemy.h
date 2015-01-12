@@ -16,10 +16,28 @@ class Enemy: public MovingEntity
 		~Enemy(void);
 
 		Vector2D getSteeringForce();
-		void draw(BITMAP* target) const;
-		Rect boundingRect() const;
+		virtual void draw(BITMAP* target) const=0;
+		virtual Rect boundingRect() const=0;
 
 		SteeringBehavior steeringBehavior;
+};
+
+class Tracker: public Enemy
+{
+	public:
+		Tracker(int x,int y, Map* world);
+
+		void draw(BITMAP* target) const;
+		Rect boundingRect() const;
+};
+
+class Dreamer: public Enemy
+{
+	public:
+		Dreamer(int x,int y, Map* world);
+
+		void draw(BITMAP* target) const;
+		Rect boundingRect() const;
 };
 
 #endif // Enemy_h__

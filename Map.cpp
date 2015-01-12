@@ -87,9 +87,14 @@ void Map::addEnemies()
 
 	int x=rand()%m_iWidth+OFFSET_X;	
 	int y=rand()%m_iHeight+OFFSET_Y;
-	Enemy *e=new Enemy(x,y,this);
+	Enemy *e;
+	
+	if(rand()%10<6)
+		e=new Dreamer(x,y,this);
+	else
+		e=new Tracker(x,y,this);
+
 	vEnemies.push_back(e);
-	//e->steeringBehavior.OnPursue(m_pPlayer);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -97,8 +102,10 @@ void Map::addEnemies()
 void Map::hitEnemy(int EnemyIndex)
 {
 	MovingEntity* e=vEnemies[EnemyIndex];
-	e->hp--;
-	if(e->hp==0)
+
+	e->health-=m_pPlayer->fireDamage/e->defense;
+
+	if(e->health<=0)
 	{
 		delete vEnemies[EnemyIndex];
 		vEnemies.erase(vEnemies.begin()+EnemyIndex);

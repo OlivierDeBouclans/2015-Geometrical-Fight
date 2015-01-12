@@ -27,6 +27,8 @@ class Map
 		void addPlayer();
 		void addEnemies();
 
+		Player* getPlayer() {return m_pPlayer;}
+
 		void hitEnemy(int EnemyIndex);
 
 		Point2D getTopLeft() {return Point2D(OFFSET_X,OFFSET_Y);}
