@@ -109,7 +109,8 @@
 /* DEBUG MACRO                                                          */
 /************************************************************************/
 
-#define DRAW_BOUNDING_RECT
+#define DEBUG_BOUNDING_RECT
+#define DEBUG_FPS
 
 /************************************************************************/
 /* MISC MACROS                                                          */

@@ -6,9 +6,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "allegro.h"
 class Map;
-//class BITMAP;
+struct BITMAP;
 
 /************************************************************************/
 /*                              Game                                    */

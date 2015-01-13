@@ -12,6 +12,8 @@
 #ifndef FPSHANDLER_H
 #define FPSHANDLER_H
 
+struct BITMAP;
+
 class FPSHandler
 {
     public:
@@ -32,6 +34,8 @@ class FPSHandler
 		//The output fps is the mean over FPS_NUM_ELEMENT_FOR_MEAN element
 		//but the adjustment for the rest time is based on the instantaneous fps
         void update();
+
+		void draw(BITMAP* target);
 
     private:
         int m_iAimedFrameRate;

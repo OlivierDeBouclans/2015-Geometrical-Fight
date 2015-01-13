@@ -14,7 +14,7 @@
 
 #include "Entity.h"
 #include "Vector2D.h"
-#include "Macros.h"
+
 
 class MovingEntity: public Entity
 {
@@ -24,7 +24,7 @@ class MovingEntity: public Entity
         //Destructor
         ~MovingEntity() {}
 
-        Point2D getCoor() {return Point2D(x,y);}
+        inline Point2D getCoor() {return Point2D(x,y);}
 
         virtual Vector2D getSteeringForce()=0;
 

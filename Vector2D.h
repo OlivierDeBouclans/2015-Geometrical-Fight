@@ -114,6 +114,7 @@ class Point2D
         //Constructors
         Point2D() {}
         Point2D(float a, float b) : x(a),y(b) {}
+		Point2D(int a, int b): x((float)a),y((float)b) {}
 
         //Coordinate
         float x;

@@ -1,7 +1,9 @@
-
 #include "MovingEntity.h"
-#include "Entity.h"
+
 #include "Vector2D.h"
+#include "Macros.h"
+
+#include "allegro.h"
 
 MovingEntity::MovingEntity(int x, int y) : Entity(x,y)
 {

@@ -2,7 +2,6 @@
 #ifndef Map_h__
 #define Map_h__
 
-#include "allegro.h"
 #include "Entity.h"
 #include "Macros.h"
 #include <vector>
@@ -11,6 +10,8 @@
 class MovingEntity;
 class Player;
 class Joystick;
+
+struct BITMAP;
 
 class Map
 {

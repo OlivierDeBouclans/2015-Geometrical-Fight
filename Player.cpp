@@ -1,9 +1,10 @@
 #include "Player.h"
+
 #include "Joystick.h"
 #include "Weapon.h"
+#include "Macros.h"
 
 #include "allegro.h"
-#include "Macros.h"
 
 using namespace std;
 

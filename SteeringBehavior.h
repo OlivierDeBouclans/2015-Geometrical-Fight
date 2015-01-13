@@ -28,8 +28,6 @@
 #define STEERINGBEHAVIOR_H
 
 #include "Vector2D.h"
-#include "Allegro.h"
-
 #include <vector>
 
 class MovingEntity;

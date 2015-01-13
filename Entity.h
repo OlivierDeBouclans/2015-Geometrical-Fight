@@ -2,7 +2,7 @@
 /**----------------------------------------------------------------------
 // @Class: Entity
 //
-// @Autor: LE BAS DE BOUCLANS Olivier
+// @Author: LE BAS DE BOUCLANS Olivier
 // @Date: 19/10/13
 //
 // @Description: Description for base entity of the game
@@ -11,10 +11,10 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "allegro.h"
 #include "Macros.h"
 
 class Map;
+struct BITMAP;
 
 struct Rect
 {

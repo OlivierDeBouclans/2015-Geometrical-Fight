@@ -1,8 +1,10 @@
 #include "Game.h"
+
 #include "Map.h"
-#include "Player.h"
 #include "Joystick.h"
+#include "Player.h"
 #include "Enemy.h"
+#include "FPSHandler.h"
 
 #include "allegro.h"
 
@@ -58,6 +60,8 @@ void Game::play()
 	m_pMap->joystick=&joystick;
 	m_pMap->addPlayer();
 
+	FPSHandler fps(60);
+
 	while(!key[KEY_ESC])
 	{
 		clear(m_pScreenBuffer);
@@ -66,13 +70,17 @@ void Game::play()
 		m_pMap->update(1);
 		m_pMap->draw(m_pScreenBuffer);
 
+		#ifdef DEBUG_FPS
+			fps.draw(m_pScreenBuffer);
+		#endif
+
 		//Buffer's bliting on screen
 		acquire_screen();
 			blit (m_pScreenBuffer, screen, 0, 0, 0, 0,SCREEN_W-1,SCREEN_H-1);
 		release_screen();
 
 		//Adjust fps
-		//m_Fps->update();
-		//rest(m_Fps->getRestTime());
+		fps.update();
+		rest(fps.getRestTime());
 	}
 }

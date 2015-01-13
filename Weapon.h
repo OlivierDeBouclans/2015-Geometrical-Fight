@@ -3,11 +3,10 @@
 #define Weapon_h__
 
 #include <vector>
-#include "allegro.h"
-#include "Macros.h"
 
 class Bullet;
 class MovingEntity;
+struct BITMAP;
 
 class Weapon
 {

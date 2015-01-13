@@ -1,8 +1,11 @@
 #include "Enemy.h"
-#include "Map.h"
+
 #include "Macros.h"
+#include "Map.h"
 #include "SteeringBehavior.h"
 #include "Player.h"
+
+#include "allegro.h"
 
 /************************************************************************/
 /*ENEMY                                                                 */

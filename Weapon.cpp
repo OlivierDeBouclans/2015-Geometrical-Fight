@@ -1,6 +1,10 @@
 #include "Weapon.h"
+
 #include "Bullet.h"
 #include "Map.h"
+#include "Macros.h"
+
+#include "allegro.h"
 
 using namespace std;
 
