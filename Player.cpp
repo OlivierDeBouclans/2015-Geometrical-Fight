@@ -17,9 +17,15 @@ Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(
 	maxSpeed      =PLAYER_SPEED;
 	color         =PLAYER_COL;
 	health        =PLAYER_HEALTH;
+	healthMax     =PLAYER_HEALTH;
 	defense       =PLAYER_DEFENSE;
 	fireDamage    =PLAYER_FIRE_DAMAGE;
 	contactDamage =PLAYER_CONTACT_DAMAGE;
+
+	furyMax       =PLAYER_FURY;
+	fury          =0;
+	xp            =0;
+	xpNextLevel   =1000;
 }
 
 
@@ -44,7 +50,7 @@ void Player::draw(BITMAP* target) const
 	/*textprintf(target, font, 200, 10, makecol(255,255,255),"%d",
 		m_pWeapon->m_pBullet.size());*/
 
-	#ifdef DRAW_BOUNDING_RECT
+	#ifdef DEBUG_BOUNDING_RECT
 		Rect m_boundingRect=boundingRect();
 		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
 	#endif

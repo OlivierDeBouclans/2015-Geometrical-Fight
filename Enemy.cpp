@@ -43,6 +43,7 @@ Tracker::Tracker(int x,int y, Map* world): Enemy(x,y,world)
 	maxSpeed      =TRACKER_SPEED;
 	color         =TRACKER_COL;
 	health        =TRACKER_HEALTH;
+	healthMax     =TRACKER_HEALTH;
 	defense       =TRACKER_DEFENSE;
 	fireDamage    =TRACKER_FIRE_DAMAGE;
 	contactDamage =TRACKER_CONTACT_DAMAGE;
@@ -98,7 +99,7 @@ void Tracker::draw(BITMAP* target) const
 	/*textprintf(target, font, 200, 10, makecol(255,255,255),"%d",
 		m_pWeapon->m_pBullet.size());*/
 
-	#ifdef DRAW_BOUNDING_RECT
+	#ifdef DEBUG_BOUNDING_RECT
 		Rect m_boundingRect=boundingRect();
 		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
 	#endif
@@ -114,6 +115,7 @@ Dreamer::Dreamer(int x,int y, Map* world): Enemy(x,y,world)
 	maxSpeed      =DREAMER_SPEED;
 	color         =DREAMER_COL;
 	health        =DREAMER_HEALTH;
+	healthMax     =DREAMER_HEALTH;
 	defense       =DREAMER_DEFENSE;
 	fireDamage    =DREAMER_FIRE_DAMAGE;
 	contactDamage =DREAMER_CONTACT_DAMAGE;
@@ -174,7 +176,7 @@ void Dreamer::draw(BITMAP* target) const
 
 	polygon(target,4,poly,color);
 
-	#ifdef DRAW_BOUNDING_RECT
+	#ifdef DEBUG_BOUNDING_RECT
 		Rect m_boundingRect=boundingRect();
 		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
 	#endif

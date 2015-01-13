@@ -22,6 +22,11 @@ class Player:public MovingEntity
 
 		void setJoystick(Joystick* joy) {m_pJoystick=joy;}
 
+		int xp;
+		int xpNextLevel;
+		int fury;
+		int furyMax;
+
 	private:
 		Joystick* m_pJoystick;
 		Weapon* m_pWeapon;

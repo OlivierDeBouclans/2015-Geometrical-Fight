@@ -31,6 +31,7 @@
 #define PLAYER_DEFENSE 1.2
 #define PLAYER_FIRE_DAMAGE 10
 #define PLAYER_CONTACT_DAMAGE 1
+#define PLAYER_FURY 100
 
 #define TRACKER_RADIUS 15
 #define TRACKER_SPEED 2
@@ -65,6 +66,10 @@
 #define OFFSET_Y 17
 #define MAP_WIDTH  1300  
 #define MAP_HEIGHT 860
+
+#define BAR_LENGTH 200
+#define BAR_WIDTH  15
+#define BAR_BORDER 2
 
 /************************************************************************/
 /* JOYSTICK MACRO                                                       */

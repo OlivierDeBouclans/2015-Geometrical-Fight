@@ -23,6 +23,8 @@ class Map
 		bool collide(Entity* e) const;
 		void update(double dt);
 
+		void drawPlayerStats(BITMAP* target) const;
+
 		static bool collide(Rect r1, Rect r2);
 
 		void addPlayer();

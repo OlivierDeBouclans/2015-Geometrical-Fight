@@ -31,7 +31,7 @@ void Bullet::draw(BITMAP* target) const
 
 	polygon(target,4,poly,color);
 
-	#ifdef DRAW_BOUNDING_RECT
+	#ifdef DEBUG_BOUNDING_RECT
 		Rect m_boundingRect=boundingRect();
 		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
 	#endif

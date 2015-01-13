@@ -43,10 +43,15 @@ class Entity
         int color;  //color
 		int radius; //collision radius
 
-		int   health;
+		int health;
+		int healthMax;
+
 		float defense;
 		float fireDamage;
 		float contactDamage;
+
+		int level;
+
 
 		Map* pMap;
 };

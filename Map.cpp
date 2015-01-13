@@ -35,9 +35,11 @@ void Map::draw(BITMAP* target) const
 {
 	rectfill(target,OFFSET_X-BORDER_WIDTH,OFFSET_Y-BORDER_WIDTH,OFFSET_X+m_iWidth+BORDER_WIDTH,OFFSET_Y+m_iHeight+BORDER_WIDTH, makecol(255,255,255));
 	rectfill(target,OFFSET_X,OFFSET_Y,OFFSET_X+m_iWidth,OFFSET_Y+m_iHeight, makecol(0,0,0));
-	//textprintf(screenBuffer, font, 200, 10, makecol(255,255,255),"FPS: %f - Rest: %d",m_Fps->getFrameRate(),m_Fps->getRestTime());
+	//textprintf(target, font, 200, 10, makecol(255,255,255),"d %d",vEnemies.size());
+
+	drawPlayerStats(target);
 	
-	#ifdef DRAW_BOUNDING_RECT
+	#ifdef DEBUG_BOUNDING_RECT
 		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
 	#endif
 
@@ -111,5 +113,46 @@ void Map::hitEnemy(int EnemyIndex)
 		delete vEnemies[EnemyIndex];
 		vEnemies.erase(vEnemies.begin()+EnemyIndex);
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Map::drawPlayerStats(BITMAP* target) const
+{
+	int x=OFFSET_X+m_iWidth+BORDER_WIDTH*2;
+	int y=OFFSET_Y-BORDER_WIDTH;
+
+	textprintf(target, font, x-50+BAR_LENGTH/2, y, makecol(255,255,255),"Level:%d Xp:%d",m_pPlayer->level,m_pPlayer->xp);
+	y+=20;
+	rectfill(target,x,y,x+BAR_LENGTH,y+BAR_WIDTH, makecol(255,255,255));
+	rectfill(target,x+BAR_BORDER,y+BAR_BORDER,x+BAR_BORDER+((BAR_LENGTH-2*BAR_BORDER)),y+BAR_WIDTH-BAR_BORDER, makecol(0,0,0));
+	rectfill(target,x+BAR_BORDER,y+BAR_BORDER,x+BAR_BORDER+((BAR_LENGTH-2*BAR_BORDER)*m_pPlayer->xp/m_pPlayer->xpNextLevel),y+BAR_WIDTH-BAR_BORDER, makecol(0,0,128));
+	y+=40;
+
+	textout(target,font,"HP:",x,y-BAR_BORDER+BAR_WIDTH/2,makecol(255,255,255));
+	x+=35;
+	rectfill(target,x,y,x+BAR_LENGTH,y+BAR_WIDTH, makecol(255,255,255));
+	rectfill(target,x+BAR_BORDER,y+BAR_BORDER,x+BAR_BORDER+((BAR_LENGTH-2*BAR_BORDER)),y+BAR_WIDTH-BAR_BORDER, makecol(0,0,0));
+	rectfill(target,x+BAR_BORDER,y+BAR_BORDER,x+BAR_BORDER+((BAR_LENGTH-2*BAR_BORDER)*m_pPlayer->health/m_pPlayer->healthMax),y+BAR_WIDTH-BAR_BORDER, makecol(0,128,0));
+	textprintf_ex(target, font, x-30+BAR_LENGTH/2, y-BAR_BORDER+BAR_WIDTH/2, makecol(255,255,255),-1,"%d/%d",m_pPlayer->health,m_pPlayer->healthMax);
+	x-=35;
+	y+=20;
+
+	textout(target,font,"Fury:",x,y-BAR_BORDER+BAR_WIDTH/2,makecol(255,255,255));
+	x+=35;
+	rectfill(target,x,y,x+BAR_LENGTH,y+BAR_WIDTH, makecol(255,255,255));
+	rectfill(target,x+BAR_BORDER,y+BAR_BORDER,x+BAR_BORDER+((BAR_LENGTH-2*BAR_BORDER)),y+BAR_WIDTH-BAR_BORDER, makecol(0,0,0));
+	rectfill(target,x+BAR_BORDER,y+BAR_BORDER,x+BAR_BORDER+((BAR_LENGTH-2*BAR_BORDER)*m_pPlayer->fury/m_pPlayer->furyMax),y+BAR_WIDTH-BAR_BORDER, makecol(255,0,0));
+	textprintf_ex(target, font, x-30+BAR_LENGTH/2, y-BAR_BORDER+BAR_WIDTH/2, makecol(255,255,255),-1,"%d/%d",m_pPlayer->fury,m_pPlayer->furyMax);
+	x-=35;
+	y+=20+BAR_WIDTH;
+
+	textprintf(target, font, x, y, makecol(255,255,255),"Defense:     %f",m_pPlayer->defense);
+	y+=20;
+	textprintf(target, font, x, y, makecol(255,255,255),"Fire damage: %f",m_pPlayer->fireDamage);
+	y+=20;
+	textprintf(target, font, x, y, makecol(255,255,255),"Mele damage: %f",m_pPlayer->contactDamage);
+	y+=20;
+
 }
 
