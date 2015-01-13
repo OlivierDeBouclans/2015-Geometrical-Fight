@@ -36,7 +36,7 @@ void Map::draw(BITMAP* target) const
 	rectfill(target,OFFSET_X-BORDER_WIDTH,OFFSET_Y-BORDER_WIDTH,OFFSET_X+m_iWidth+BORDER_WIDTH,OFFSET_Y+m_iHeight+BORDER_WIDTH, makecol(255,255,255));
 	rectfill(target,OFFSET_X,OFFSET_Y,OFFSET_X+m_iWidth,OFFSET_Y+m_iHeight, makecol(0,0,0));
 	//textprintf(target, font, 200, 10, makecol(255,255,255),"d %d",vEnemies.size());
-
+	
 	drawPlayerStats(target);
 	
 	#ifdef DEBUG_BOUNDING_RECT
@@ -154,5 +154,7 @@ void Map::drawPlayerStats(BITMAP* target) const
 	textprintf(target, font, x, y, makecol(255,255,255),"Mele damage: %f",m_pPlayer->contactDamage);
 	y+=20;
 
+	textprintf(target, font, x, y, makecol(255,255,255),"Max Speed:   %f",m_pPlayer->maxSpeed);
+	y+=20;
 }
 

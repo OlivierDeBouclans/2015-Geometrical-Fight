@@ -5,7 +5,7 @@
 #include "allegro.h"
 
 
-Joystick::Joystick(void):a(_a), b(_b), x(_x), y(y), lb(_lb), rb(_rb), start(_start), back(_back), lt(_lt), rt(_rt), stick_x(_stick_x), stick_y(_stick_y), throttle(_throttle)
+Joystick::Joystick(void):a(_a), b(_b), x(_x), y(_y), lb(_lb), rb(_rb), start(_start), back(_back), lt(_lt), rt(_rt), stick_x(_stick_x), stick_y(_stick_y), throttle(_throttle)
 {
 }
 
@@ -47,8 +47,8 @@ void Joystick::update()
 	_start=joy[0].button[BUTTON_START].b;
 	_back=joy[0].button[BUTTON_BACK].b;
 
-	_lt=-joy[0].stick[0].axis[2].d1;
-	_rt=-joy[0].stick[0].axis[2].d2;
+	_rt=-joy[0].stick[0].axis[2].d1;
+	_lt=-joy[0].stick[0].axis[2].d2;
 
 	_stick_x=joy[0].stick[0].axis[0].pos;
 	_stick_y=joy[0].stick[0].axis[1].pos;

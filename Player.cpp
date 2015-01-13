@@ -13,9 +13,11 @@ Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(
 {
 	m_pWeapon=new Weapon(this);
 	
-	radius        =PLAYER_RADIUS;
+	form          =NORMAL;
+
+	radius        =PLAYER_DEFAULT_RADIUS;
 	maxSpeed      =PLAYER_SPEED;
-	color         =PLAYER_COL;
+	color         =PLAYER_DEFAULT_COL;
 	health        =PLAYER_HEALTH;
 	healthMax     =PLAYER_HEALTH;
 	defense       =PLAYER_DEFENSE;
@@ -26,6 +28,24 @@ Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(
 	fury          =0;
 	xp            =0;
 	xpNextLevel   =1000;
+
+	agressive_fire_coef     =PLAYER_AGRESSIVE_FIRE_DAMAGE_COEF;
+	agressive_contact_coef  =PLAYER_AGRESSIVE_CONTACT_DAMAGE_COEF;
+	agressive_defense_coef  =PLAYER_AGRESSIVE_DEFENSE_COEF;
+							 
+	defensive_fire_coef     =PLAYER_DEFENSIVE_FIRE_DAMAGE_COEF;
+	defensive_contact_coef  =PLAYER_DEFENSIVE_CONTACT_DAMAGE_COEF;
+	defensive_defense_coef  =PLAYER_DEFENSIVE_DEFENSE_COEF;
+	defensive_speed_coef    =PLAYER_DEFENSIVE_SPEED_COEF;
+							 
+	sneaky_fire_coef        =PLAYER_SNEAKY_FIRE_DAMAGE_COEF;
+	sneaky_contact_coef     =PLAYER_SNEAKY_CONTACT_DAMAGE_COEF;
+	sneaky_defense_coef     =PLAYER_SNEAKY_DEFENSE_COEF;
+	sneaky_speed_coef       =PLAYER_SNEAKY_SPEED_COEF;
+							 
+	speedy_contact_coef     =PLAYER_SPEEDY_CONTACT_DAMAGE_COEF; 
+	speedy_defense_coef     =PLAYER_SPEEDY_DEFENSE_COEF;
+	speedy_speed_coef       =PLAYER_SPEEDY_SPEED_COEF;
 }
 
 
@@ -79,8 +99,30 @@ void Player::update(double dt)
 	if (m_pJoystick)
 	{
 		m_pJoystick->update();
-		if(m_pJoystick->a)
+		if(m_pJoystick->rt)
 			m_pWeapon->fire();
+
+		if(m_pJoystick->a)
+		{
+			unchange();
+			change(AGRESSIVE);
+		}
+		else if(m_pJoystick->b)
+		{
+			unchange();
+			change(SNEAKY);
+		}
+		else if(m_pJoystick->y)
+		{
+			unchange();
+			change(SPEEDY);
+		}
+		else if(m_pJoystick->x)
+		{
+			unchange();
+			change(DEFENSIVE);
+		}
+
 	}
 
 	m_pWeapon->update(dt);
@@ -117,3 +159,159 @@ Rect Player::boundingRect() const
 
 	return r;
 }
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::unchange()
+{
+	switch(form)
+	{
+		case AGRESSIVE:
+			unchangeAgressive();
+		break;
+
+		case DEFENSIVE:
+			unchangeDefensive();
+		break;
+
+		case SNEAKY:
+			unchangeSneaky();
+		break;
+
+		case SPEEDY:
+			unchangeSpeedy();
+		break;
+	}
+
+	form=NORMAL;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::unchangeAgressive()
+{
+	color=PLAYER_DEFAULT_COL;
+	radius=PLAYER_DEFAULT_RADIUS;
+
+	fireDamage/=agressive_fire_coef;
+	contactDamage/=agressive_contact_coef;
+	defense/=agressive_defense_coef;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::unchangeSneaky()
+{
+	color=PLAYER_DEFAULT_COL;
+	radius=PLAYER_DEFAULT_RADIUS;
+
+	fireDamage/=sneaky_fire_coef;
+	contactDamage/=sneaky_contact_coef;
+	defense/=sneaky_defense_coef;
+	maxSpeed/=sneaky_speed_coef;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::unchangeSpeedy()
+{
+	color=PLAYER_DEFAULT_COL;
+	radius=PLAYER_DEFAULT_RADIUS;
+
+	contactDamage/=speedy_contact_coef;
+	defense/=speedy_defense_coef;
+	maxSpeed/=speedy_speed_coef;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::unchangeDefensive()
+{
+	color=PLAYER_DEFAULT_COL;
+	radius=PLAYER_DEFAULT_RADIUS;
+
+	fireDamage/=defensive_fire_coef;
+	contactDamage/=defensive_contact_coef;
+	defense/=defensive_defense_coef;
+	maxSpeed/=defensive_speed_coef;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::change(Form wantedForm)
+{
+	switch(wantedForm)
+	{
+	case AGRESSIVE:
+		changeAgressive();
+	break;
+
+	case DEFENSIVE:
+		changeDefensive();
+	break;
+
+	case SNEAKY:
+		changeSneaky();
+	break;
+
+	case SPEEDY:
+		changeSpeedy();
+	break;
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::changeAgressive()
+{
+	color=PLAYER_AGRESSIVE_COL;
+	radius=PLAYER_AGRESSIVE_RADIUS;
+	form=AGRESSIVE;
+
+	fireDamage*=agressive_fire_coef;
+	contactDamage*=agressive_contact_coef;
+	defense*=agressive_defense_coef;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::changeSneaky()
+{
+	color=PLAYER_SNEAKY_COL;
+	radius=PLAYER_SNEAKY_RADIUS;
+	form=SNEAKY;
+
+	fireDamage*=sneaky_fire_coef;
+	contactDamage*=sneaky_contact_coef;
+	defense*=sneaky_defense_coef;
+	maxSpeed*=sneaky_speed_coef;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::changeSpeedy()
+{
+	color=PLAYER_SPEEDY_COL;
+	radius=PLAYER_SPEEDY_RADIUS;
+	form=SPEEDY;
+
+	contactDamage*=speedy_contact_coef;
+	defense*=speedy_defense_coef;
+	maxSpeed*=speedy_speed_coef;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::changeDefensive()
+{
+	color=PLAYER_DEFENSIVE_COL;
+	radius=PLAYER_DEFENSIVE_RADIUS;
+	form=DEFENSIVE;
+
+	fireDamage*=defensive_fire_coef;
+	contactDamage*=defensive_contact_coef;
+	defense*=defensive_defense_coef;
+	maxSpeed*=defensive_speed_coef;
+}
+
