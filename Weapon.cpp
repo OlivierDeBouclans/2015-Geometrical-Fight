@@ -45,7 +45,7 @@ void Weapon::update(double dt)
 
 //////////////////////////////////////////////////////////////////////////
 
-void Weapon::fire()
+void Weapon::fire(bool ahead)
 {
 	double t=clock();
 	if(m_bLastFire+m_bFireRate>t)
@@ -53,7 +53,7 @@ void Weapon::fire()
 	m_bLastFire=t;
 	
 	Bullet b(m_pOwner->x,m_pOwner->y);
-	b.launch(*m_pOwner);
+	b.launch(*m_pOwner, ahead?1:-1);
 	m_pBullet.push_back(b);
 }
 

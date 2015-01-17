@@ -8,7 +8,7 @@ Bullet::Bullet(int x, int y): MovingEntity(x,y)
 {
 	color=makecol(255,255,0);
 	radius=BULLET_SIZE;
-	maxSpeed=5;
+	maxSpeed=BULLET_SPEED*2;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -46,10 +46,10 @@ Vector2D Bullet::getSteeringForce()
 
 //////////////////////////////////////////////////////////////////////////
 
-void Bullet::launch(const MovingEntity& owner)
+void Bullet::launch(const MovingEntity& owner, int way)
 {
-	double n=owner.vSpeed.Norm();
-	vSpeed=owner.vSpeed*(1+BULLET_SPEED/n);
+	//double n=owner.vSpeed.Norm();
+	vSpeed=owner.vSpeed*(1+BULLET_SPEED)*way;
 }
 
 //////////////////////////////////////////////////////////////////////////

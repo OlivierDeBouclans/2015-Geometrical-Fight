@@ -101,6 +101,8 @@ void Player::update(double dt)
 		m_pJoystick->update();
 		if(m_pJoystick->rt)
 			m_pWeapon->fire();
+		else if(m_pJoystick->lt)
+			m_pWeapon->fire(false);
 
 		if(m_pJoystick->a)
 		{

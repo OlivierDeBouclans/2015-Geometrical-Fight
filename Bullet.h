@@ -17,7 +17,7 @@ class Bullet:public MovingEntity
 		Vector2D getSteeringForce();
 		Rect boundingRect() const;
 
-		void launch(const MovingEntity& owner);
+		void launch(const MovingEntity& owner, int way);
 };
 
 #endif // Bullet_h__

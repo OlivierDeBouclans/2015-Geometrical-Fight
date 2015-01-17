@@ -14,7 +14,7 @@ class Weapon
 		Weapon(MovingEntity* owner);
 		~Weapon(void);
 
-		void fire();
+		void fire(bool ahead=true);
 		void update(double dt);
 		void draw(BITMAP* target) const;
 
