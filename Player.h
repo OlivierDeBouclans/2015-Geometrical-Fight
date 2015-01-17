@@ -36,6 +36,8 @@ class Player:public MovingEntity
 			void unchangeSneaky();
 			void unchangeSpeedy();
 
+		void getXp(int value);
+
 		int xp;
 		int xpNextLevel;
 		int fury;

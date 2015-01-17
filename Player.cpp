@@ -322,3 +322,23 @@ void Player::changeDefensive()
 	maxSpeed*=defensive_speed_coef;
 }
 
+//////////////////////////////////////////////////////////////////////////
+
+void Player::getXp(int value)
+{
+	xp+=value;
+
+	if(xp>=xpNextLevel)
+	{
+		xp-=xpNextLevel;
+		level++;
+		xpNextLevel*=LEVEL_XP_INCREASE;
+
+		healthMax     =PLAYER_HEALTH;
+		health        =healthMax;
+		defense       *=LEVEL_STATS_INCREASE;
+		fireDamage    *=LEVEL_STATS_INCREASE;
+		contactDamage *=LEVEL_STATS_INCREASE;
+	}
+}
+

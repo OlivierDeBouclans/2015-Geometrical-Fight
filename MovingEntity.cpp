@@ -44,3 +44,22 @@ void MovingEntity::update(double Dt)
 		vSide = vHead.Ortho();
 	}
 }
+
+//////////////////////////////////////////////////////////////////////////
+
+void MovingEntity::setLevel(int lvl)
+{
+	level=lvl;
+
+	int e=1;
+	for(int i=1;i<lvl;i++)
+		e*=LEVEL_STATS_INCREASE;
+
+	maxSpeed      *=e;
+	healthMax     *=e;
+	health        *=e;
+	defense       *=e;
+	fireDamage    *=e;
+	contactDamage *=e;
+}
+

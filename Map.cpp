@@ -109,6 +109,7 @@ void Map::addEnemies()
 	else
 		e=new Tracker(x,y,this);
 
+	e->setLevel((rand()%(m_pPlayer->level+2))+1);
 	vEnemies.push_back(e);
 }
 
@@ -181,9 +182,14 @@ void Map::destroyEnemy(int EnemyIndex)
 	vEnemies.erase(vEnemies.begin()+EnemyIndex);
 }
 
+//////////////////////////////////////////////////////////////////////////
+
 void Map::hitPlayer(int damage)
 {
 	m_pPlayer->health-=damage/m_pPlayer->defense;
+
+	if(m_pPlayer->health<=0)
+		exit(0);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -193,7 +199,7 @@ void Map::getXp(Xp* xp)
 	for(unsigned int i=0; i<vXp.size();++i)
 		if(vXp[i]==xp)
 		{
-			m_pPlayer->xp+=xp->value;
+			m_pPlayer->getXp(xp->value);
 
 			delete xp;
 			vXp.erase(vXp.begin()+i);

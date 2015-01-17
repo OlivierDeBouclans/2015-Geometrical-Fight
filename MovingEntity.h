@@ -37,6 +37,8 @@ class MovingEntity: public Entity
 
 		virtual void draw(BITMAP* target) const=0;
 
+		void setLevel(int lvl);
+
 		//Public attributes
         double mass;                        //Mass
         double maxSpeed;                    //Maximum speed
