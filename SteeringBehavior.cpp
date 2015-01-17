@@ -60,6 +60,9 @@ Vector2D SteeringBehavior::Pursue()
 {
     Vector2D ToTarget = m_PursueEntity->getCoor() - m_owner->getCoor();
 
+	if(m_dPursueRadius>0 && ToTarget.NormSquared()>m_dPursueRadius*m_dPursueRadius)
+		return Vector2D(0,0);
+
     double RelativeHeading = m_owner->vHead * m_PursueEntity->vHead;
 
     //if ahead just go the the target position

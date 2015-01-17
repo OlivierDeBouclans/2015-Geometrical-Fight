@@ -8,7 +8,7 @@
 #define DEFAULT_X -1
 #define DEFAULT_Y -1
 
-#define BULLET_SPEED 8
+#define BULLET_SPEED 10
 #define BULLET_SIZE 6
 
 #define DEFAULT_DELAY_SPAWN 1500
@@ -77,6 +77,15 @@
 #define DREAMER_DEFENSE 1.5
 #define DREAMER_FIRE_DAMAGE 0
 #define DREAMER_CONTACT_DAMAGE 20
+
+#define XP_RADIUS 4
+#define XP_SPEED 3
+#define XP_COL makecol(0,255,0)
+#define XP_HEALTH 1
+#define XP_DEFENSE 1
+#define XP_FIRE_DAMAGE 0
+#define XP_CONTACT_DAMAGE 0 
+#define XP_PURSUE_RADIUS 50
 
 /************************************************************************/
 /* MOVING ENTITY MACROS                                                 */

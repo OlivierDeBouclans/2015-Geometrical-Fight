@@ -8,6 +8,7 @@
 #include "Vector2D.h"
 
 class MovingEntity;
+class Xp;
 class Player;
 class Joystick;
 
@@ -32,7 +33,11 @@ class Map
 
 		Player* getPlayer() {return m_pPlayer;}
 
-		void hitEnemy(int EnemyIndex);
+		void hitEnemy(int EnemyIndex, bool fireDamage=true);
+		void destroyEnemy(int EnemyIndex);
+
+		void hitPlayer(int damage);
+		void getXp(Xp* xp);
 
 		Point2D getTopLeft() {return Point2D(OFFSET_X,OFFSET_Y);}
 		Point2D getTopRight() {return Point2D(OFFSET_X+m_iWidth,OFFSET_Y);}
@@ -41,6 +46,7 @@ class Map
 
 		Joystick* joystick;
 		std::vector<MovingEntity*> vEnemies;
+		std::vector<Xp*> vXp;
 
 	protected:
 		int m_iWidth;

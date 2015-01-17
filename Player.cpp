@@ -3,6 +3,7 @@
 #include "Joystick.h"
 #include "Weapon.h"
 #include "Macros.h"
+#include "Map.h"
 
 #include "allegro.h"
 
@@ -128,6 +129,10 @@ void Player::update(double dt)
 	}
 
 	m_pWeapon->update(dt);
+
+	for(unsigned int i=0; i<pMap->vEnemies.size();++i)
+	if(Map::collide(boundingRect(),pMap->vEnemies[i]->boundingRect()))
+		pMap->hitEnemy(i,false);
 
 	MovingEntity::update(dt);
 }

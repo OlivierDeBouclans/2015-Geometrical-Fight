@@ -29,6 +29,12 @@ Map::~Map(void)
 		delete vEnemies.back();
 		vEnemies.pop_back();
 	}
+
+	while(vXp.size())
+	{
+		delete vXp.back();
+		vXp.pop_back();
+	}
 }
 
 void Map::draw(BITMAP* target) const
@@ -42,6 +48,9 @@ void Map::draw(BITMAP* target) const
 	#ifdef DEBUG_BOUNDING_RECT
 		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
 	#endif
+
+	for(unsigned int i=0;i<vXp.size();i++)
+		vXp[i]->draw(target);
 
 	m_pPlayer->draw(target);
 
@@ -69,6 +78,9 @@ void Map::update(double dt)
 
 	for(unsigned int i=0;i<vEnemies.size();i++)
 		vEnemies[i]->update(dt);
+
+	for(unsigned int i=0;i<vXp.size();i++)
+		vXp[i]->update(dt);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -102,17 +114,17 @@ void Map::addEnemies()
 
 //////////////////////////////////////////////////////////////////////////
 
-void Map::hitEnemy(int EnemyIndex)
+void Map::hitEnemy(int EnemyIndex, bool fireDamage)
 {
 	MovingEntity* e=vEnemies[EnemyIndex];
 
-	e->health-=m_pPlayer->fireDamage/e->defense;
+	if(fireDamage)
+		e->health-=m_pPlayer->fireDamage/e->defense;
+	else
+		e->health-=m_pPlayer->contactDamage/e->defense;
 
 	if(e->health<=0)
-	{
-		delete vEnemies[EnemyIndex];
-		vEnemies.erase(vEnemies.begin()+EnemyIndex);
-	}
+		destroyEnemy(EnemyIndex);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -156,5 +168,37 @@ void Map::drawPlayerStats(BITMAP* target) const
 
 	textprintf(target, font, x, y, makecol(255,255,255),"Max Speed:   %f",m_pPlayer->maxSpeed);
 	y+=20;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Map::destroyEnemy(int EnemyIndex)
+{
+	Xp *xp=new Xp(vEnemies[EnemyIndex]->x,vEnemies[EnemyIndex]->y,this);
+	vXp.push_back(xp);
+
+	delete vEnemies[EnemyIndex];
+	vEnemies.erase(vEnemies.begin()+EnemyIndex);
+}
+
+void Map::hitPlayer(int damage)
+{
+	m_pPlayer->health-=damage/m_pPlayer->defense;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Map::getXp(Xp* xp)
+{
+	for(unsigned int i=0; i<vXp.size();++i)
+		if(vXp[i]==xp)
+		{
+			m_pPlayer->xp+=xp->value;
+
+			delete xp;
+			vXp.erase(vXp.begin()+i);
+
+			break;
+		}
 }
 

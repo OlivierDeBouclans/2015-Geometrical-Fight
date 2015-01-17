@@ -33,6 +33,16 @@ Vector2D Enemy::getSteeringForce()
 	return steeringBehavior.getSteeringForce();
 }
 
+//////////////////////////////////////////////////////////////////////////
+
+void Enemy::update(double dt)
+{
+  if(Map::collide(boundingRect(),pMap->getPlayer()->boundingRect()))
+	pMap->hitPlayer(contactDamage);
+
+  MovingEntity::update(dt);
+}
+
 /************************************************************************/
 /* TRACKER                                                              */
 /************************************************************************/
@@ -180,4 +190,60 @@ void Dreamer::draw(BITMAP* target) const
 		Rect m_boundingRect=boundingRect();
 		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
 	#endif
+}
+
+/************************************************************************/
+/* Xp                                                                   */
+/************************************************************************/
+
+Xp::Xp(int x, int y, Map* world): Enemy(x,y,world)
+{
+	radius        =XP_RADIUS;
+	maxSpeed      =XP_SPEED;
+	color         =XP_COL;
+	health        =XP_HEALTH;
+	healthMax     =XP_HEALTH;
+	defense       =XP_DEFENSE;
+	fireDamage    =XP_FIRE_DAMAGE;
+	contactDamage =XP_CONTACT_DAMAGE;
+
+	value=50;
+
+	steeringBehavior.OnWander(10+rand()%10,50+rand()%50);
+	steeringBehavior.OnPursue(world->getPlayer(),XP_PURSUE_RADIUS,5);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+Rect Xp::boundingRect() const
+{
+	Rect r;
+	r.x1=x-radius;
+	r.x2=x+radius;
+	r.y1=y-radius;
+	r.y2=y+radius;
+
+	return r;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Xp::draw(BITMAP* target) const
+{
+	circlefill(target,x,y,radius,color);
+
+	#ifdef DEBUG_BOUNDING_RECT
+		Rect m_boundingRect=boundingRect();
+		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
+	#endif
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Xp::update(double dt)
+{
+	MovingEntity::update(dt);
+
+	if(Map::collide(boundingRect(),pMap->getPlayer()->boundingRect()))
+		pMap->getXp(this);	   
 }

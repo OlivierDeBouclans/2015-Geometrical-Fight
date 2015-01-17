@@ -65,11 +65,12 @@ class SteeringBehavior
 		void setMap(Map* world) {m_pMap=world;}
 
         //Activation for each behavior
-        void  OnPursue(MovingEntity *target, double weight=1)
+        void  OnPursue(MovingEntity *target, double pursueRadius=-1, double weight=1)
             {
                 m_bPursue = true;
                 m_dPursue = weight;
                 m_PursueEntity = target;
+				m_dPursueRadius=pursueRadius;
             }
         void  OnEvade(MovingEntity *target, double weight=1)
             {
@@ -186,6 +187,7 @@ class SteeringBehavior
         MovingEntity *m_EvadeEntity;        //Entity to flee from
         double m_WanderRadius;              //radius of the wander circle
         double m_WanderDistance;            //distance of the wander circle from the entity
+		double m_dPursueRadius;
         MovingEntity *m_InterposeEntity1;   //Entities to interpose
         MovingEntity *m_InterposeEntity2;   //Entities to interpose
         MovingEntity *m_HideEntity;         //Entity to hide from
