@@ -43,6 +43,22 @@ void Enemy::update(double dt)
   MovingEntity::update(dt);
 }
 
+//////////////////////////////////////////////////////////////////////////
+
+void Enemy::draw(BITMAP* target) const
+{
+	Rect r=boundingRect();
+	textprintf(target,font,r.x1,r.y1-10,makecol(255,255,255),"%d",level);
+
+	//rectfill(target,r.x1+35,r.y1,r.x2,r.y1, makecol(255,255,255));
+	//rectfill(target,x+BAR_BORDER,y+BAR_BORDER,x+BAR_BORDER+((BAR_LENGTH-2*BAR_BORDER)),y+BAR_WIDTH-BAR_BORDER, makecol(0,0,0));
+	int x1=r.x1+10;
+	int x2=r.x2;
+	int l=health/2;
+	rectfill(target,x1,r.y1-7,x1+l,r.y1-3, makecol(128,0,0));
+	//textprintf_ex(target, font, x-30+BAR_LENGTH/2, y-BAR_BORDER+BAR_WIDTH/2, makecol(255,255,255),-1,"%d/%d",m_pPlayer->health,m_pPlayer->healthMax);
+}
+
 /************************************************************************/
 /* TRACKER                                                              */
 /************************************************************************/
@@ -113,6 +129,8 @@ void Tracker::draw(BITMAP* target) const
 		Rect m_boundingRect=boundingRect();
 		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
 	#endif
+
+	Enemy::draw(target);
 }
 
 /************************************************************************/
@@ -190,6 +208,8 @@ void Dreamer::draw(BITMAP* target) const
 		Rect m_boundingRect=boundingRect();
 		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
 	#endif
+
+	Enemy::draw(target);
 }
 
 /************************************************************************/

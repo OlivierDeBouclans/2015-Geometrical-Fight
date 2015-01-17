@@ -24,7 +24,7 @@
 /* ENTITIES DEFAUTL STATS                                               */
 /************************************************************************/
 
-#define PLAYER_FURY 100
+#define PLAYER_FURY 1000
 #define PLAYER_HEALTH 100
 
 #define PLAYER_DEFAULT_COL   makecol(128,128,128)
@@ -93,6 +93,11 @@
 
 #define LEVEL_XP_INCREASE 1.3
 #define LEVEL_STATS_INCREASE 1.2
+
+#define FURY_DESTROY_ENEMY 150
+#define FURY_FIRE_DAMAGE_ENEMY 30
+#define FURY_CONTACT_DAMAGE_ENEMY 10
+#define FURY_GET_XP 60
 
 /************************************************************************/
 /* MOVING ENTITY MACROS                                                 */

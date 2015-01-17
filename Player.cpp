@@ -130,6 +130,11 @@ void Player::update(double dt)
 
 	m_pWeapon->update(dt);
 
+	if(form!=NORMAL)
+		decreaseFury(1);
+	if(fury==0)
+		unchange();
+
 	for(unsigned int i=0; i<pMap->vEnemies.size();++i)
 	if(Map::collide(boundingRect(),pMap->vEnemies[i]->boundingRect()))
 		pMap->hitEnemy(i,false);
@@ -340,5 +345,25 @@ void Player::getXp(int value)
 		fireDamage    *=LEVEL_STATS_INCREASE;
 		contactDamage *=LEVEL_STATS_INCREASE;
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::increaseFury(int value)
+{
+	fury+=value;
+
+	if(fury>furyMax)
+		fury=furyMax;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::decreaseFury(int value)
+{
+	fury-=value;
+
+	if(fury<0)
+		fury=0;
 }
 

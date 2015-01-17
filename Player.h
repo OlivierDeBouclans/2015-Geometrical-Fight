@@ -37,6 +37,8 @@ class Player:public MovingEntity
 			void unchangeSpeedy();
 
 		void getXp(int value);
+		void increaseFury(int value);
+		void decreaseFury(int value);
 
 		int xp;
 		int xpNextLevel;

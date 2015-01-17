@@ -120,9 +120,15 @@ void Map::hitEnemy(int EnemyIndex, bool fireDamage)
 	MovingEntity* e=vEnemies[EnemyIndex];
 
 	if(fireDamage)
-		e->health-=m_pPlayer->fireDamage/e->defense;
+		{
+			e->health-=m_pPlayer->fireDamage/e->defense;
+			m_pPlayer->increaseFury(FURY_FIRE_DAMAGE_ENEMY);
+		}
 	else
-		e->health-=m_pPlayer->contactDamage/e->defense;
+		{
+			e->health-=m_pPlayer->contactDamage/e->defense;
+			m_pPlayer->increaseFury(FURY_CONTACT_DAMAGE_ENEMY);
+		}
 
 	if(e->health<=0)
 		destroyEnemy(EnemyIndex);
@@ -177,6 +183,8 @@ void Map::destroyEnemy(int EnemyIndex)
 {
 	Xp *xp=new Xp(vEnemies[EnemyIndex]->x,vEnemies[EnemyIndex]->y,this);
 	vXp.push_back(xp);
+
+	m_pPlayer->increaseFury(FURY_DESTROY_ENEMY);
 
 	delete vEnemies[EnemyIndex];
 	vEnemies.erase(vEnemies.begin()+EnemyIndex);

@@ -16,7 +16,7 @@ class Enemy: public MovingEntity
 		~Enemy(void);
 
 		Vector2D getSteeringForce();
-		virtual void draw(BITMAP* target) const=0;
+		virtual void draw(BITMAP* target) const;
 		virtual Rect boundingRect() const=0;
 		virtual void update(double dt);
 
