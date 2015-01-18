@@ -421,3 +421,28 @@ void Player::specialDefensive()
 	maxSpeed=0;
 }
 
+//////////////////////////////////////////////////////////////////////////
+
+void Player::steal(int damage)
+{
+	static float life=0;
+
+	life+=damage*lifeSteal;
+
+	int iLife=(int)life;
+	if(iLife>=1)
+	{
+		health+=iLife;
+		life-=iLife;
+		if(health>healthMax)
+			health=healthMax;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::specialAgressive()
+{
+
+}
+

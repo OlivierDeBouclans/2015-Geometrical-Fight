@@ -25,6 +25,9 @@ class Player:public MovingEntity
 		void special();
 		void specialSpeedy();
 		void specialDefensive();
+		void specialAgressive();
+
+		void steal(int damage);
 
 		void setJoystick(Joystick* joy) {m_pJoystick=joy;}
 

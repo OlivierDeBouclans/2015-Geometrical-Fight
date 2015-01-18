@@ -48,8 +48,7 @@ Vector2D Bullet::getSteeringForce()
 
 void Bullet::launch(const MovingEntity& owner, int way)
 {
-	//double n=owner.vSpeed.Norm();
-	vSpeed=owner.vSpeed*BULLET_SPEED*way;
+	vSpeed=owner.vHead*BULLET_SPEED*way;
 }
 
 //////////////////////////////////////////////////////////////////////////
