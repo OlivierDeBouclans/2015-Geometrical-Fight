@@ -29,6 +29,7 @@ Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(
 	fury          =0;
 	xp            =0;
 	xpNextLevel   =1000;
+	lifeSteal=0;
 
 	agressive_fire_coef     =PLAYER_AGRESSIVE_FIRE_DAMAGE_COEF;
 	agressive_contact_coef  =PLAYER_AGRESSIVE_CONTACT_DAMAGE_COEF;
@@ -105,26 +106,34 @@ void Player::update(double dt)
 		else if(m_pJoystick->lt)
 			m_pWeapon->fire(false);
 
+		Form f=form;
 		if(m_pJoystick->a)
 		{
 			unchange();
-			change(AGRESSIVE);
+			if(f!=AGRESSIVE)
+				change(AGRESSIVE);
 		}
 		else if(m_pJoystick->b)
 		{
 			unchange();
-			change(SNEAKY);
+			if(f!=SNEAKY)
+				change(SNEAKY);
 		}
 		else if(m_pJoystick->y)
 		{
 			unchange();
-			change(SPEEDY);
+			if(f!=SPEEDY)
+				change(SPEEDY);
 		}
 		else if(m_pJoystick->x)
 		{
 			unchange();
-			change(DEFENSIVE);
+			if(f!=DEFENSIVE)
+				change(DEFENSIVE);
 		}
+
+		if(m_pJoystick->lb)
+			special();
 
 	}
 
@@ -246,6 +255,7 @@ void Player::unchangeDefensive()
 	contactDamage/=defensive_contact_coef;
 	defense/=defensive_defense_coef;
 	maxSpeed/=defensive_speed_coef;
+	lifeSteal=0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -325,6 +335,7 @@ void Player::changeDefensive()
 	contactDamage*=defensive_contact_coef;
 	defense*=defensive_defense_coef;
 	maxSpeed*=defensive_speed_coef;
+	lifeSteal=PLAYER_DEFENSIVE_LIFE_STEAL;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -365,5 +376,48 @@ void Player::decreaseFury(int value)
 
 	if(fury<0)
 		fury=0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::specialSpeedy()
+{
+	Point2D c(x,y);
+	c=c+vSpeed*10;
+
+	x=c.x;
+	y=c.y;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::special()
+{
+	switch(form)
+	{
+	case AGRESSIVE:
+		//specialeAgressive();
+		break;
+
+	case DEFENSIVE:
+		specialDefensive();
+		break;
+
+	case SNEAKY:
+		//specialSneaky();
+		break;
+
+	case SPEEDY:
+		specialSpeedy();
+		break;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::specialDefensive()
+{
+	lifeSteal*=2;
+	maxSpeed=0;
 }
 

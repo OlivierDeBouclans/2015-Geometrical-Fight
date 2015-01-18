@@ -121,8 +121,10 @@ void Map::hitEnemy(int EnemyIndex, bool fireDamage)
 
 	if(fireDamage)
 		{
-			e->health-=m_pPlayer->fireDamage/e->defense;
+			int damage=m_pPlayer->fireDamage/e->defense;
+			e->health-=damage;
 			m_pPlayer->increaseFury(FURY_FIRE_DAMAGE_ENEMY);
+			m_pPlayer->health+=damage*m_pPlayer->lifeSteal;
 		}
 	else
 		{

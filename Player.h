@@ -22,6 +22,10 @@ class Player:public MovingEntity
 		Rect boundingRect() const;
 		void update(double dt);
 
+		void special();
+		void specialSpeedy();
+		void specialDefensive();
+
 		void setJoystick(Joystick* joy) {m_pJoystick=joy;}
 
 		void change(Form wantedForm);
@@ -44,6 +48,8 @@ class Player:public MovingEntity
 		int xpNextLevel;
 		int fury;
 		int furyMax;
+
+		float lifeSteal;
 
 		Form form;
 
