@@ -32,6 +32,7 @@ class Map
 		void addEnemies();
 
 		Player* getPlayer() {return m_pPlayer;}
+		Rect getBoundingRect() {return m_boundingRect;}
 
 		void hitEnemy(int EnemyIndex, bool fireDamage=true);
 		void destroyEnemy(int EnemyIndex);
@@ -47,6 +48,8 @@ class Map
 		Joystick* joystick;
 		std::vector<MovingEntity*> vEnemies;
 		std::vector<Xp*> vXp;
+
+		bool bPause;
 
 	protected:
 		int m_iWidth;

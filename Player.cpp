@@ -242,6 +242,8 @@ void Player::unchangeSpeedy()
 	contactDamage/=speedy_contact_coef;
 	defense/=speedy_defense_coef;
 	maxSpeed/=speedy_speed_coef;
+
+	m_pWeapon->dFireRate*=PLAYER_SPEEDY_FIRE_RATE_COEF;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -321,6 +323,7 @@ void Player::changeSpeedy()
 	contactDamage*=speedy_contact_coef;
 	defense*=speedy_defense_coef;
 	maxSpeed*=speedy_speed_coef;
+	m_pWeapon->dFireRate/=PLAYER_SPEEDY_FIRE_RATE_COEF;
 }
 
 //////////////////////////////////////////////////////////////////////////

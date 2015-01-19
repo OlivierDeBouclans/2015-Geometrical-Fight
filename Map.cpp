@@ -5,7 +5,7 @@
 #include "Enemy.h"
 
 
-Map::Map(int width, int height): m_iWidth(width), m_iHeight(height), m_pPlayer(NULL), m_dLastSpawn(clock())
+Map::Map(int width, int height): m_iWidth(width), m_iHeight(height), m_pPlayer(NULL), m_dLastSpawn(clock()), bPause(false)
 {
 	int x1=OFFSET_X;
 	int x2=OFFSET_X+m_iWidth;
@@ -56,6 +56,9 @@ void Map::draw(BITMAP* target) const
 
 	for(unsigned int i=0;i<vEnemies.size();i++)
 		vEnemies[i]->draw(target);
+
+	if(bPause)
+		textprintf(target,font,0-50+(m_boundingRect.x1+m_boundingRect.x2)/2,(m_boundingRect.y1+m_boundingRect.y2)/2,makecol(255,255,255),"PAUSE");
 }
 
 bool Map::collide(Entity* e) const

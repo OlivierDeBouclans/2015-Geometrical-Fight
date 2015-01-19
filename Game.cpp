@@ -66,8 +66,11 @@ void Game::play()
 	{
 		clear(m_pScreenBuffer);
 
-		m_pMap->addEnemies();
-		m_pMap->update(1);
+		if(!m_pMap->bPause)
+		{
+			m_pMap->addEnemies();
+			m_pMap->update(1);
+		}
 		m_pMap->draw(m_pScreenBuffer);
 
 		#ifdef DEBUG_FPS
@@ -79,6 +82,9 @@ void Game::play()
 			blit (m_pScreenBuffer, screen, 0, 0, 0, 0,SCREEN_W-1,SCREEN_H-1);
 		release_screen();
 
+		if(key[KEY_P])
+			m_pMap->bPause=!m_pMap->bPause;
+		
 		//Adjust fps
 		fps.update();
 		rest(fps.getRestTime());

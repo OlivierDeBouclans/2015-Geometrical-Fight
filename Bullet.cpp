@@ -1,14 +1,17 @@
 #include "Bullet.h"
+#include "Map.h"
 
 #include "allegro.h"
 
 using namespace std;
 
-Bullet::Bullet(int x, int y): MovingEntity(x,y)
+Bullet::Bullet(int x, int y, Map* world): MovingEntity(x,y)
 {
 	color=makecol(255,255,0);
 	radius=BULLET_SIZE;
 	maxSpeed=BULLET_SPEED*2;
+	pMap=world;
+	iBounceTime=0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -84,4 +87,30 @@ Rect Bullet::boundingRect() const
 	r.y2=y2;
 
 	return r;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Bullet::update(double dt)
+{
+	MovingEntity::update(dt);
+
+	if(iBounceTime)
+	{
+		Point2D tl=pMap->getTopLeft();
+		Point2D br=pMap->getBotRight();
+
+		if(x>br.x || x<tl.x)
+		{
+			vSpeed.x=-vSpeed.x;
+			--iBounceTime;
+		}
+
+		if(y>br.y || y<tl.y)
+		{
+			vSpeed.y=-vSpeed.y;
+			--iBounceTime;
+		}
+	}
+
 }

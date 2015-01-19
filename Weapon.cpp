@@ -3,12 +3,13 @@
 #include "Bullet.h"
 #include "Map.h"
 #include "Macros.h"
+#include "Player.h"
 
 #include "allegro.h"
 
 using namespace std;
 
-Weapon::Weapon(MovingEntity* owner): m_pOwner(owner), m_bLastFire(0), m_bFireRate(DEFAULT_FIRE_RATE)
+Weapon::Weapon(Player* owner): m_pOwner(owner), m_bLastFire(0), dFireRate(DEFAULT_FIRE_RATE)
 {
 }
 
@@ -48,13 +49,34 @@ void Weapon::update(double dt)
 void Weapon::fire(bool ahead)
 {
 	double t=clock();
-	if(m_bLastFire+m_bFireRate>t)
+	if(m_bLastFire+dFireRate>t)
 		return;
 	m_bLastFire=t;
-	
-	Bullet b(m_pOwner->x,m_pOwner->y);
-	b.launch(*m_pOwner, ahead?1:-1);
-	m_pBullet.push_back(b);
+
+	if(m_pOwner->form==Player::AGRESSIVE)
+	{
+		Point2D p1=Point2D(m_pOwner->x,m_pOwner->y)-m_pOwner->vSide*m_pOwner->radius/2;
+		Point2D p2=Point2D(m_pOwner->x,m_pOwner->y)+m_pOwner->vSide*m_pOwner->radius/2;
+
+		Bullet b1(p1.x,p1.y,m_pOwner->pMap);
+		Bullet b2(p2.x,p2.y,m_pOwner->pMap);
+
+		b1.launch(*m_pOwner, ahead?1:-1);
+		m_pBullet.push_back(b1);
+
+		b2.launch(*m_pOwner, ahead?1:-1);
+		m_pBullet.push_back(b2);
+	}
+	else
+	{
+		Bullet b(m_pOwner->x,m_pOwner->y,m_pOwner->pMap);
+
+		if(m_pOwner->form==Player::SNEAKY)
+			b.iBounceTime=2;
+
+		b.launch(*m_pOwner, ahead?1:-1);
+		m_pBullet.push_back(b);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
