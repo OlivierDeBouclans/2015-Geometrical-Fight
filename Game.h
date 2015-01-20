@@ -13,6 +13,9 @@ struct BITMAP;
 /*                              Game                                    */
 /************************************************************************/
 
+void countLogicUpdate();
+void countGameTime();
+
 class Game
 {
 	public:

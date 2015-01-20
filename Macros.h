@@ -20,6 +20,9 @@
 #define SCREEN_WIDTH  1600
 #define SCREEN_HEIGHT 900
 
+#define UPDATE_PER_SECOND_LOGIC 60
+#define GAME_TIME_REFRESH_MS 100
+
 /************************************************************************/
 /* ENTITIES DEFAUTL STATS                                               */
 /************************************************************************/
