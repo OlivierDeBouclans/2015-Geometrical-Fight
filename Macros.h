@@ -2,8 +2,6 @@
 #ifndef Macros_h__
 #define Macros_h__
 
-#define DEFAULT_FIRE_RATE 100
-
 #define DEFAULT_COLOR makecol(128,128,128)
 #define DEFAULT_X -1
 #define DEFAULT_Y -1
@@ -26,6 +24,9 @@
 /************************************************************************/
 /* ENTITIES DEFAUTL STATS                                               */
 /************************************************************************/
+
+#define DEFAULT_FIRE_RATE 100
+#define COOLDOWN_FORM 500
 
 #define PLAYER_FURY 1000
 #define PLAYER_HEALTH 100

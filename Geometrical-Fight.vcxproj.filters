@@ -51,7 +51,7 @@
     <ClInclude Include="SteeringBehavior.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FPSHandler.h">
+    <ClInclude Include="CoolDown.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,7 +92,7 @@
     <ClCompile Include="SteeringBehavior.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FPSHandler.cpp">
+    <ClCompile Include="CoolDown.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

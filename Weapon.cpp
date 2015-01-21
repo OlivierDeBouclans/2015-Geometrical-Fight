@@ -4,13 +4,15 @@
 #include "Map.h"
 #include "Macros.h"
 #include "Player.h"
+#include "CoolDown.h"
 
 #include "allegro.h"
 
 using namespace std;
 
-Weapon::Weapon(Player* owner): m_pOwner(owner), m_bLastFire(0), dFireRate(DEFAULT_FIRE_RATE)
+Weapon::Weapon(Player* owner): m_pOwner(owner), m_dFireRate(DEFAULT_FIRE_RATE)
 {
+	cd.add(FIRE,DEFAULT_FIRE_RATE);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -48,10 +50,8 @@ void Weapon::update(double dt)
 
 void Weapon::fire(bool ahead)
 {
-	double t=clock();
-	if(m_bLastFire+dFireRate>t)
+	if(!cd.isAvailable(FIRE))
 		return;
-	m_bLastFire=t;
 
 	if(m_pOwner->form==Player::AGRESSIVE)
 	{
@@ -77,6 +77,8 @@ void Weapon::fire(bool ahead)
 		b.launch(*m_pOwner, ahead?1:-1);
 		m_pBullet.push_back(b);
 	}
+
+	cd.launch(FIRE);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -85,8 +87,14 @@ void Weapon::draw(BITMAP* target) const
 {
 	for(unsigned int i=0;i<m_pBullet.size();i++)
 		m_pBullet[i].draw(target);
+}
 
-	//textprintf(target, font, 200, 10, makecol(255,255,255),"%d",m_pBullet.size());
+//////////////////////////////////////////////////////////////////////////
+
+void Weapon::setFireRate(double d)
+{
+	m_dFireRate=d;
+	cd.setCoolDown(FIRE,d);
 }
 
 //////////////////////////////////////////////////////////////////////////

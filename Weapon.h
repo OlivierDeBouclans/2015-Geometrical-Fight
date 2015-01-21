@@ -3,6 +3,7 @@
 #define Weapon_h__
 
 #include <vector>
+#include "CoolDown.h"
 
 class Bullet;
 class Player;
@@ -18,11 +19,16 @@ class Weapon
 		void update(double dt);
 		void draw(BITMAP* target) const;
 
-		double dFireRate;
+		double fireRate() {return m_dFireRate;}
+		void setFireRate(double d);
+
 	protected:
 		Player* m_pOwner;
 		std::vector<Bullet> m_pBullet;
-		double m_bLastFire;
+		double m_dFireRate;
+
+		enum {FIRE};
+		CoolDown cd;
 };
 
 #endif // Weapon_h__

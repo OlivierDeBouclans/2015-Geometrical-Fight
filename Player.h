@@ -4,6 +4,7 @@
 
 #include "movingentity.h"
 #include "Macros.h"
+#include "CoolDown.h"
 
 class Vector2D;
 class Joystick;
@@ -77,6 +78,9 @@ class Player:public MovingEntity
 	private:
 		Joystick* m_pJoystick;
 		Weapon*   m_pWeapon;
+
+		enum {CHANGE_AGRESSIVE,CHANGE_SPEEDY,CHANGE_SNEAKY, CHANGE_DEFENSIVE,UNCHANGE};
+		CoolDown cd;
 };
 
 #endif // Player_h__

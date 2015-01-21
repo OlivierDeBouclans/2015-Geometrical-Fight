@@ -48,6 +48,12 @@ Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(
 	speedy_contact_coef     =PLAYER_SPEEDY_CONTACT_DAMAGE_COEF; 
 	speedy_defense_coef     =PLAYER_SPEEDY_DEFENSE_COEF;
 	speedy_speed_coef       =PLAYER_SPEEDY_SPEED_COEF;
+
+	cd.add(CHANGE_AGRESSIVE,COOLDOWN_FORM);
+	cd.add(CHANGE_SNEAKY,COOLDOWN_FORM);
+	cd.add(CHANGE_SPEEDY,COOLDOWN_FORM);
+	cd.add(CHANGE_DEFENSIVE,COOLDOWN_FORM);
+	cd.add(UNCHANGE,COOLDOWN_FORM);
 }
 
 
@@ -80,6 +86,8 @@ void Player::draw(BITMAP* target) const
 	m_pWeapon->draw(target);
 }
 
+//////////////////////////////////////////////////////////////////////////
+
 Vector2D Player::getSteeringForce()
 {
 	if(!m_pJoystick)
@@ -101,35 +109,75 @@ void Player::update(double dt)
 	if (m_pJoystick)
 	{
 		m_pJoystick->update();
+
 		if(m_pJoystick->rt)
 			m_pWeapon->fire();
 		else if(m_pJoystick->lt)
 			m_pWeapon->fire(false);
 
-		Form f=form;
 		if(m_pJoystick->a)
 		{
-			unchange();
-			if(f!=AGRESSIVE)
-				change(AGRESSIVE);
+			if(form==AGRESSIVE && cd.isAvailable(UNCHANGE))
+			{
+				unchangeAgressive();
+				cd.launch(UNCHANGE);
+				cd.launch(CHANGE_AGRESSIVE);
+			}
+			else if(cd.isAvailable(CHANGE_AGRESSIVE))
+			{
+				unchange();
+				changeAgressive();
+				cd.launch(UNCHANGE);
+				cd.launch(CHANGE_AGRESSIVE);
+			}
 		}
 		else if(m_pJoystick->b)
 		{
-			unchange();
-			if(f!=SNEAKY)
-				change(SNEAKY);
+			if(form==DEFENSIVE && cd.isAvailable(UNCHANGE))
+			{
+				unchangeDefensive();
+				cd.launch(UNCHANGE);
+				cd.launch(CHANGE_DEFENSIVE);
+			}
+			else if(cd.isAvailable(CHANGE_DEFENSIVE))
+			{
+				unchange();
+				changeDefensive();
+				cd.launch(UNCHANGE);
+				cd.launch(CHANGE_DEFENSIVE);
+			}
 		}
 		else if(m_pJoystick->y)
 		{
-			unchange();
-			if(f!=SPEEDY)
-				change(SPEEDY);
+			if(form==SPEEDY && cd.isAvailable(UNCHANGE))
+			{
+				unchangeSpeedy();
+				cd.launch(UNCHANGE);
+				cd.launch(CHANGE_SPEEDY);
+			}
+			else if(cd.isAvailable(CHANGE_SPEEDY))
+			{
+				unchange();
+				changeSpeedy();
+				cd.launch(UNCHANGE);
+				cd.launch(CHANGE_SPEEDY);
+			}
 		}
 		else if(m_pJoystick->x)
 		{
-			unchange();
-			if(f!=DEFENSIVE)
-				change(DEFENSIVE);
+			if(form==SNEAKY && cd.isAvailable(UNCHANGE))
+			{
+				unchangeSneaky();
+				cd.launch(UNCHANGE);
+				cd.launch(CHANGE_SNEAKY);
+			}
+			else if(cd.isAvailable(CHANGE_SNEAKY))
+			{
+				unchange();
+				changeSneaky();
+				cd.launch(UNCHANGE);
+				cd.launch(CHANGE_SNEAKY);
+			}
 		}
 
 		if(m_pJoystick->lb)
@@ -203,16 +251,18 @@ void Player::unchange()
 			unchangeSpeedy();
 		break;
 	}
-
-	form=NORMAL;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 void Player::unchangeAgressive()
 {
+	if(form!=AGRESSIVE)
+		return;
+
 	color=PLAYER_DEFAULT_COL;
 	radius=PLAYER_DEFAULT_RADIUS;
+	form=NORMAL;
 
 	fireDamage/=agressive_fire_coef;
 	contactDamage/=agressive_contact_coef;
@@ -223,8 +273,12 @@ void Player::unchangeAgressive()
 
 void Player::unchangeSneaky()
 {
+	if(form!=SNEAKY)
+		return;
+
 	color=PLAYER_DEFAULT_COL;
 	radius=PLAYER_DEFAULT_RADIUS;
+	form=NORMAL;
 
 	fireDamage/=sneaky_fire_coef;
 	contactDamage/=sneaky_contact_coef;
@@ -236,22 +290,30 @@ void Player::unchangeSneaky()
 
 void Player::unchangeSpeedy()
 {
+	if(form!=SPEEDY)
+		return;
+
 	color=PLAYER_DEFAULT_COL;
 	radius=PLAYER_DEFAULT_RADIUS;
+	form=NORMAL;
 
 	contactDamage/=speedy_contact_coef;
 	defense/=speedy_defense_coef;
 	maxSpeed/=speedy_speed_coef;
 
-	m_pWeapon->dFireRate*=PLAYER_SPEEDY_FIRE_RATE_COEF;
+	m_pWeapon->setFireRate(m_pWeapon->fireRate()*PLAYER_SPEEDY_FIRE_RATE_COEF);
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 void Player::unchangeDefensive()
 {
+	if(form!=DEFENSIVE)
+		return;
+
 	color=PLAYER_DEFAULT_COL;
 	radius=PLAYER_DEFAULT_RADIUS;
+	form=NORMAL;
 
 	fireDamage/=defensive_fire_coef;
 	contactDamage/=defensive_contact_coef;
@@ -296,6 +358,7 @@ void Player::changeAgressive()
 	fireDamage*=agressive_fire_coef;
 	contactDamage*=agressive_contact_coef;
 	defense*=agressive_defense_coef;
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -323,7 +386,8 @@ void Player::changeSpeedy()
 	contactDamage*=speedy_contact_coef;
 	defense*=speedy_defense_coef;
 	maxSpeed*=speedy_speed_coef;
-	m_pWeapon->dFireRate/=PLAYER_SPEEDY_FIRE_RATE_COEF;
+
+	m_pWeapon->setFireRate(m_pWeapon->fireRate()/PLAYER_SPEEDY_FIRE_RATE_COEF);
 }
 
 //////////////////////////////////////////////////////////////////////////

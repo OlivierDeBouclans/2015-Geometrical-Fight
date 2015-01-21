@@ -16,6 +16,8 @@ struct BITMAP;
 void countLogicUpdate();
 void countGameTime();
 
+//volatile int gameTime=0;
+
 class Game
 {
 	public:
