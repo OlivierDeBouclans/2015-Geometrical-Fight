@@ -13,6 +13,7 @@ using namespace std;
 Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(joystick)
 {
 	m_pWeapon=new Weapon(this);
+	m_delay=new DelayCall<Player>(*this);
 	
 	form          =NORMAL;
 
@@ -54,12 +55,16 @@ Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(
 	cd.add(CHANGE_SPEEDY,COOLDOWN_FORM);
 	cd.add(CHANGE_DEFENSIVE,COOLDOWN_FORM);
 	cd.add(UNCHANGE,COOLDOWN_FORM);
+
+	cd.add(SPECIAL_SPEEDY,COOLDOWN_SPECIAL);
+	cd.add(SPECIAL_DEFENSIVE,COOLDOWN_SPECIAL);
 }
 
 
 Player::~Player(void)
 {
 	delete m_pWeapon;
+	delete m_delay;
 }
 
 void Player::draw(BITMAP* target) const
@@ -131,7 +136,7 @@ void Player::update(double dt)
 				cd.launch(CHANGE_AGRESSIVE);
 			}
 		}
-		else if(m_pJoystick->b)
+		else if(m_pJoystick->x)
 		{
 			if(form==DEFENSIVE && cd.isAvailable(UNCHANGE))
 			{
@@ -163,7 +168,7 @@ void Player::update(double dt)
 				cd.launch(CHANGE_SPEEDY);
 			}
 		}
-		else if(m_pJoystick->x)
+		else if(m_pJoystick->b)
 		{
 			if(form==SNEAKY && cd.isAvailable(UNCHANGE))
 			{
@@ -195,6 +200,8 @@ void Player::update(double dt)
 	for(unsigned int i=0; i<pMap->vEnemies.size();++i)
 	if(Map::collide(boundingRect(),pMap->vEnemies[i]->boundingRect()))
 		pMap->hitEnemy(i,false);
+
+	m_delay->update();
 
 	MovingEntity::update(dt);
 }
@@ -449,11 +456,16 @@ void Player::decreaseFury(int value)
 
 void Player::specialSpeedy()
 {
+	if(!cd.isAvailable(SPECIAL_SPEEDY))
+		return;
+
 	Point2D c(x,y);
 	c=c+vSpeed*10;
 
 	x=c.x;
 	y=c.y;
+
+	cd.launch(SPECIAL_SPEEDY);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -484,8 +496,14 @@ void Player::special()
 
 void Player::specialDefensive()
 {
+	if(!cd.isAvailable(SPECIAL_DEFENSIVE))
+		return;
+
 	lifeSteal*=2;
-	maxSpeed=0;
+	maxSpeed/=100;
+
+	m_delay->call(&Player::specialDefensiveUnchange,2000);
+	cd.launch(SPECIAL_DEFENSIVE);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -511,5 +529,13 @@ void Player::steal(int damage)
 void Player::specialAgressive()
 {
 
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::specialDefensiveUnchange()
+{
+	lifeSteal/=2;
+	maxSpeed*=100;	
 }
 

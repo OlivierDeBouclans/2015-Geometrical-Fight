@@ -5,6 +5,7 @@
 #include "movingentity.h"
 #include "Macros.h"
 #include "CoolDown.h"
+#include "DelayCall.h"
 
 class Vector2D;
 class Joystick;
@@ -26,6 +27,7 @@ class Player:public MovingEntity
 		void special();
 		void specialSpeedy();
 		void specialDefensive();
+			void specialDefensiveUnchange();
 		void specialAgressive();
 
 		void steal(int damage);
@@ -78,9 +80,11 @@ class Player:public MovingEntity
 	private:
 		Joystick* m_pJoystick;
 		Weapon*   m_pWeapon;
+		DelayCall<Player>* m_delay;
 
-		enum {CHANGE_AGRESSIVE,CHANGE_SPEEDY,CHANGE_SNEAKY, CHANGE_DEFENSIVE,UNCHANGE};
+		enum {CHANGE_AGRESSIVE,CHANGE_SPEEDY,CHANGE_SNEAKY, CHANGE_DEFENSIVE,UNCHANGE,SPECIAL_SPEEDY, SPECIAL_DEFENSIVE};
 		CoolDown cd;
+
 };
 
 #endif // Player_h__

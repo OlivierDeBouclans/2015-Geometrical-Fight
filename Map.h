@@ -6,6 +6,7 @@
 #include "Macros.h"
 #include <vector>
 #include "Vector2D.h"
+#include "CoolDown.h"
 
 class MovingEntity;
 class Xp;
@@ -59,6 +60,9 @@ class Map
 		double m_dLastSpawn;
 
 		Player* m_pPlayer;
+
+		enum {HIT_ENEMY, HIT_PLAYER};
+		CoolDown cd;
 
 
 };

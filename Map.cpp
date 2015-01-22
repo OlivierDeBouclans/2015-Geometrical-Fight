@@ -16,6 +16,9 @@ Map::Map(int width, int height): m_iWidth(width), m_iHeight(height), m_pPlayer(N
 	m_boundingRect.x2=x2;
 	m_boundingRect.y1=y1;
 	m_boundingRect.y2=y2;
+
+	cd.add(HIT_ENEMY,COOLDOWN_CONTACT_DAMAGE);
+	cd.add(HIT_PLAYER,COOLDOWN_CONTACT_DAMAGE);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -131,8 +134,13 @@ void Map::hitEnemy(int EnemyIndex, bool fireDamage)
 		}
 	else
 		{
+			if(!cd.isAvailable(HIT_ENEMY))
+				return; 
+
 			e->health-=m_pPlayer->contactDamage/e->defense;
 			m_pPlayer->increaseFury(FURY_CONTACT_DAMAGE_ENEMY);
+
+			cd.launch(HIT_ENEMY);
 		}
 
 	if(e->health<=0)
@@ -199,10 +207,15 @@ void Map::destroyEnemy(int EnemyIndex)
 
 void Map::hitPlayer(int damage)
 {
+	if(!cd.isAvailable(HIT_PLAYER))
+		return; 
+
 	m_pPlayer->health-=damage/m_pPlayer->defense;
 
 	if(m_pPlayer->health<=0)
 		exit(0);
+
+	cd.launch(HIT_PLAYER);
 }
 
 //////////////////////////////////////////////////////////////////////////
