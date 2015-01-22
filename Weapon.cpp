@@ -35,8 +35,15 @@ void Weapon::update(double dt)
 			{
 				if(Map::collide(m_pOwner->pMap->vEnemies[j]->boundingRect(),m_pBullet[i].boundingRect()))
 				{
-					m_pBullet.erase(m_pBullet.begin()+i);
-					m_pOwner->pMap->hitEnemy(j);
+					if(m_pBullet[i].cd.isAvailable(0))
+						{
+							m_pOwner->pMap->hitEnemy(j);
+							m_pBullet[i].cd.launch(0);
+						}
+
+					if(!m_pOwner->agressive_piercing)
+						m_pBullet.erase(m_pBullet.begin()+i);
+
 					break;
 				}
 			}

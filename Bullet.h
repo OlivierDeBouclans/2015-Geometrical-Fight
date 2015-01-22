@@ -4,6 +4,7 @@
 
 #include "movingentity.h"
 #include "Macros.h"
+#include "CoolDown.h"
 
 class Map;
 class Vector2D;
@@ -22,6 +23,8 @@ class Bullet:public MovingEntity
 		void launch(const MovingEntity& owner, int way);
 
 		int iBounceTime;
+
+		CoolDown cd;
 };
 
 #endif // Bullet_h__

@@ -29,6 +29,7 @@ class Player:public MovingEntity
 		void specialDefensive();
 			void specialDefensiveUnchange();
 		void specialAgressive();
+			void specialAgressiveUnchange();
 
 		void steal(int damage);
 
@@ -75,6 +76,7 @@ class Player:public MovingEntity
 		float agressive_fire_coef;
 		float agressive_contact_coef;
 		float agressive_defense_coef;
+		bool  agressive_piercing;
 
 		float sneaky_fire_coef;
 		float sneaky_contact_coef;
@@ -98,7 +100,7 @@ class Player:public MovingEntity
 		Weapon*   m_pWeapon;
 		DelayCall<Player>* m_delay;
 
-		enum {CHANGE_AGRESSIVE,CHANGE_SPEEDY,CHANGE_SNEAKY, CHANGE_DEFENSIVE,UNCHANGE,SPECIAL_SPEEDY, SPECIAL_DEFENSIVE,DECREASE_FURY};
+		enum {CHANGE_AGRESSIVE,CHANGE_SPEEDY,CHANGE_SNEAKY, CHANGE_DEFENSIVE,UNCHANGE,SPECIAL_SPEEDY, SPECIAL_DEFENSIVE,DECREASE_FURY,SPECIAL_AGRESSIVE};
 		CoolDown cd;
 
 };

@@ -35,6 +35,7 @@ Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(
 	agressive_fire_coef     =PLAYER_AGRESSIVE_FIRE_DAMAGE_COEF;
 	agressive_contact_coef  =PLAYER_AGRESSIVE_CONTACT_DAMAGE_COEF;
 	agressive_defense_coef  =PLAYER_AGRESSIVE_DEFENSE_COEF;
+	agressive_piercing      =false;
 							 
 	defensive_fire_coef     =PLAYER_DEFENSIVE_FIRE_DAMAGE_COEF;
 	defensive_contact_coef  =PLAYER_DEFENSIVE_CONTACT_DAMAGE_COEF;
@@ -63,6 +64,7 @@ Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(
 	cd.add(SPECIAL_DEFENSIVE,200);
 
 	cd.add(DECREASE_FURY,COOLDOWN_FURY_DECREASE);
+	cd.add(SPECIAL_AGRESSIVE,200);
 }
 
 
@@ -89,8 +91,8 @@ void Player::draw(BITMAP* target) const
 
 	triangle(target, ( (int) p3.x), ( (int) p3.y), ( (int) p1.x ), ( (int) p1.y), ( (int) p2.x ), ( (int) p2.y), col);
 
-	/*textprintf(target, font, 200, 10, makecol(255,255,255),"%d",
-		m_pWeapon->m_pBullet.size());*/
+	//textprintf(target, font, 200, 200, makecol(255,255,255),"%d",
+	//	agressive_piercing);
 
 	#ifdef DEBUG_BOUNDING_RECT
 		Rect m_boundingRect=boundingRect();
@@ -512,7 +514,7 @@ void Player::special()
 	switch(form)
 	{
 	case AGRESSIVE:
-		//specialeAgressive();
+		specialAgressive();
 		break;
 
 	case DEFENSIVE:
@@ -547,6 +549,12 @@ void Player::specialDefensive()
 	cd.launch(SPECIAL_DEFENSIVE);
 }
 
+void Player::specialDefensiveUnchange()
+{
+	lifeSteal/=2;
+	maxSpeed*=100;	
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 void Player::steal(int damage)
@@ -569,16 +577,25 @@ void Player::steal(int damage)
 
 void Player::specialAgressive()
 {
+	if(!cd.isAvailable(SPECIAL_AGRESSIVE))
+		return;
 
+	if(fury<3)
+		return;
+	decreaseFury(3);
+
+	agressive_piercing=true;
+
+
+	m_delay->call(&Player::specialAgressiveUnchange,200);
+	cd.launch(SPECIAL_AGRESSIVE);		
 }
 
-//////////////////////////////////////////////////////////////////////////
-
-void Player::specialDefensiveUnchange()
+void Player::specialAgressiveUnchange()
 {
-	lifeSteal/=2;
-	maxSpeed*=100;	
+	agressive_piercing=false;
 }
+
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -586,14 +603,14 @@ void Player::activeSpeedy()
 {
 	decreaseFury(FURY_ACTIVE_COST);
 
-	maxSpeed*=2;
+	maxSpeed*=1.4;
 
 	m_delay->call(&Player::activeSpeedyUnchange,ACTIVE_SPEEDY_LENGTH);
 }
 
 void Player::activeSpeedyUnchange()
 {
-	maxSpeed/=2;
+	maxSpeed/=1.4;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -650,4 +667,6 @@ void Player::activeAgressive()
 
 	m_pWeapon->specialFire(30);
 }
+
+//////////////////////////////////////////////////////////////////////////
 

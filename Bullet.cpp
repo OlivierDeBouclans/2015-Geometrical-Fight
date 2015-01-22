@@ -12,6 +12,8 @@ Bullet::Bullet(int x, int y, Map* world): MovingEntity(x,y)
 	maxSpeed=BULLET_SPEED*2;
 	pMap=world;
 	iBounceTime=0;
+
+	cd.add(0,COOLDOWN_CONTACT_DAMAGE);
 }
 
 //////////////////////////////////////////////////////////////////////////

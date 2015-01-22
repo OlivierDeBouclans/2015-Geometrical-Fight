@@ -43,6 +43,14 @@ DelayCall<T>::~DelayCall(void)
 template<class T>
 void DelayCall<T>::call(void (T::*f)(),double delay)
 {
+	for(unsigned int i=0; i<vFunction.size();i++)
+		if(vFunction[i].function==f)
+		{
+			vFunction[i].delay=delay;
+			vFunction[i].startTime=clock();
+			return;
+		}
+
 	functionDelay d;
 	d.function=f;
 	d.delay=delay;
