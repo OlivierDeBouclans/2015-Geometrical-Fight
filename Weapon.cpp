@@ -101,3 +101,21 @@ void Weapon::setFireRate(double d)
 }
 
 //////////////////////////////////////////////////////////////////////////
+
+void Weapon::specialFire(int nbBullets)
+{
+	double stepAngle=2*3.14/nbBullets;
+	for(int i=0; i<nbBullets;i++)
+	{
+		Point2D p=Point2D(m_pOwner->x,m_pOwner->y);
+
+		Bullet b(p.x,p.y,m_pOwner->pMap);
+
+		b.vSpeed.x=cos(i*stepAngle)*BULLET_SPEED;
+		b.vSpeed.y=sin(i*stepAngle)*BULLET_SPEED;
+		m_pBullet.push_back(b);
+	}
+
+}
+
+//////////////////////////////////////////////////////////////////////////

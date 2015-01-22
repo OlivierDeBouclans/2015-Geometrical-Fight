@@ -59,6 +59,8 @@ class Player:public MovingEntity
 		void activeSneaky();
 		void activeSneakyUnchange();
 
+		void activeAgressive();
+
 		void getDamage(int damage);
 
 		int xp;
@@ -96,7 +98,7 @@ class Player:public MovingEntity
 		Weapon*   m_pWeapon;
 		DelayCall<Player>* m_delay;
 
-		enum {CHANGE_AGRESSIVE,CHANGE_SPEEDY,CHANGE_SNEAKY, CHANGE_DEFENSIVE,UNCHANGE,SPECIAL_SPEEDY, SPECIAL_DEFENSIVE};
+		enum {CHANGE_AGRESSIVE,CHANGE_SPEEDY,CHANGE_SNEAKY, CHANGE_DEFENSIVE,UNCHANGE,SPECIAL_SPEEDY, SPECIAL_DEFENSIVE,DECREASE_FURY};
 		CoolDown cd;
 
 };

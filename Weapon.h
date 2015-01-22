@@ -16,6 +16,7 @@ class Weapon
 		~Weapon(void);
 
 		void fire(bool ahead=true);
+		void specialFire(int nbBullets);
 		void update(double dt);
 		void draw(BITMAP* target) const;
 

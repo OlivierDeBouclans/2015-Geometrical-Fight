@@ -61,6 +61,8 @@ Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(
 
 	cd.add(SPECIAL_SPEEDY,COOLDOWN_SPECIAL);
 	cd.add(SPECIAL_DEFENSIVE,COOLDOWN_SPECIAL);
+
+	cd.add(DECREASE_FURY,COOLDOWN_FURY_DECREASE);
 }
 
 
@@ -208,8 +210,11 @@ void Player::update(double dt)
 
 	m_pWeapon->update(dt);
 
-	if(form!=NORMAL)
+	if(form!=NORMAL && cd.isAvailable(DECREASE_FURY))
+	{
 		decreaseFury(1);
+		cd.launch(DECREASE_FURY);
+	}
 	if(fury==0)
 		unchange();
 
@@ -382,6 +387,8 @@ void Player::changeAgressive()
 	contactDamage*=agressive_contact_coef;
 	defense*=agressive_defense_coef;
 
+	if(fury>FURY_ACTIVE_COST)
+		activeAgressive();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -397,7 +404,8 @@ void Player::changeSneaky()
 	defense*=sneaky_defense_coef;
 	maxSpeed*=sneaky_speed_coef;
 
-	activeSneaky();
+	if(fury>FURY_ACTIVE_COST)
+		activeSneaky();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -414,7 +422,8 @@ void Player::changeSpeedy()
 
 	m_pWeapon->setFireRate(m_pWeapon->fireRate()/PLAYER_SPEEDY_FIRE_RATE_COEF);
 	
-	activeSpeedy();
+	if(fury>FURY_ACTIVE_COST)
+		activeSpeedy();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -431,7 +440,8 @@ void Player::changeDefensive()
 	maxSpeed*=defensive_speed_coef;
 	lifeSteal=PLAYER_DEFENSIVE_LIFE_STEAL;
 
-	activeDefensive();
+	if(fury>FURY_ACTIVE_COST)		
+		activeDefensive();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -565,6 +575,8 @@ void Player::specialDefensiveUnchange()
 
 void Player::activeSpeedy()
 {
+	decreaseFury(FURY_ACTIVE_COST);
+
 	maxSpeed*=2;
 
 	m_delay->call(&Player::activeSpeedyUnchange,ACTIVE_SPEEDY_LENGTH);
@@ -578,7 +590,9 @@ void Player::activeSpeedyUnchange()
 //////////////////////////////////////////////////////////////////////////
 
 void Player::activeDefensive()
-{
+{		   
+	decreaseFury(FURY_ACTIVE_COST);
+
 	defensive_shield=defensive_shield_max;
 	m_delay->call(&Player::activeDefensiveUnchange,ACTIVE_DEFENSIVE_LENGTH);
 }
@@ -592,6 +606,8 @@ void Player::activeDefensiveUnchange()
 
 void Player::activeSneaky()
 {
+	decreaseFury(FURY_ACTIVE_COST);
+
 	sneaky_phantom=true;
 	m_delay->call(&Player::activeSneakyUnchange,ACTIVE_SNEAKY_LENGTH);
 }
@@ -615,5 +631,14 @@ void Player::getDamage(int damage)
 		health+=defensive_shield;
 		defensive_shield=0;
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::activeAgressive()
+{
+	decreaseFury(FURY_ACTIVE_COST);
+
+	m_pWeapon->specialFire(30);
 }
 
