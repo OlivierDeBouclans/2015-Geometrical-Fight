@@ -19,6 +19,12 @@ Map::Map(int width, int height): m_iWidth(width), m_iHeight(height), m_pPlayer(N
 
 	cd.add(HIT_ENEMY,COOLDOWN_CONTACT_DAMAGE);
 	cd.add(HIT_PLAYER,COOLDOWN_CONTACT_DAMAGE);
+
+	background=create_bitmap(SCREEN_W, SCREEN_H);
+	clear_bitmap(background);
+	rectfill(background,0,0,SCREEN_W,SCREEN_H,makecol(0,0,0));
+	rectfill(background,OFFSET_X-BORDER_WIDTH,OFFSET_Y-BORDER_WIDTH,OFFSET_X+m_iWidth+BORDER_WIDTH,OFFSET_Y+m_iHeight+BORDER_WIDTH, makecol(255,255,255));
+	rectfill(background,OFFSET_X,OFFSET_Y,OFFSET_X+m_iWidth,OFFSET_Y+m_iHeight, makecol(0,0,0));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -42,10 +48,8 @@ Map::~Map(void)
 
 void Map::draw(BITMAP* target) const
 {
-	rectfill(target,OFFSET_X-BORDER_WIDTH,OFFSET_Y-BORDER_WIDTH,OFFSET_X+m_iWidth+BORDER_WIDTH,OFFSET_Y+m_iHeight+BORDER_WIDTH, makecol(255,255,255));
-	rectfill(target,OFFSET_X,OFFSET_Y,OFFSET_X+m_iWidth,OFFSET_Y+m_iHeight, makecol(0,0,0));
-	//textprintf(target, font, 200, 10, makecol(255,255,255),"d %d",vEnemies.size());
-	
+
+    blit(background,target,0,0,0,0,SCREEN_W-1,SCREEN_H-1);
 	drawPlayerStats(target);
 	
 	#ifdef DEBUG_BOUNDING_RECT

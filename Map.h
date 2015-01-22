@@ -64,6 +64,8 @@ class Map
 		enum {HIT_ENEMY, HIT_PLAYER};
 		CoolDown cd;
 
+		BITMAP* background;
+
 
 };
 

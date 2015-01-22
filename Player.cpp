@@ -30,7 +30,7 @@ Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(
 	fury          =0;
 	xp            =0;
 	xpNextLevel   =1000;
-	lifeSteal=0;
+	lifeSteal     =0;
 
 	agressive_fire_coef     =PLAYER_AGRESSIVE_FIRE_DAMAGE_COEF;
 	agressive_contact_coef  =PLAYER_AGRESSIVE_CONTACT_DAMAGE_COEF;
@@ -100,7 +100,7 @@ void Player::draw(BITMAP* target) const
 		Rect r=boundingRect();
 		int x1=r.x1;
 		int x2=r.x2;
-		int l=defensive_shield/2;
+		int l=defensive_shield;
 		rectfill(target,x1,r.y1-7,x1+l,r.y1-3, makecol(128,128,128));
 	}
 
