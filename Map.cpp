@@ -210,7 +210,10 @@ void Map::hitPlayer(int damage)
 	if(!cd.isAvailable(HIT_PLAYER))
 		return; 
 
-	m_pPlayer->health-=damage/m_pPlayer->defense;
+	if(m_pPlayer->sneaky_phantom)
+		return;
+
+	m_pPlayer->getDamage(damage);
 
 	if(m_pPlayer->health<=0)
 		exit(0);

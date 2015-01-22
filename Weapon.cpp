@@ -53,6 +53,9 @@ void Weapon::fire(bool ahead)
 	if(!cd.isAvailable(FIRE))
 		return;
 
+	if(m_pOwner->sneaky_phantom)
+		return;
+
 	if(m_pOwner->form==Player::AGRESSIVE)
 	{
 		Point2D p1=Point2D(m_pOwner->x,m_pOwner->y)-m_pOwner->vSide*m_pOwner->radius/2;

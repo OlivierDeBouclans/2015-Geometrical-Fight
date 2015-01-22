@@ -40,11 +40,14 @@ Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(
 	defensive_contact_coef  =PLAYER_DEFENSIVE_CONTACT_DAMAGE_COEF;
 	defensive_defense_coef  =PLAYER_DEFENSIVE_DEFENSE_COEF;
 	defensive_speed_coef    =PLAYER_DEFENSIVE_SPEED_COEF;
+	defensive_shield_max    =PLAYER_DEFENSIVE_SHIELD_MAX;
+	defensive_shield        =0;
 							 
 	sneaky_fire_coef        =PLAYER_SNEAKY_FIRE_DAMAGE_COEF;
 	sneaky_contact_coef     =PLAYER_SNEAKY_CONTACT_DAMAGE_COEF;
 	sneaky_defense_coef     =PLAYER_SNEAKY_DEFENSE_COEF;
 	sneaky_speed_coef       =PLAYER_SNEAKY_SPEED_COEF;
+	sneaky_phantom          =false;
 							 
 	speedy_contact_coef     =PLAYER_SPEEDY_CONTACT_DAMAGE_COEF; 
 	speedy_defense_coef     =PLAYER_SPEEDY_DEFENSE_COEF;
@@ -78,7 +81,11 @@ void Player::draw(BITMAP* target) const
 	Point2D p2=coor-(vSide/3)*radius;
 	Point2D p3=coor+(vSide/3)*radius;
 
-	triangle(target, ( (int) p3.x), ( (int) p3.y), ( (int) p1.x ), ( (int) p1.y), ( (int) p2.x ), ( (int) p2.y), color);
+	int col=color;
+	if(sneaky_phantom)
+		col/=2;
+
+	triangle(target, ( (int) p3.x), ( (int) p3.y), ( (int) p1.x ), ( (int) p1.y), ( (int) p2.x ), ( (int) p2.y), col);
 
 	/*textprintf(target, font, 200, 10, makecol(255,255,255),"%d",
 		m_pWeapon->m_pBullet.size());*/
@@ -87,6 +94,15 @@ void Player::draw(BITMAP* target) const
 		Rect m_boundingRect=boundingRect();
 		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
 	#endif
+
+	if(defensive_shield>0)
+	{
+		Rect r=boundingRect();
+		int x1=r.x1;
+		int x2=r.x2;
+		int l=defensive_shield/2;
+		rectfill(target,x1,r.y1-7,x1+l,r.y1-3, makecol(128,128,128));
+	}
 
 	m_pWeapon->draw(target);
 }
@@ -380,6 +396,8 @@ void Player::changeSneaky()
 	contactDamage*=sneaky_contact_coef;
 	defense*=sneaky_defense_coef;
 	maxSpeed*=sneaky_speed_coef;
+
+	activeSneaky();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -395,6 +413,8 @@ void Player::changeSpeedy()
 	maxSpeed*=speedy_speed_coef;
 
 	m_pWeapon->setFireRate(m_pWeapon->fireRate()/PLAYER_SPEEDY_FIRE_RATE_COEF);
+	
+	activeSpeedy();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -410,6 +430,8 @@ void Player::changeDefensive()
 	defense*=defensive_defense_coef;
 	maxSpeed*=defensive_speed_coef;
 	lifeSteal=PLAYER_DEFENSIVE_LIFE_STEAL;
+
+	activeDefensive();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -537,5 +559,61 @@ void Player::specialDefensiveUnchange()
 {
 	lifeSteal/=2;
 	maxSpeed*=100;	
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::activeSpeedy()
+{
+	maxSpeed*=2;
+
+	m_delay->call(&Player::activeSpeedyUnchange,ACTIVE_SPEEDY_LENGTH);
+}
+
+void Player::activeSpeedyUnchange()
+{
+	maxSpeed/=2;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::activeDefensive()
+{
+	defensive_shield=defensive_shield_max;
+	m_delay->call(&Player::activeDefensiveUnchange,ACTIVE_DEFENSIVE_LENGTH);
+}
+
+void Player::activeDefensiveUnchange()
+{
+	defensive_shield=0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::activeSneaky()
+{
+	sneaky_phantom=true;
+	m_delay->call(&Player::activeSneakyUnchange,ACTIVE_SNEAKY_LENGTH);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::activeSneakyUnchange()
+{
+	sneaky_phantom=false;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Player::getDamage(int damage)
+{
+	damage=damage/defense;
+	defensive_shield-=damage;
+
+	if(defensive_shield<0)
+	{
+		health+=defensive_shield;
+		defensive_shield=0;
+	}
 }
 

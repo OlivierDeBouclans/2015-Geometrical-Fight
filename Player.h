@@ -50,6 +50,17 @@ class Player:public MovingEntity
 		void increaseFury(int value);
 		void decreaseFury(int value);
 
+		void activeSpeedy();
+		void activeSpeedyUnchange();
+
+		void activeDefensive();
+		void activeDefensiveUnchange();
+
+		void activeSneaky();
+		void activeSneakyUnchange();
+
+		void getDamage(int damage);
+
 		int xp;
 		int xpNextLevel;
 		int fury;
@@ -67,12 +78,15 @@ class Player:public MovingEntity
 		float sneaky_contact_coef;
 		float sneaky_defense_coef;
 		float sneaky_speed_coef;
+		bool  sneaky_phantom;
 
 		float defensive_fire_coef;
 		float defensive_contact_coef;
 		float defensive_defense_coef;
 		float defensive_speed_coef;
-
+		float defensive_shield;
+		float defensive_shield_max;
+		
 		float speedy_contact_coef;
 		float speedy_defense_coef;
 		float speedy_speed_coef;
