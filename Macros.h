@@ -115,6 +115,7 @@
 #define FURY_CONTACT_DAMAGE_ENEMY 3
 #define FURY_GET_XP 3
 #define FURY_ACTIVE_COST 20
+#define FURY_SPECIAL_COST 30
 
 /************************************************************************/
 /* MOVING ENTITY MACROS                                                 */

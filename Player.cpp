@@ -60,7 +60,7 @@ Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(
 	cd.add(UNCHANGE,COOLDOWN_FORM);
 
 	cd.add(SPECIAL_SPEEDY,COOLDOWN_SPECIAL);
-	cd.add(SPECIAL_DEFENSIVE,COOLDOWN_SPECIAL);
+	cd.add(SPECIAL_DEFENSIVE,200);
 
 	cd.add(DECREASE_FURY,COOLDOWN_FURY_DECREASE);
 }
@@ -491,6 +491,10 @@ void Player::specialSpeedy()
 	if(!cd.isAvailable(SPECIAL_SPEEDY))
 		return;
 
+	if(fury<FURY_SPECIAL_COST)
+		return;
+	decreaseFury(FURY_SPECIAL_COST);
+
 	Point2D c(x,y);
 	c=c+vSpeed*10;
 
@@ -504,6 +508,7 @@ void Player::specialSpeedy()
 
 void Player::special()
 {
+
 	switch(form)
 	{
 	case AGRESSIVE:
@@ -531,10 +536,14 @@ void Player::specialDefensive()
 	if(!cd.isAvailable(SPECIAL_DEFENSIVE))
 		return;
 
+	if(fury<3)
+		return;
+	decreaseFury(3);
+
 	lifeSteal*=2;
 	maxSpeed/=100;
 
-	m_delay->call(&Player::specialDefensiveUnchange,2000);
+	m_delay->call(&Player::specialDefensiveUnchange,200);
 	cd.launch(SPECIAL_DEFENSIVE);
 }
 
