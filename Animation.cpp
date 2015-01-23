@@ -1,13 +1,12 @@
 #include "Animation.h"
 
+
+
 Animation::Animation(Sprite *s,int curframe)
 {
     m_sprite=s;
     m_curframe=curframe;
 
-    m_prevframe=curframe;
-    m_animdir=-1;
-    m_animtype=-1;
     m_framecount=-1;
     m_framedelay=-1;
 }
@@ -34,93 +33,54 @@ int Animation::getFrameWidth()
 
 bool Animation::isAnimated()
 {
-    return m_animtype != -1;
+    return !m_frames.empty();
 }
 
-void Animation::startAnimation(int animtype, int direction, int framedelay, bool restart)
+void Animation::startAnimation(std::list<int> frames, int framedelay, bool reverseorder, bool restart)
 {
-    if( m_animtype == -1 || (animtype == 1 && m_animtype == 0) ||(m_animtype !=1 && restart))
+   // if(m_frames.empty() || restart)
     {
-        m_animtype=animtype;
-        m_framecount=0;
+        m_frames.insert(m_frames.end(),frames.begin(),frames.end());
+        m_framecount=clock();
         m_framedelay=framedelay;
+		m_bReversOrder=reverseorder;
 
-        if( direction == 0)
-            m_curframe=49;
-        else if( direction == 1)
-            m_curframe=61;
-        else if( direction == 2)
-            m_curframe=73;
-        else if( direction == 3)
-            m_curframe=85;
-
-        switch(m_animtype)
-        {
-            case 0:
-
-                m_prevframe= m_curframe;
-                m_curframe+=m_animdir;
-
-            break;
-
-            case 1:
-
-                m_prevframe= m_curframe;
-                m_curframe = (m_curframe / m_sprite->getNumberOfRow() - 4 )*m_sprite->getNumberOfRow() + m_sprite->getNumberOfRow() - 1;
-
-            break;
-
-        }
+		if(m_bReversOrder)
+		{
+			m_curframe=m_frames.back();
+			m_frames.pop_back();
+		}
+		else
+		{
+			m_curframe=m_frames.front();
+			m_frames.pop_front();
+		}
     }
 }
 
 void Animation::update()
 {
-    if(m_animtype != -1)
-    {
-        m_framecount++;
-
-        if(m_framecount >= m_framedelay)
+    if(!m_frames.empty())
+        if(clock()-m_framecount >= m_framedelay)
         {
-            m_framecount=0;
+            m_framecount=clock();
 
-            switch(m_animtype)
-            {
-                case 0:
-
-                    if(m_curframe==m_prevframe)
-                    {
-                        m_animtype=-1;
-                    }
-                    else
-                    {
-                        m_animdir = - m_animdir;
-                        m_curframe=m_prevframe;
-                        m_framecount=m_framedelay/2;
-                    }
-
-                break;
-
-                case 1:
-
-                    m_curframe-=3;
-
-                    if( (m_curframe < 0 || (m_curframe % m_sprite->getNumberOfRow()) == m_sprite->getNumberOfRow() - 1))
-                    {
-                        m_animtype=-1;
-                        m_curframe=m_prevframe;
-                    }
-
-                break;
-
-            }
+			if(m_bReversOrder)
+			{
+				m_curframe=m_frames.back();
+				m_frames.pop_back();
+			}
+			else
+			{
+				m_curframe=m_frames.front();
+				m_frames.pop_front();
+			}
         }
-    }
 }
 
 void Animation::draw(BITMAP *target, int frameRow, int x, int y)
 {
-    //m_sprite->draw(target,m_curframe,x,y);
+    m_sprite->draw(target,frameRow+m_curframe,x,y);
 }
 
 

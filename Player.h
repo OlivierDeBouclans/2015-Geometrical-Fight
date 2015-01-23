@@ -7,6 +7,9 @@
 #include "CoolDown.h"
 #include "DelayCall.h"
 
+#include <list>
+#include <vector>
+
 class Vector2D;
 class Joystick;
 class Weapon;
@@ -19,6 +22,7 @@ class Player:public MovingEntity
 		~Player();
 
 		enum Form {NORMAL, AGRESSIVE, DEFENSIVE, SPEEDY, SNEAKY};
+		enum {NORMAL_TO_AGRESSIVE,NORMAL_TO_DEFENSIVE, NORMAL_TO_SPEEDY, NORMAL_TO_SNEAKY}; 
 
 		Vector2D getSteeringForce();
 		void draw(BITMAP* target) const;
@@ -99,6 +103,8 @@ class Player:public MovingEntity
 		float speedy_speed_coef;
 
 		Animation* pSprite;
+
+		std::vector< std::list<int> > lAnimation;
 
 	private:
 		Joystick* m_pJoystick;

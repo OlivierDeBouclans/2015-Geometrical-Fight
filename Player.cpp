@@ -68,6 +68,30 @@ Player::Player(Animation *sprite,int x, int y, Joystick* joystick):MovingEntity(
 	cd.add(SPECIAL_SNEAKY,5000);
 
 	cd.add(DECREASE_FURY,COOLDOWN_FURY_DECREASE);
+
+	std::list<int> l;
+	l.push_back(0);
+	l.push_back(1);
+	l.push_back(2);
+	l.push_back(3);
+	l.push_back(4);
+	l.push_back(5);
+	lAnimation.push_back(l);
+
+	std::list<int> l2;
+	l2.push_back(0);
+	l2.push_back(6);
+	lAnimation.push_back(l2);
+
+	std::list<int> l3;
+	l3.push_back(0);
+	l3.push_back(7);
+	lAnimation.push_back(l3);
+
+	std::list<int> l4;
+	l4.push_back(0);
+	l4.push_back(8);
+	lAnimation.push_back(l4);
 }
 
 
@@ -236,6 +260,7 @@ void Player::update(double dt)
 		pMap->hitEnemy(i,false);
 
 	m_delay->update();
+	pSprite->update();
 
 	MovingEntity::update(dt);
 }
@@ -301,6 +326,8 @@ void Player::unchangeAgressive()
 	if(form!=AGRESSIVE)
 		return;
 
+	pSprite->startAnimation(lAnimation[NORMAL_TO_AGRESSIVE],100,true);
+
 	color=PLAYER_DEFAULT_COL;
 	radius=PLAYER_DEFAULT_RADIUS;
 	form=NORMAL;
@@ -316,6 +343,8 @@ void Player::unchangeSneaky()
 {
 	if(form!=SNEAKY)
 		return;
+
+	pSprite->startAnimation(lAnimation[NORMAL_TO_SNEAKY],100,true);
 
 	color=PLAYER_DEFAULT_COL;
 	radius=PLAYER_DEFAULT_RADIUS;
@@ -334,6 +363,8 @@ void Player::unchangeSpeedy()
 	if(form!=SPEEDY)
 		return;
 
+	pSprite->startAnimation(lAnimation[NORMAL_TO_SPEEDY],100,true);
+
 	color=PLAYER_DEFAULT_COL;
 	radius=PLAYER_DEFAULT_RADIUS;
 	form=NORMAL;
@@ -351,6 +382,8 @@ void Player::unchangeDefensive()
 {
 	if(form!=DEFENSIVE)
 		return;
+
+	pSprite->startAnimation(lAnimation[NORMAL_TO_DEFENSIVE],100,true);
 
 	color=PLAYER_DEFAULT_COL;
 	radius=PLAYER_DEFAULT_RADIUS;
@@ -392,6 +425,8 @@ void Player::change(Form wantedForm)
 
 void Player::changeAgressive()
 {
+	pSprite->startAnimation(lAnimation[NORMAL_TO_AGRESSIVE],100);
+
 	color=PLAYER_AGRESSIVE_COL;
 	radius=PLAYER_AGRESSIVE_RADIUS;
 	form=AGRESSIVE;
@@ -408,6 +443,8 @@ void Player::changeAgressive()
 
 void Player::changeSneaky()
 {
+	pSprite->startAnimation(lAnimation[NORMAL_TO_SNEAKY],100);
+
 	color=PLAYER_SNEAKY_COL;
 	radius=PLAYER_SNEAKY_RADIUS;
 	form=SNEAKY;
@@ -425,6 +462,8 @@ void Player::changeSneaky()
 
 void Player::changeSpeedy()
 {
+	pSprite->startAnimation(lAnimation[NORMAL_TO_SPEEDY],100);
+
 	color=PLAYER_SPEEDY_COL;
 	radius=PLAYER_SPEEDY_RADIUS;
 	form=SPEEDY;
@@ -443,6 +482,8 @@ void Player::changeSpeedy()
 
 void Player::changeDefensive()
 {
+	pSprite->startAnimation(lAnimation[NORMAL_TO_DEFENSIVE],100);
+
 	color=PLAYER_DEFENSIVE_COL;
 	radius=PLAYER_DEFENSIVE_RADIUS;
 	form=DEFENSIVE;

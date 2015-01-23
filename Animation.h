@@ -2,6 +2,7 @@
 #define ANIMATION_H
 
 #include "Sprite.h"
+#include <list>
 
 class Animation
 {
@@ -12,7 +13,7 @@ class Animation
 
         void draw(BITMAP *target, int frameRow, int x, int y);
 
-        void startAnimation(int animtype, int direction, int framedelay, bool restart=false);
+        void startAnimation(std::list<int> frames, int framedelay, bool reversOrded=false, bool restart=false);
         bool isAnimated();
         void update();
 
@@ -25,11 +26,11 @@ class Animation
         Sprite *m_sprite;
 
         int m_curframe;
-        int m_prevframe;
-        int m_animdir;
-        int m_animtype;
+        bool m_bReversOrder;
         int m_framecount;
         int m_framedelay;
+
+		std::list<int> m_frames;
 };
 
 #endif // ANIMATION_H
