@@ -36,25 +36,25 @@ bool Animation::isAnimated()
     return !m_frames.empty();
 }
 
+int Animation::remainingTime()
+{
+	return m_frames.size()*m_framedelay;
+}
+
 void Animation::startAnimation(std::list<int> frames, int framedelay, bool reverseorder, bool restart)
 {
    // if(m_frames.empty() || restart)
     {
+		if(reverseorder)
+			frames.reverse();
+
         m_frames.insert(m_frames.end(),frames.begin(),frames.end());
         m_framecount=clock();
         m_framedelay=framedelay;
-		m_bReversOrder=reverseorder;
 
-		if(m_bReversOrder)
-		{
-			m_curframe=m_frames.back();
-			m_frames.pop_back();
-		}
-		else
-		{
-			m_curframe=m_frames.front();
-			m_frames.pop_front();
-		}
+		m_curframe=m_frames.front();
+		m_frames.pop_front();
+
     }
 }
 
@@ -65,16 +65,8 @@ void Animation::update()
         {
             m_framecount=clock();
 
-			if(m_bReversOrder)
-			{
-				m_curframe=m_frames.back();
-				m_frames.pop_back();
-			}
-			else
-			{
-				m_curframe=m_frames.front();
-				m_frames.pop_front();
-			}
+			m_curframe=m_frames.front();
+			m_frames.pop_front();
         }
 }
 

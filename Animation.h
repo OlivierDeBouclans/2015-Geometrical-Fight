@@ -20,6 +20,8 @@ class Animation
         int getFrameWidth();
         int getFrameHeight();
 
+		int remainingTime();
+
     protected:
 
     private:

@@ -86,11 +86,15 @@ Player::Player(Animation *sprite,int x, int y, Joystick* joystick):MovingEntity(
 	std::list<int> l3;
 	l3.push_back(0);
 	l3.push_back(7);
+	l3.push_back(8);
+	l3.push_back(9);
+	l3.push_back(10);
+	l3.push_back(11);
 	lAnimation.push_back(l3);
 
 	std::list<int> l4;
 	l4.push_back(0);
-	l4.push_back(8);
+	l4.push_back(12);
 	lAnimation.push_back(l4);
 }
 
@@ -186,7 +190,10 @@ void Player::update(double dt)
 			else if(cd.isAvailable(CHANGE_AGRESSIVE))
 			{
 				unchange();
-				changeAgressive();
+
+				pSprite->startAnimation(lAnimation[NORMAL_TO_AGRESSIVE],ANIMATION_SPEED);
+				m_delay->call(&Player::changeAgressive,pSprite->remainingTime());
+
 				cd.launch(UNCHANGE);
 				cd.launch(CHANGE_AGRESSIVE);
 			}
@@ -202,7 +209,10 @@ void Player::update(double dt)
 			else if(cd.isAvailable(CHANGE_DEFENSIVE))
 			{
 				unchange();
-				changeDefensive();
+				
+				pSprite->startAnimation(lAnimation[NORMAL_TO_DEFENSIVE],ANIMATION_SPEED);
+				m_delay->call(&Player::changeDefensive,pSprite->remainingTime());
+
 				cd.launch(UNCHANGE);
 				cd.launch(CHANGE_DEFENSIVE);
 			}
@@ -218,7 +228,10 @@ void Player::update(double dt)
 			else if(cd.isAvailable(CHANGE_SPEEDY))
 			{
 				unchange();
-				changeSpeedy();
+
+				pSprite->startAnimation(lAnimation[NORMAL_TO_SPEEDY],ANIMATION_SPEED);
+				m_delay->call(&Player::changeSpeedy,pSprite->remainingTime());
+
 				cd.launch(UNCHANGE);
 				cd.launch(CHANGE_SPEEDY);
 			}
@@ -234,7 +247,10 @@ void Player::update(double dt)
 			else if(cd.isAvailable(CHANGE_SNEAKY))
 			{
 				unchange();
-				changeSneaky();
+				
+				pSprite->startAnimation(lAnimation[NORMAL_TO_SNEAKY],ANIMATION_SPEED);
+				m_delay->call(&Player::changeSneaky,pSprite->remainingTime());
+
 				cd.launch(UNCHANGE);
 				cd.launch(CHANGE_SNEAKY);
 			}
@@ -326,7 +342,7 @@ void Player::unchangeAgressive()
 	if(form!=AGRESSIVE)
 		return;
 
-	pSprite->startAnimation(lAnimation[NORMAL_TO_AGRESSIVE],100,true);
+	pSprite->startAnimation(lAnimation[NORMAL_TO_AGRESSIVE],ANIMATION_SPEED,true);
 
 	color=PLAYER_DEFAULT_COL;
 	radius=PLAYER_DEFAULT_RADIUS;
@@ -344,7 +360,7 @@ void Player::unchangeSneaky()
 	if(form!=SNEAKY)
 		return;
 
-	pSprite->startAnimation(lAnimation[NORMAL_TO_SNEAKY],100,true);
+	pSprite->startAnimation(lAnimation[NORMAL_TO_SNEAKY],ANIMATION_SPEED,true);
 
 	color=PLAYER_DEFAULT_COL;
 	radius=PLAYER_DEFAULT_RADIUS;
@@ -363,7 +379,7 @@ void Player::unchangeSpeedy()
 	if(form!=SPEEDY)
 		return;
 
-	pSprite->startAnimation(lAnimation[NORMAL_TO_SPEEDY],100,true);
+	pSprite->startAnimation(lAnimation[NORMAL_TO_SPEEDY],ANIMATION_SPEED,true);
 
 	color=PLAYER_DEFAULT_COL;
 	radius=PLAYER_DEFAULT_RADIUS;
@@ -383,7 +399,7 @@ void Player::unchangeDefensive()
 	if(form!=DEFENSIVE)
 		return;
 
-	pSprite->startAnimation(lAnimation[NORMAL_TO_DEFENSIVE],100,true);
+	pSprite->startAnimation(lAnimation[NORMAL_TO_DEFENSIVE],ANIMATION_SPEED,true);
 
 	color=PLAYER_DEFAULT_COL;
 	radius=PLAYER_DEFAULT_RADIUS;
@@ -425,8 +441,6 @@ void Player::change(Form wantedForm)
 
 void Player::changeAgressive()
 {
-	pSprite->startAnimation(lAnimation[NORMAL_TO_AGRESSIVE],100);
-
 	color=PLAYER_AGRESSIVE_COL;
 	radius=PLAYER_AGRESSIVE_RADIUS;
 	form=AGRESSIVE;
@@ -443,8 +457,6 @@ void Player::changeAgressive()
 
 void Player::changeSneaky()
 {
-	pSprite->startAnimation(lAnimation[NORMAL_TO_SNEAKY],100);
-
 	color=PLAYER_SNEAKY_COL;
 	radius=PLAYER_SNEAKY_RADIUS;
 	form=SNEAKY;
@@ -462,8 +474,6 @@ void Player::changeSneaky()
 
 void Player::changeSpeedy()
 {
-	pSprite->startAnimation(lAnimation[NORMAL_TO_SPEEDY],100);
-
 	color=PLAYER_SPEEDY_COL;
 	radius=PLAYER_SPEEDY_RADIUS;
 	form=SPEEDY;
@@ -482,8 +492,6 @@ void Player::changeSpeedy()
 
 void Player::changeDefensive()
 {
-	pSprite->startAnimation(lAnimation[NORMAL_TO_DEFENSIVE],100);
-
 	color=PLAYER_DEFENSIVE_COL;
 	radius=PLAYER_DEFENSIVE_RADIUS;
 	form=DEFENSIVE;
