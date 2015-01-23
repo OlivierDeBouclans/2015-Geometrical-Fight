@@ -5,13 +5,14 @@
 #include "Macros.h"
 #include "Map.h"
 #include "Enemy.h"
+#include "Sprite.h"
 
 #include "allegro.h"
 
 using namespace std;
 
 
-Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(joystick)
+Player::Player(Sprite *sprite,int x, int y, Joystick* joystick):MovingEntity(x,y), m_pSprite(sprite), m_pJoystick(joystick)
 {
 	m_pWeapon=new Weapon(this);
 	m_delay=new DelayCall<Player>(*this);
@@ -91,7 +92,14 @@ void Player::draw(BITMAP* target) const
 	if(sneaky_phantom)
 		col/=2;
 
-	triangle(target, ( (int) p3.x), ( (int) p3.y), ( (int) p1.x ), ( (int) p1.y), ( (int) p2.x ), ( (int) p2.y), col);
+	double a=(Vector2D(0,1)*vHead);
+	double b= (Vector2D(1,0)*vHead)>0 ? -1 : 1;
+	double angle = 360+b*acos(a)*360/(2*3.14);
+	int frame = ((int) angle % 360)*SPRITE_NUMBER_OF_DIRECTION / 360;
+
+	m_pSprite->draw(target,5*frame+form,x-m_pSprite->getFrameWidth()/2,y-m_pSprite->getFrameHeight()/2);
+
+	//triangle(target, ( (int) p3.x), ( (int) p3.y), ( (int) p1.x ), ( (int) p1.y), ( (int) p2.x ), ( (int) p2.y), col);
 
 	//textprintf(target, font, 200, 200, makecol(255,255,255),"%d",
 	//	agressive_piercing);

@@ -10,11 +10,12 @@
 class Vector2D;
 class Joystick;
 class Weapon;
+class Sprite;
 
 class Player:public MovingEntity
 {
 	public:
-		Player(int x=DEFAULT_X, int y=DEFAULT_Y,Joystick* joystick=NULL);
+		Player(Sprite* sprite, int x=DEFAULT_X, int y=DEFAULT_Y,Joystick* joystick=NULL);
 		~Player();
 
 		enum Form {NORMAL, AGRESSIVE, DEFENSIVE, SPEEDY, SNEAKY};
@@ -104,6 +105,8 @@ class Player:public MovingEntity
 
 		enum {CHANGE_AGRESSIVE,CHANGE_SPEEDY,CHANGE_SNEAKY, CHANGE_DEFENSIVE,UNCHANGE,SPECIAL_SPEEDY, SPECIAL_DEFENSIVE,DECREASE_FURY,SPECIAL_AGRESSIVE,SPECIAL_SNEAKY};
 		CoolDown cd;
+
+		Sprite* m_pSprite;
 
 };
 

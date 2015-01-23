@@ -68,7 +68,7 @@ void Game::init()
 	}
 
 	m_pScreenBuffer=create_bitmap(SCREEN_W, SCREEN_H);
-	clear_bitmap(m_pScreenBuffer);
+	//clear_bitmap(m_pScreenBuffer);
 
 	m_pMap=new Map(MAP_WIDTH, MAP_HEIGHT);
 }

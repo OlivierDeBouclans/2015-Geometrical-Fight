@@ -87,6 +87,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MovingEntity.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="SteeringBehavior.h" />
     <ClInclude Include="Vector2D.h" />
     <ClInclude Include="Weapon.h" />
@@ -101,10 +102,14 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MovingEntity.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SteeringBehavior.cpp" />
     <ClCompile Include="Vector2D.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Weapon.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PlayerAgressive.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

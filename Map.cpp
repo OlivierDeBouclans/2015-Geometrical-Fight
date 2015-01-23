@@ -3,7 +3,7 @@
 #include "allegro.h"
 #include "Player.h"
 #include "Enemy.h"
-
+#include "Sprite.h"
 
 Map::Map(int width, int height): m_iWidth(width), m_iHeight(height), m_pPlayer(NULL), decoy(NULL), m_dLastSpawn(clock()), bPause(false)
 {
@@ -25,6 +25,8 @@ Map::Map(int width, int height): m_iWidth(width), m_iHeight(height), m_pPlayer(N
 	rectfill(background,0,0,SCREEN_W,SCREEN_H,makecol(0,0,0));
 	rectfill(background,OFFSET_X-BORDER_WIDTH,OFFSET_Y-BORDER_WIDTH,OFFSET_X+m_iWidth+BORDER_WIDTH,OFFSET_Y+m_iHeight+BORDER_WIDTH, makecol(255,255,255));
 	rectfill(background,OFFSET_X,OFFSET_Y,OFFSET_X+m_iWidth,OFFSET_Y+m_iHeight, makecol(0,0,0));
+
+	createSprite();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -43,6 +45,12 @@ Map::~Map(void)
 	{
 		delete vXp.back();
 		vXp.pop_back();
+	}
+
+	while(vSpriteList.size())
+	{
+		//delete vSpriteList.back();
+		vSpriteList.pop_back();
 	}
 }
 
@@ -103,7 +111,7 @@ void Map::update(double dt)
 
 void Map::addPlayer()
 {
-	m_pPlayer=new Player((OFFSET_X+m_iWidth)/2,(OFFSET_Y+m_iHeight)/2);
+	m_pPlayer=new Player(vSpriteList[5],(OFFSET_X+m_iWidth)/2,(OFFSET_Y+m_iHeight)/2);
 	m_pPlayer->pMap=this;
 	m_pPlayer->setJoystick(joystick);
 }
@@ -245,5 +253,45 @@ void Map::getXp(Xp* xp)
 
 			break;
 		}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void Map::createSprite()
+{
+	vSpriteList.push_back(new Sprite("PlayerNormal.bmp",400,400));
+	vSpriteList.push_back(new Sprite("PlayerAgressive.bmp",400,400));
+	vSpriteList.push_back(new Sprite("PlayerDefensive.bmp",400,400));
+	vSpriteList.push_back(new Sprite("PlayerSpeedy.bmp",400,400));
+	vSpriteList.push_back(new Sprite("PlayerSneaky.bmp",400,400));
+
+	int size=64;
+
+	BITMAP*s=create_bitmap(size*5, size);
+	rectfill(s, 0, 0, s->w, s->h, makecol(255,0,255));
+		vSpriteList[0]->draw(s,0,0*size,0,0.16);
+		vSpriteList[1]->draw(s,0,1*size,0,0.16);	
+		vSpriteList[2]->draw(s,0,2*size,0,0.16);
+		vSpriteList[3]->draw(s,0,3*size,0,0.16);
+		vSpriteList[4]->draw(s,0,4*size,0,0.16);
+	Sprite* sp=new Sprite(s,size,size);
+	  save_bitmap("dump2.bmp", s, NULL);
+
+	BITMAP* SpritePLayer=create_bitmap(size*5, SPRITE_NUMBER_OF_DIRECTION*size);
+	rectfill(SpritePLayer, 0, 0, SpritePLayer->w, SpritePLayer->h, makecol(255,0,255));
+	for(int k=0; k<SPRITE_NUMBER_OF_DIRECTION; k++)
+	{
+		float angle = k*360/SPRITE_NUMBER_OF_DIRECTION;
+		sp->draw(SpritePLayer,0,0*size,k*size,1.0,angle+180);
+		sp->draw(SpritePLayer,1,1*size,k*size,1.0,angle+180);
+		sp->draw(SpritePLayer,2,2*size,k*size,1.0,angle+180);
+		sp->draw(SpritePLayer,3,3*size,k*size,1.0,angle+180);
+		sp->draw(SpritePLayer,4,4*size,k*size,1.0,angle+180);
+	}
+	vSpriteList.push_back(new Sprite(SpritePLayer,size,size));
+
+	save_bitmap("dump.bmp", SpritePLayer, NULL);
+
+	delete sp;
 }
 

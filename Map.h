@@ -13,6 +13,7 @@ class Xp;
 class Player;
 class Joystick;
 class Decoy;
+class Sprite;
 
 struct BITMAP;
 
@@ -42,6 +43,8 @@ class Map
 		void hitPlayer(int damage);
 		void getXp(Xp* xp);
 
+		void createSprite();
+
 		Point2D getTopLeft() {return Point2D(OFFSET_X,OFFSET_Y);}
 		Point2D getTopRight() {return Point2D(OFFSET_X+m_iWidth,OFFSET_Y);}
 		Point2D getBotLeft() {return Point2D(OFFSET_X,OFFSET_Y+m_iHeight);}
@@ -50,6 +53,7 @@ class Map
 		Joystick* joystick;
 		std::vector<MovingEntity*> vEnemies;
 		std::vector<Xp*> vXp;
+		std::vector<Sprite*> vSpriteList;
 
 		bool bPause;
 		Decoy* decoy;
@@ -67,8 +71,6 @@ class Map
 		CoolDown cd;
 
 		BITMAP* background;
-
-
 };
 
 #endif // Map_h__
