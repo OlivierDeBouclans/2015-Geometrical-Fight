@@ -5,7 +5,7 @@
 #include "Enemy.h"
 
 
-Map::Map(int width, int height): m_iWidth(width), m_iHeight(height), m_pPlayer(NULL), m_dLastSpawn(clock()), bPause(false)
+Map::Map(int width, int height): m_iWidth(width), m_iHeight(height), m_pPlayer(NULL), decoy(NULL), m_dLastSpawn(clock()), bPause(false)
 {
 	int x1=OFFSET_X;
 	int x2=OFFSET_X+m_iWidth;
@@ -61,6 +61,9 @@ void Map::draw(BITMAP* target) const
 
 	m_pPlayer->draw(target);
 
+	if(decoy)
+		decoy->draw(target);
+
 	for(unsigned int i=0;i<vEnemies.size();i++)
 		vEnemies[i]->draw(target);
 
@@ -85,6 +88,9 @@ bool Map::collide(Rect r1, Rect r2)
 void Map::update(double dt)
 {
 	m_pPlayer->update(dt);
+
+	if(decoy)
+		decoy->update(dt);
 
 	for(unsigned int i=0;i<vEnemies.size();i++)
 		vEnemies[i]->update(dt);

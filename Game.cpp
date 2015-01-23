@@ -107,14 +107,14 @@ void Game::play()
 
 	while(!key[KEY_ESC])
 	{
-		waiting_time[ind]=gameTime*GAME_TIME_REFRESH_MS;
+		waiting_time[ind]=clock();
 		while(logicUpdateToDo==0)
 		{
 			rest(1);
 		}
-		waiting_time[ind]=gameTime*GAME_TIME_REFRESH_MS-waiting_time[ind];
+		waiting_time[ind]=clock()-waiting_time[ind];
 
-		logic_time[ind]=gameTime*GAME_TIME_REFRESH_MS;
+		logic_time[ind]=clock();
 		while(logicUpdateToDo>0)
 		{
 			int old_logicUpdateToDo=logicUpdateToDo;
@@ -144,11 +144,11 @@ void Game::play()
 			frames_done=0;
 			old_time=gameTime;
 		}
-		logic_time[ind]=gameTime*GAME_TIME_REFRESH_MS-logic_time[ind];
+		logic_time[ind]=clock()-logic_time[ind];
 
-		drawing_time[ind]=gameTime*GAME_TIME_REFRESH_MS;
+		drawing_time[ind]=clock();
 		m_pMap->draw(m_pScreenBuffer);
-		drawing_time[ind]=gameTime*GAME_TIME_REFRESH_MS-drawing_time[ind];
+		drawing_time[ind]=clock()-drawing_time[ind];
 
 		ind=(ind+1)%CPU_USAGE_MEAN;
 		#ifdef DEBUG_FPS

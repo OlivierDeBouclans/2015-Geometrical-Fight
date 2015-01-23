@@ -4,6 +4,7 @@
 #include "Weapon.h"
 #include "Macros.h"
 #include "Map.h"
+#include "Enemy.h"
 
 #include "allegro.h"
 
@@ -62,9 +63,10 @@ Player::Player(int x, int y, Joystick* joystick):MovingEntity(x,y), m_pJoystick(
 
 	cd.add(SPECIAL_SPEEDY,COOLDOWN_SPECIAL);
 	cd.add(SPECIAL_DEFENSIVE,200);
+	cd.add(SPECIAL_AGRESSIVE,200);
+	cd.add(SPECIAL_SNEAKY,5000);
 
 	cd.add(DECREASE_FURY,COOLDOWN_FURY_DECREASE);
-	cd.add(SPECIAL_AGRESSIVE,200);
 }
 
 
@@ -458,6 +460,8 @@ void Player::getXp(int value)
 		level++;
 		xpNextLevel*=LEVEL_XP_INCREASE;
 
+		fury=furyMax;
+
 		healthMax     =PLAYER_HEALTH;
 		health        =healthMax;
 		defense       *=LEVEL_STATS_INCREASE;
@@ -522,7 +526,7 @@ void Player::special()
 		break;
 
 	case SNEAKY:
-		//specialSneaky();
+		specialSneaky();
 		break;
 
 	case SPEEDY:
@@ -666,6 +670,29 @@ void Player::activeAgressive()
 	decreaseFury(FURY_ACTIVE_COST);
 
 	m_pWeapon->specialFire(30);
+}
+
+void Player::specialSneaky()
+{		    
+	if(!cd.isAvailable(SPECIAL_SNEAKY))
+		return;
+
+	if(fury<FURY_ACTIVE_COST)
+		return;
+	decreaseFury(FURY_ACTIVE_COST);		 
+
+	pMap->decoy=new Decoy(x,y,pMap);
+	pMap->decoy->vSpeed=vSpeed;
+	
+	m_delay->call(&Player::specialSneakyUnchange,5000);
+
+	cd.launch(SPECIAL_SNEAKY);	
+}
+
+void Player::specialSneakyUnchange()
+{
+	delete pMap->decoy;
+	pMap->decoy=NULL;
 }
 
 //////////////////////////////////////////////////////////////////////////

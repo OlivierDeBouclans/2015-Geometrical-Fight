@@ -267,3 +267,70 @@ void Xp::update(double dt)
 	if(Map::collide(boundingRect(),pMap->getPlayer()->boundingRect()))
 		pMap->getXp(this);	   
 }
+
+
+/************************************************************************/
+/* Decoy                                                                */
+/************************************************************************/
+
+Decoy::Decoy(int x, int y, Map* world): Enemy(x,y,world)
+{
+	radius        =PLAYER_DEFAULT_RADIUS;
+	maxSpeed      =PLAYER_SPEED;
+	color         =PLAYER_DEFAULT_COL;
+	health        =PLAYER_HEALTH;
+	healthMax     =PLAYER_HEALTH;
+	defense       =PLAYER_DEFENSE;
+	fireDamage    =0;
+	contactDamage =0;
+
+	steeringBehavior.OnWander(10+rand()%10,50+rand()%50);
+}
+
+void Decoy::draw(BITMAP* target) const
+{
+	Point2D coor=Point2D(x,y);
+	Point2D p1=coor+vHead*radius;
+	Point2D p2=coor-(vSide/3)*radius;
+	Point2D p3=coor+(vSide/3)*radius;
+
+	triangle(target, ( (int) p3.x), ( (int) p3.y), ( (int) p1.x ), ( (int) p1.y), ( (int) p2.x ), ( (int) p2.y), color);
+
+	#ifdef DEBUG_BOUNDING_RECT
+		Rect m_boundingRect=boundingRect();
+		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
+	#endif
+}
+
+Rect Decoy::boundingRect() const
+{
+	Point2D coor(x,y);
+	Point2D p1=coor+vHead*radius;
+	Point2D p2=coor-(vSide/2)*radius;
+	Point2D p3=coor+(vSide/2)*radius;
+
+	int x1=min(p1.x,p2.x);
+	x1=min(x1,p3.x);
+
+	int x2=max(p1.x,p2.x);
+	x2=max(x2,p3.x);
+
+	int y1=min(p1.y,p2.y);
+	y1=min(y1,p3.y);
+
+	int y2=max(p1.y,p2.y);
+	y2=max(y2,p3.y);
+
+	Rect r;
+	r.x1=x1;
+	r.x2=x2;
+	r.y1=y1;
+	r.y2=y2;
+
+	return r;
+}
+
+void Decoy::update(double dt)
+{
+	MovingEntity::update(dt);
+}

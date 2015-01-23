@@ -12,6 +12,7 @@ class MovingEntity;
 class Xp;
 class Player;
 class Joystick;
+class Decoy;
 
 struct BITMAP;
 
@@ -51,6 +52,7 @@ class Map
 		std::vector<Xp*> vXp;
 
 		bool bPause;
+		Decoy* decoy;
 
 	protected:
 		int m_iWidth;

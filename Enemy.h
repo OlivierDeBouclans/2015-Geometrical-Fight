@@ -53,5 +53,16 @@ class Xp: public Enemy
 		int value;
 };
 
+class Decoy: public Enemy
+{
+	public:
+		Decoy(int x, int y, Map* world);
+
+		void draw(BITMAP* target) const;
+		Rect boundingRect() const;
+		void update(double dt);
+
+};
+
 #endif // Enemy_h__
 
