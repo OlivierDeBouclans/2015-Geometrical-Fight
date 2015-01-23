@@ -22,24 +22,19 @@ Animation::~Animation()
 
 }
 
-int Animation::getHeight()
+int Animation::getFrameHeight()
 {
-    return m_sprite->getHeight();
+    return m_sprite->getFrameHeight();
 }
 
-int Animation::getWidth()
+int Animation::getFrameWidth()
 {
-    return m_sprite->getWidth();
+    return m_sprite->getFrameWidth();
 }
 
 bool Animation::isAnimated()
 {
     return m_animtype != -1;
-}
-
-bool Animation::isAttacking()
-{
-    return m_animtype == 1;
 }
 
 void Animation::startAnimation(int animtype, int direction, int framedelay, bool restart)
@@ -71,7 +66,7 @@ void Animation::startAnimation(int animtype, int direction, int framedelay, bool
             case 1:
 
                 m_prevframe= m_curframe;
-                m_curframe = (m_curframe / m_sprite->getNbRow() - 4 )*m_sprite->getNbRow() + m_sprite->getNbRow() - 1;
+                m_curframe = (m_curframe / m_sprite->getNumberOfRow() - 4 )*m_sprite->getNumberOfRow() + m_sprite->getNumberOfRow() - 1;
 
             break;
 
@@ -110,7 +105,7 @@ void Animation::update()
 
                     m_curframe-=3;
 
-                    if( (m_curframe < 0 || (m_curframe % m_sprite->getNbRow()) == m_sprite->getNbRow() - 1))
+                    if( (m_curframe < 0 || (m_curframe % m_sprite->getNumberOfRow()) == m_sprite->getNumberOfRow() - 1))
                     {
                         m_animtype=-1;
                         m_curframe=m_prevframe;
@@ -123,15 +118,9 @@ void Animation::update()
     }
 }
 
-void Animation::Draw(BITMAP *target, int x, int y)
+void Animation::draw(BITMAP *target, int frameRow, int x, int y)
 {
-    m_sprite->Draw(target,m_curframe,x,y);
+    //m_sprite->draw(target,m_curframe,x,y);
 }
-
-void Animation::Draw(BITMAP *target, int x, int y, float coeff)
-{
-    m_sprite->Draw(target,m_curframe,x,y,coeff);
-}
-
 
 

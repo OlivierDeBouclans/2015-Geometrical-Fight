@@ -10,16 +10,14 @@ class Animation
         Animation(Sprite *s,int curframe);
         ~Animation();
 
-        void Draw(BITMAP *target, int x, int y);
-        void Draw(BITMAP *target, int x, int y, float coeff);
+        void draw(BITMAP *target, int frameRow, int x, int y);
 
         void startAnimation(int animtype, int direction, int framedelay, bool restart=false);
         bool isAnimated();
-        bool isAttacking();
         void update();
 
-        int getWidth();
-        int getHeight();
+        int getFrameWidth();
+        int getFrameHeight();
 
     protected:
 
