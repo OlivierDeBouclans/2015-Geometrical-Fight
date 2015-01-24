@@ -51,6 +51,7 @@ class Entity
 		float contactDamage;
 
 		int level;
+		int xp;
 
 
 		Map* pMap;

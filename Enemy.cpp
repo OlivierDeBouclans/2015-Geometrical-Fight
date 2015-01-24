@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "SteeringBehavior.h"
 #include "Player.h"
+#include "Sprite.h"
 
 #include "allegro.h"
 
@@ -18,6 +19,8 @@ Enemy::Enemy(int x, int y, Map* world): MovingEntity(x,y)
 	steeringBehavior.setOwner(this);
 	steeringBehavior.setMap(pMap);
 	steeringBehavior.OnWallAvoidance();
+
+	xp=3;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -57,6 +60,13 @@ void Enemy::draw(BITMAP* target) const
 	int l=health/2;
 	rectfill(target,x1,r.y1-7,x1+l,r.y1-3, makecol(128,0,0));
 	//textprintf_ex(target, font, x-30+BAR_LENGTH/2, y-BAR_BORDER+BAR_WIDTH/2, makecol(255,255,255),-1,"%d/%d",m_pPlayer->health,m_pPlayer->healthMax);
+
+	#ifdef DEBUG_WANDER
+		Point2D WanderPoint(Point2D(x,y)+vHead*steeringBehavior.m_WanderDistance+vSide*steeringBehavior.m_WanderRadius*sin(steeringBehavior.WanderAngle)+vHead*steeringBehavior.m_WanderRadius*cos(steeringBehavior.WanderAngle));
+		Point2D p=Point2D(x,y)+vHead*steeringBehavior.m_WanderDistance;
+		circle(target,p.x,p.y,steeringBehavior.m_WanderRadius,makecol(0,255,0));
+		circlefill(target,WanderPoint.x,WanderPoint.y,6,makecol(0,255,0));
+	#endif
 }
 
 /************************************************************************/
@@ -148,7 +158,7 @@ Dreamer::Dreamer(int x,int y, Map* world): Enemy(x,y,world)
 	fireDamage    =DREAMER_FIRE_DAMAGE;
 	contactDamage =DREAMER_CONTACT_DAMAGE;
 
-	steeringBehavior.OnWander(30+rand()%10,200+rand()%50);
+	steeringBehavior.OnWander(30+rand()%10,200+rand()%50,3.14/64);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -216,7 +226,7 @@ void Dreamer::draw(BITMAP* target) const
 /* Xp                                                                   */
 /************************************************************************/
 
-Xp::Xp(int x, int y, Map* world): Enemy(x,y,world)
+Xp::Xp(Value e, int x, int y, Map* world): Enemy(x,y,world)
 {
 	radius        =XP_RADIUS;
 	maxSpeed      =XP_SPEED;
@@ -227,9 +237,31 @@ Xp::Xp(int x, int y, Map* world): Enemy(x,y,world)
 	fireDamage    =XP_FIRE_DAMAGE;
 	contactDamage =XP_CONTACT_DAMAGE;
 
-	value=50;
+	eValue=e;
 
-	steeringBehavior.OnWander(10+rand()%10,50+rand()%50);
+	switch(e)
+	{
+		case ONE: 
+			value=1; 
+		break;
+
+		case TEN: 
+			value=10; 
+		break;
+
+		case HUNDRED: 
+			value=100; 
+		break;
+
+		case THOUSAND: 
+			value=1000; 
+		break;
+	}
+
+	headRotationAngle=XP_ROTATION_SPEED;
+
+	//steeringBehavior.OnWander(0,5,0);
+	//steeringBehavior.WanderAngle=3.14/4;
 	steeringBehavior.OnPursue(world->getPlayer(),XP_PURSUE_RADIUS,5);
 }
 
@@ -250,11 +282,30 @@ Rect Xp::boundingRect() const
 
 void Xp::draw(BITMAP* target) const
 {
-	circlefill(target,x,y,radius,color);
+	//circlefill(target,x,y,radius,color);
+	Point2D coor=Point2D(x,y);
+	Point2D p1=coor+vFakeHead*radius;
+	Point2D p2=coor-(vFakeSide/3)*radius;
+	Point2D p3=coor+(vFakeSide/3)*radius;
+
+	Sprite *s=pMap->vSpriteList[1];
+	double a=(Vector2D(0,1)*vFakeHead);
+	double b= (Vector2D(1,0)*vFakeHead)>0 ? -1 : 1;
+	double angle = 360+b*acos(a)*360/(2*3.14);
+	int frame = ((int) angle % 360)*SPRITE_NUMBER_OF_DIRECTION / 360;
+	s->draw(target,s->getNumberOfRow()*frame+eValue,x-s->getFrameWidth()/2,y-s->getFrameHeight()/2);
+
 
 	#ifdef DEBUG_BOUNDING_RECT
 		Rect m_boundingRect=boundingRect();
 		rect(target,m_boundingRect.x1,m_boundingRect.y1,m_boundingRect.x2,m_boundingRect.y2,makecol(255,0,0));
+	#endif
+
+	#ifdef DEBUG_WANDER
+			Point2D WanderPoint(Point2D(x,y)+vHead*steeringBehavior.m_WanderDistance+vSide*steeringBehavior.m_WanderRadius*sin(steeringBehavior.WanderAngle)+vHead*steeringBehavior.m_WanderRadius*cos(steeringBehavior.WanderAngle));
+			Point2D p=Point2D(x,y)+vHead*steeringBehavior.m_WanderDistance;
+			circle(target,p.x,p.y,steeringBehavior.m_WanderRadius,makecol(0,255,0));
+			circlefill(target,WanderPoint.x,WanderPoint.y,6,makecol(0,255,0));
 	#endif
 }
 
@@ -284,7 +335,7 @@ Decoy::Decoy(int x, int y, Map* world): Enemy(x,y,world)
 	fireDamage    =0;
 	contactDamage =0;
 
-	steeringBehavior.OnWander(10+rand()%10,50+rand()%50);
+	steeringBehavior.OnWander(10+rand()%10,50+rand()%50,3.14/64);
 }
 
 void Decoy::draw(BITMAP* target) const

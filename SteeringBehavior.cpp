@@ -85,11 +85,8 @@ Vector2D SteeringBehavior::Evade()
 }
 
 Vector2D SteeringBehavior::Wander()
-{    double jitter = WANDER_JITER;
-
-    static double WanderAngle = 0;
-
-    WanderAngle += jitter*((rand()%1000)-500)/500;
+{    
+    WanderAngle += m_WanderJitter*((rand()%1000)-500)/500;
 
     Point2D m_WanderPoint(m_owner->getCoor()+m_owner->vHead*m_WanderDistance+ m_owner->vSide*m_WanderRadius*sin(WanderAngle)+m_owner->vHead*m_WanderRadius*cos(WanderAngle));
 
@@ -557,4 +554,6 @@ SteeringBehavior::SteeringBehavior(MovingEntity *owner/*=NULL*/):m_owner(owner)
 	m_bSeparation = false;
 	m_bAlignment = false;
 	m_bCohesion = false;
+
+	WanderAngle=0;
 }

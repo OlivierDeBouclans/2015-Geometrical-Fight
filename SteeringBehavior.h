@@ -78,12 +78,13 @@ class SteeringBehavior
                 m_dEvade  = weight;
                 m_EvadeEntity = target;
             }
-        void  OnWander(double WanderRadius,double WanderDistance, double weight=1)
+        void  OnWander(double WanderDistance, double WanderRadius, double WanderJitter, double weight=1)
             {
                 m_bWander = true;
                 m_dWander = weight;
                 m_WanderDistance = WanderDistance;
                 m_WanderRadius = WanderRadius;
+				m_WanderJitter = WanderJitter;
             }
        /* void  OnObstacleAvoidance(std::vector<Obstacle> *Obstacles, double weight=1)
             {
@@ -142,11 +143,15 @@ class SteeringBehavior
                 m_Entities = EntityList;
             }
 
+		double WanderAngle;
+        double m_WanderRadius;              //radius of the wander circle
+        double m_WanderDistance;            //distance of the wander circle from the entity
+		double m_WanderJitter;
+
     protected:
 
         //Accumulate force function
         bool AccumulateForce(Vector2D *RunningTot, Vector2D ForceToAdd);
-
     private:
 
         //boolean for each behavior
@@ -185,8 +190,6 @@ class SteeringBehavior
         MovingEntity *m_PursueEntity;       //Entity to pursue
         Vector2D m_PursueOffset;            //Offset for pursuit
         MovingEntity *m_EvadeEntity;        //Entity to flee from
-        double m_WanderRadius;              //radius of the wander circle
-        double m_WanderDistance;            //distance of the wander circle from the entity
 		double m_dPursueRadius;
         MovingEntity *m_InterposeEntity1;   //Entities to interpose
         MovingEntity *m_InterposeEntity2;   //Entities to interpose

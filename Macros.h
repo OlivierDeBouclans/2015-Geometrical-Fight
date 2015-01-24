@@ -13,7 +13,7 @@
 
 #define SPRITE_NUMBER_OF_DIRECTION 128
 
-#define ANIMATION_SPEED 50
+#define ANIMATION_SPEED 25
 
 /************************************************************************/
 /*SYSTEM MACROS                                                       */
@@ -98,14 +98,15 @@
 #define DREAMER_FIRE_DAMAGE 0
 #define DREAMER_CONTACT_DAMAGE 20
 
-#define XP_RADIUS 4
-#define XP_SPEED 3
+#define XP_RADIUS 8
+#define XP_SPEED 10
 #define XP_COL makecol(0,255,0)
 #define XP_HEALTH 1
 #define XP_DEFENSE 1
 #define XP_FIRE_DAMAGE 0
 #define XP_CONTACT_DAMAGE 0 
-#define XP_PURSUE_RADIUS 50
+#define XP_PURSUE_RADIUS 150
+#define XP_ROTATION_SPEED -3.14/45
 
 /************************************************************************/
 /*LEVEL MACROS                                                      */
@@ -188,6 +189,7 @@
 
 //#define DEBUG_BOUNDING_RECT
 #define DEBUG_FPS
+//#define DEBUG_WANDER
 
 /************************************************************************/
 /* MISC MACROS                                                          */

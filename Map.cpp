@@ -27,7 +27,10 @@ Map::Map(int width, int height): m_iWidth(width), m_iHeight(height), m_pPlayer(N
 	rectfill(background,OFFSET_X-BORDER_WIDTH,OFFSET_Y-BORDER_WIDTH,OFFSET_X+m_iWidth+BORDER_WIDTH,OFFSET_Y+m_iHeight+BORDER_WIDTH, makecol(255,255,255));
 	rectfill(background,OFFSET_X,OFFSET_Y,OFFSET_X+m_iWidth,OFFSET_Y+m_iHeight, makecol(0,0,0));
 
-	createSprite();
+	//createSprite();
+
+	vSpriteList.push_back(new Sprite("Player.bmp",64,64));
+	vSpriteList.push_back(new Sprite("Xp.bmp",12,12));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -112,7 +115,7 @@ void Map::update(double dt)
 
 void Map::addPlayer()
 {
-	m_pPlayer=new Player(new Animation(vSpriteList.back(),0),(OFFSET_X+m_iWidth)/2,(OFFSET_Y+m_iHeight)/2);
+	m_pPlayer=new Player(new Animation(vSpriteList[0],0),(OFFSET_X+m_iWidth)/2,(OFFSET_Y+m_iHeight)/2);
 	m_pPlayer->pMap=this;
 	m_pPlayer->setJoystick(joystick);
 }
@@ -213,8 +216,37 @@ void Map::drawPlayerStats(BITMAP* target) const
 
 void Map::destroyEnemy(int EnemyIndex)
 {
-	Xp *xp=new Xp(vEnemies[EnemyIndex]->x,vEnemies[EnemyIndex]->y,this);
-	vXp.push_back(xp);
+	int nbXp=vEnemies[EnemyIndex]->xp;
+	int x=vEnemies[EnemyIndex]->x;
+	int y=vEnemies[EnemyIndex]->y;
+
+	while(nbXp > 1000)
+	{
+		Xp *xp=new Xp(Xp::THOUSAND,x+(rand()%60)-30,y+(rand()%60)-30,this);
+		vXp.push_back(xp);
+		nbXp-=1000;
+	}
+
+	while(nbXp > 100)
+	{
+		Xp *xp=new Xp(Xp::HUNDRED,x+(rand()%60)-30,y+(rand()%60)-30,this);
+		vXp.push_back(xp);
+		nbXp-=100;
+	}
+
+	while(nbXp > 10)
+	{
+		Xp *xp=new Xp(Xp::TEN,x+(rand()%60)-30,y+(rand()%60)-30,this);
+		vXp.push_back(xp);
+		nbXp-=10;
+	}
+
+	while(nbXp > 1)
+	{
+		Xp *xp=new Xp(Xp::ONE,x+(rand()%60)-30,y+(rand()%60)-30,this);
+		vXp.push_back(xp);
+		nbXp-=1;
+	}
 
 	m_pPlayer->increaseFury(FURY_DESTROY_ENEMY);
 
@@ -296,21 +328,61 @@ void Map::createSprite()
 
 	Sprite* sp=new Sprite(s,size,size);
 
-	//save_bitmap("dump2.bmp", s, NULL);
-
-	BITMAP* SpritePLayer=create_bitmap(size*vSpriteList.size(), SPRITE_NUMBER_OF_DIRECTION*size);
-	rectfill(SpritePLayer, 0, 0, SpritePLayer->w, SpritePLayer->h, makecol(255,0,255));
+	BITMAP* sprite=create_bitmap(size*vSpriteList.size(), SPRITE_NUMBER_OF_DIRECTION*size);
+	rectfill(sprite, 0, 0, sprite->w, sprite->h, makecol(255,0,255));
 	for(int k=0; k<SPRITE_NUMBER_OF_DIRECTION; k++)
 	{
 		float angle = k*360/SPRITE_NUMBER_OF_DIRECTION;
 
 		for(unsigned int i=0;i<vSpriteList.size();i++)
-			sp->draw(SpritePLayer,i,i*size,k*size,1.0,angle+180);
+			sp->draw(sprite,i,i*size,k*size,1.0,angle+180);
 	}
-	vSpriteList.push_back(new Sprite(SpritePLayer,size,size));
 
-	//save_bitmap("dump.bmp", SpritePLayer, NULL);
+	save_bitmap("Player.bmp", sprite, NULL);
 
+	while(vSpriteList.size())
+	{
+		delete vSpriteList.back();
+		vSpriteList.pop_back();
+	}
 	delete sp;
+	delete sprite;
+
+
+
+
+	vSpriteList.push_back(new Sprite("Xp1.bmp",200,200));
+	vSpriteList.push_back(new Sprite("Xp10.bmp",200,200));
+	vSpriteList.push_back(new Sprite("Xp100.bmp",200,200));
+	vSpriteList.push_back(new Sprite("Xp1000.bmp",200,200));
+
+	size=12;
+	s=create_bitmap(size*vSpriteList.size(), size);
+	rectfill(s, 0, 0, s->w, s->h, makecol(255,0,255));
+
+	for(unsigned int i=0;i<vSpriteList.size();i++)
+		vSpriteList[i]->draw(s,0,i*size,0,0.06);
+
+	sp=new Sprite(s,size,size);
+
+	sprite=create_bitmap(size*vSpriteList.size(), SPRITE_NUMBER_OF_DIRECTION*size);
+	rectfill(sprite, 0, 0, sprite->w, sprite->h, makecol(255,0,255));
+	for(int k=0; k<SPRITE_NUMBER_OF_DIRECTION; k++)
+	{
+		float angle = k*360/SPRITE_NUMBER_OF_DIRECTION;
+
+		for(unsigned int i=0;i<vSpriteList.size();i++)
+			sp->draw(sprite,i,i*size,k*size,1.0,angle+180);
+	}
+
+	save_bitmap("Xp.bmp", sprite, NULL);
+
+	while(vSpriteList.size())
+	{
+		delete vSpriteList.back();
+		vSpriteList.pop_back();
+	}
+	delete sp;
+	delete sprite;
 }
 

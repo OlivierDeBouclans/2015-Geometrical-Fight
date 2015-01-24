@@ -31,7 +31,7 @@ Player::Player(Animation *sprite,int x, int y, Joystick* joystick):MovingEntity(
 	furyMax       =PLAYER_FURY;
 	fury          =0;
 	xp            =0;
-	xpNextLevel   =1000;
+	xpNextLevel   =100;
 	lifeSteal     =0;
 
 	agressive_fire_coef     =PLAYER_AGRESSIVE_FIRE_DAMAGE_COEF;
@@ -134,7 +134,7 @@ void Player::draw(BITMAP* target) const
 	double angle = 360+b*acos(a)*360/(2*3.14);
 	int frame = ((int) angle % 360)*SPRITE_NUMBER_OF_DIRECTION / 360;
 
-	pSprite->draw(target,(pMap->vSpriteList.size()-1)*frame,x-pSprite->getFrameWidth()/2,y-pSprite->getFrameHeight()/2);
+	pSprite->draw(target,pSprite->getNumberOfRow()*frame,x-pSprite->getFrameWidth()/2,y-pSprite->getFrameHeight()/2);
 
 	//triangle(target, ( (int) p3.x), ( (int) p3.y), ( (int) p1.x ), ( (int) p1.y), ( (int) p2.x ), ( (int) p2.y), col);
 
@@ -522,11 +522,19 @@ void Player::getXp(int value)
 
 	if(xp>=xpNextLevel)
 	{
+		fury=furyMax;
+		activeAgressive();
+		activeDefensive();
+		activeSneaky();
+		activeSpeedy();
+		fury=furyMax;
+
+
+
 		xp-=xpNextLevel;
 		level++;
 		xpNextLevel*=LEVEL_XP_INCREASE;
 
-		fury=furyMax;
 
 		healthMax     =PLAYER_HEALTH;
 		health        =healthMax;

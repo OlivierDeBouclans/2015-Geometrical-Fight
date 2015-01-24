@@ -19,6 +19,7 @@ class Animation
 
         int getFrameWidth();
         int getFrameHeight();
+		int getNumberOfRow() {return m_sprite->getNumberOfRow();}
 
 		int remainingTime();
 

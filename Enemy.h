@@ -21,6 +21,7 @@ class Enemy: public MovingEntity
 		virtual void update(double dt);
 
 		SteeringBehavior steeringBehavior;
+
 };
 
 class Tracker: public Enemy
@@ -44,13 +45,17 @@ class Dreamer: public Enemy
 class Xp: public Enemy
 {
 	public:
-		Xp(int x, int y, Map* world);
+		enum Value {ONE,TEN,HUNDRED,THOUSAND};
+
+		Xp(Value v, int x, int y, Map* world);
+
 
 		void draw(BITMAP* target) const;
 		Rect boundingRect() const;
 		void update(double dt);
 
 		int value;
+		Value eValue;
 };
 
 class Decoy: public Enemy

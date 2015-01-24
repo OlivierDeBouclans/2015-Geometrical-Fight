@@ -47,6 +47,10 @@ class MovingEntity: public Entity
         Vector2D vSpeed;                     //Current Speed of the entity
         Vector2D vHead;                      //Current direction of the entity
         Vector2D vSide;                      //Vector orthogonal to the current direction
+
+		Vector2D vFakeHead;
+		Vector2D vFakeSide;
+		double headRotationAngle;
 };
 
 #endif // MOVINGENTITY_H

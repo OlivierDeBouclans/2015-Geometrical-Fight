@@ -71,7 +71,6 @@ class Player:public MovingEntity
 
 		void getDamage(int damage);
 
-		int xp;
 		int xpNextLevel;
 		int fury;
 		int furyMax;

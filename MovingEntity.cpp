@@ -13,6 +13,9 @@ MovingEntity::MovingEntity(int x, int y) : Entity(x,y)
 	vSpeed   =Vector2D(0,0);
 	vHead    =Vector2D(rand() % 1000,rand() % 1000).Normalize();
 	vSide    =vHead.Ortho();
+	vFakeHead=vHead;
+	vFakeSide=vSide;
+	headRotationAngle=0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -43,6 +46,17 @@ void MovingEntity::update(double Dt)
 		vHead = vSpeed / sqrtf(n);
 		vSide = vHead.Ortho();
 	}
+
+	if(headRotationAngle)
+	{
+		vFakeHead=vFakeHead.Rotate(headRotationAngle);
+		vFakeSide=vFakeHead.Ortho();
+	}
+	else
+	{
+		vFakeHead=vHead;
+		vFakeSide=vSide;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -51,9 +65,12 @@ void MovingEntity::setLevel(int lvl)
 {
 	level=lvl;
 
-	int e=1;
+	int e=1; int a=1;
 	for(int i=1;i<lvl;i++)
+	{
 		e*=LEVEL_STATS_INCREASE;
+		a*=2;
+	}
 
 	maxSpeed      *=e;
 	healthMax     *=e;
@@ -61,5 +78,6 @@ void MovingEntity::setLevel(int lvl)
 	defense       *=e;
 	fireDamage    *=e;
 	contactDamage *=e;
+	xp            *=a;
 }
 
