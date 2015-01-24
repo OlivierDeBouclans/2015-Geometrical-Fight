@@ -81,20 +81,24 @@ Player::Player(Animation *sprite,int x, int y, Joystick* joystick):MovingEntity(
 	std::list<int> l2;
 	l2.push_back(0);
 	l2.push_back(6);
+	l2.push_back(7);
+	l2.push_back(8);
+	l2.push_back(9);
+	l2.push_back(10);
 	lAnimation.push_back(l2);
 
 	std::list<int> l3;
 	l3.push_back(0);
-	l3.push_back(7);
-	l3.push_back(8);
-	l3.push_back(9);
-	l3.push_back(10);
 	l3.push_back(11);
+	l3.push_back(12);
+	l3.push_back(13);
+	l3.push_back(14);
+	l3.push_back(15);
 	lAnimation.push_back(l3);
 
 	std::list<int> l4;
 	l4.push_back(0);
-	l4.push_back(12);
+	l4.push_back(16);
 	lAnimation.push_back(l4);
 }
 

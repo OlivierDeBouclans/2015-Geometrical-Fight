@@ -268,13 +268,18 @@ void Map::createSprite()
 		vSpriteList.push_back(new Sprite("PlayerAgressiveToNormal1.bmp",400,400));
 	vSpriteList.push_back(new Sprite("PlayerAgressive.bmp",400,400));
 
+		vSpriteList.push_back(new Sprite("PlayerDefensiveToNormal4.bmp",400,400));
+		vSpriteList.push_back(new Sprite("PlayerDefensiveToNormal3.bmp",400,400));
+		vSpriteList.push_back(new Sprite("PlayerDefensiveToNormal2.bmp",400,400));
+		vSpriteList.push_back(new Sprite("PlayerDefensiveToNormal1.bmp",400,400));
 	vSpriteList.push_back(new Sprite("PlayerDefensive.bmp",400,400));
 
-			vSpriteList.push_back(new Sprite("PlayerSpeedyToNormal4.bmp",400,400));
-			vSpriteList.push_back(new Sprite("PlayerSpeedyToNormal3.bmp",400,400));
-			vSpriteList.push_back(new Sprite("PlayerSpeedyToNormal2.bmp",400,400));
-			vSpriteList.push_back(new Sprite("PlayerSpeedyToNormal1.bmp",400,400));
+		vSpriteList.push_back(new Sprite("PlayerSpeedyToNormal4.bmp",400,400));
+		vSpriteList.push_back(new Sprite("PlayerSpeedyToNormal3.bmp",400,400));
+		vSpriteList.push_back(new Sprite("PlayerSpeedyToNormal2.bmp",400,400));
+		vSpriteList.push_back(new Sprite("PlayerSpeedyToNormal1.bmp",400,400));
 	vSpriteList.push_back(new Sprite("PlayerSpeedy.bmp",400,400));
+
 	vSpriteList.push_back(new Sprite("PlayerSneaky.bmp",400,400));
 
 	int size=64;
