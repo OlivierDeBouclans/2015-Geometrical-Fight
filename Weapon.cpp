@@ -76,6 +76,8 @@ void Weapon::fire(bool ahead)
 
 		b2.launch(*m_pOwner, ahead?1:-1);
 		m_pBullet.push_back(b2);
+
+		play_sample(m_pOwner->pMap->vSoundList[Map::FIRE],20,128,1500,FALSE);
 	}
 	else
 	{
@@ -86,6 +88,8 @@ void Weapon::fire(bool ahead)
 
 		b.launch(*m_pOwner, ahead?1:-1);
 		m_pBullet.push_back(b);
+
+		play_sample(m_pOwner->pMap->vSoundList[Map::FIRE],20,128,500,FALSE);
 	}
 
 	cd.launch(FIRE);
@@ -123,6 +127,7 @@ void Weapon::specialFire(int nbBullets)
 		m_pBullet.push_back(b);
 	}
 
+	play_sample(m_pOwner->pMap->vSoundList[Map::EXPLOSION],60,128,1500,FALSE);
 }
 
 //////////////////////////////////////////////////////////////////////////

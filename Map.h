@@ -15,6 +15,7 @@ class Joystick;
 class Decoy;
 class Sprite;
 
+struct SAMPLE;
 struct BITMAP;
 
 class Map
@@ -44,6 +45,7 @@ class Map
 		void getXp(Xp* xp);
 
 		void createSprite();
+		void loadSound();
 
 		Point2D getTopLeft() {return Point2D(OFFSET_X,OFFSET_Y);}
 		Point2D getTopRight() {return Point2D(OFFSET_X+m_iWidth,OFFSET_Y);}
@@ -53,7 +55,11 @@ class Map
 		Joystick* joystick;
 		std::vector<MovingEntity*> vEnemies;
 		std::vector<Xp*> vXp;
-		std::vector<Sprite*> vSpriteList;
+		std::map<int,Sprite*> vSpriteList;
+		std::map<int,SAMPLE*> vSoundList;
+
+		enum {PLAYER_SPRITE,XP_SPRITE};
+		enum {FIRE, EXPLOSION, SPEED, XP, DAMAGE};
 
 		bool bPause;
 		Decoy* decoy;

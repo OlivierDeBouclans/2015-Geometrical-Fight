@@ -183,7 +183,9 @@ void Player::update(double dt)
 		m_pJoystick->update();
 
 		if(m_pJoystick->rt)
+		{
 			m_pWeapon->fire();
+		}
 		else if(m_pJoystick->lt)
 			m_pWeapon->fire(false);
 
@@ -684,6 +686,7 @@ void Player::activeSpeedy()
 	maxSpeed*=1.4;
 
 	m_delay->call(&Player::activeSpeedyUnchange,ACTIVE_SPEEDY_LENGTH);
+	play_sample(pMap->vSoundList[Map::SPEED],90,128,1000,FALSE);
 }
 
 void Player::activeSpeedyUnchange()

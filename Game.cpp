@@ -67,8 +67,10 @@ void Game::init()
 		return;
 	}
 
+	install_sound(DIGI_AUTODETECT, MIDI_NONE, "");
+
 	m_pScreenBuffer=create_bitmap(SCREEN_W, SCREEN_H);
-	//clear_bitmap(m_pScreenBuffer);
+	clear_bitmap(m_pScreenBuffer);
 
 	m_pMap=new Map(MAP_WIDTH, MAP_HEIGHT);
 }
@@ -89,6 +91,7 @@ void Game::play()
 	m_pMap->joystick=&joystick;
 	m_pMap->addPlayer();
 
+
 	int fps=0;
 	int frames_done=0;
 	int old_time=0;
@@ -105,6 +108,12 @@ void Game::play()
 		drawing_time[i]=0;
 	}
 
+	//int volume=128;
+	//int panning=128;
+	//int pitch=1000;
+	//SAMPLE* samp=load_sample("Sound/Fire.wav");
+	//play_sample(samp,128,128,1000,TRUE);
+
 	while(!key[KEY_ESC])
 	{
 		waiting_time[ind]=clock();
@@ -112,6 +121,36 @@ void Game::play()
 		{
 			rest(1);
 		}
+		////change the panning
+		//if ((key[KEY_LEFT]) && (panning > 0))
+		//	panning--;
+		//else if ((key[KEY_RIGHT]) && (panning < 255))
+		//	panning++;
+		////change the pitch (rounding at 512)
+		//if ((key[KEY_UP]) && (pitch < 16384))
+		//	pitch = ((pitch * 513) / 512) + 1;
+		//else if ((key[KEY_DOWN]) && (pitch > 64))
+		//	pitch = ((pitch * 511) / 512) - 1;
+		////change the volume
+		//if (key[KEY_Q] && volume < 255)
+		//	volume++;
+		//else if (key[KEY_A] && volume > 0)
+		//	volume--;
+		////adjust the sample
+		//adjust_sample(samp, volume, panning, pitch, TRUE);
+		//int WHITE=makecol(255,255,255);
+		//textout(screen,font,"PlayWave Program (ESC to quit)",0,0,WHITE);
+		//textprintf(screen,font,0,10,WHITE,"Sound Driver: %s",digi_driver->name);
+		//textout(screen,font,"Playing clapping.wav...",0,20,WHITE);
+		//	textout(screen,font,"Left,Right - Pan Left,Right",0,50,WHITE);
+		//	textout(screen,font,"Up,Down - Pitch Raise,Lower",0,60,WHITE);
+		//	textout(screen,font,"-,+ - Volume Down,Up",0,70,WHITE);
+
+		////display status
+		//textprintf(screen,font,0,100,WHITE,"PITCH: %5d", pitch);
+		//textprintf(screen,font,0,110,WHITE,"PAN: %5d", panning);
+		//textprintf(screen,font,0,120,WHITE,"VOLUME:%5d", volume);
+
 		waiting_time[ind]=clock()-waiting_time[ind];
 
 		logic_time[ind]=clock();

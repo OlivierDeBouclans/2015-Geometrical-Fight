@@ -288,7 +288,7 @@ void Xp::draw(BITMAP* target) const
 	Point2D p2=coor-(vFakeSide/3)*radius;
 	Point2D p3=coor+(vFakeSide/3)*radius;
 
-	Sprite *s=pMap->vSpriteList[1];
+	Sprite *s=pMap->vSpriteList[Map::XP_SPRITE];
 	double a=(Vector2D(0,1)*vFakeHead);
 	double b= (Vector2D(1,0)*vFakeHead)>0 ? -1 : 1;
 	double angle = 360+b*acos(a)*360/(2*3.14);

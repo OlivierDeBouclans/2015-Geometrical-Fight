@@ -28,9 +28,10 @@ Map::Map(int width, int height): m_iWidth(width), m_iHeight(height), m_pPlayer(N
 	rectfill(background,OFFSET_X,OFFSET_Y,OFFSET_X+m_iWidth,OFFSET_Y+m_iHeight, makecol(0,0,0));
 
 	//createSprite();
+	loadSound();
 
-	vSpriteList.push_back(new Sprite("Player.bmp",64,64));
-	vSpriteList.push_back(new Sprite("Xp.bmp",12,12));
+	vSpriteList[PLAYER_SPRITE]=new Sprite("Player.bmp",64,64);
+	vSpriteList[XP_SPRITE]=new Sprite("Xp.bmp",12,12);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -51,11 +52,8 @@ Map::~Map(void)
 		vXp.pop_back();
 	}
 
-	while(vSpriteList.size())
-	{
-		//delete vSpriteList.back();
-		vSpriteList.pop_back();
-	}
+	//delete vSpriteList[PLAYER_SPRITE];
+	//delete vSpriteList[XP_SPRITE];
 }
 
 void Map::draw(BITMAP* target) const
@@ -115,7 +113,7 @@ void Map::update(double dt)
 
 void Map::addPlayer()
 {
-	m_pPlayer=new Player(new Animation(vSpriteList[0],0),(OFFSET_X+m_iWidth)/2,(OFFSET_Y+m_iHeight)/2);
+	m_pPlayer=new Player(new Animation(vSpriteList[PLAYER_SPRITE],0),(OFFSET_X+m_iWidth)/2,(OFFSET_Y+m_iHeight)/2);
 	m_pPlayer->pMap=this;
 	m_pPlayer->setJoystick(joystick);
 }
@@ -164,6 +162,8 @@ void Map::hitEnemy(int EnemyIndex, bool fireDamage)
 
 			cd.launch(HIT_ENEMY);
 		}
+
+	play_sample(vSoundList[DAMAGE],60,128,1000,FALSE);
 
 	if(e->health<=0)
 		destroyEnemy(EnemyIndex);
@@ -252,6 +252,7 @@ void Map::destroyEnemy(int EnemyIndex)
 
 	delete vEnemies[EnemyIndex];
 	vEnemies.erase(vEnemies.begin()+EnemyIndex);
+	play_sample(vSoundList[EXPLOSION],40,128,1000,FALSE);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -284,6 +285,8 @@ void Map::getXp(Xp* xp)
 			delete xp;
 			vXp.erase(vXp.begin()+i);
 
+			play_sample(vSoundList[XP],90,128,1000,FALSE);
+
 			break;
 		}
 }
@@ -292,58 +295,60 @@ void Map::getXp(Xp* xp)
 
 void Map::createSprite()
 {
-	vSpriteList.push_back(new Sprite("PlayerNormal.bmp",400,400));
+	std::vector<Sprite*> l;
 
-		vSpriteList.push_back(new Sprite("PlayerAgressiveToNormal4.bmp",400,400));
-		vSpriteList.push_back(new Sprite("PlayerAgressiveToNormal3.bmp",400,400));
-		vSpriteList.push_back(new Sprite("PlayerAgressiveToNormal2.bmp",400,400));
-		vSpriteList.push_back(new Sprite("PlayerAgressiveToNormal1.bmp",400,400));
-	vSpriteList.push_back(new Sprite("PlayerAgressive.bmp",400,400));
+	l.push_back(new Sprite("PlayerNormal.bmp",400,400));
 
-		vSpriteList.push_back(new Sprite("PlayerDefensiveToNormal4.bmp",400,400));
-		vSpriteList.push_back(new Sprite("PlayerDefensiveToNormal3.bmp",400,400));
-		vSpriteList.push_back(new Sprite("PlayerDefensiveToNormal2.bmp",400,400));
-		vSpriteList.push_back(new Sprite("PlayerDefensiveToNormal1.bmp",400,400));
-	vSpriteList.push_back(new Sprite("PlayerDefensive.bmp",400,400));
+		l.push_back(new Sprite("PlayerAgressiveToNormal4.bmp",400,400));
+		l.push_back(new Sprite("PlayerAgressiveToNormal3.bmp",400,400));
+		l.push_back(new Sprite("PlayerAgressiveToNormal2.bmp",400,400));
+		l.push_back(new Sprite("PlayerAgressiveToNormal1.bmp",400,400));
+	l.push_back(new Sprite("PlayerAgressive.bmp",400,400));
 
-		vSpriteList.push_back(new Sprite("PlayerSpeedyToNormal4.bmp",400,400));
-		vSpriteList.push_back(new Sprite("PlayerSpeedyToNormal3.bmp",400,400));
-		vSpriteList.push_back(new Sprite("PlayerSpeedyToNormal2.bmp",400,400));
-		vSpriteList.push_back(new Sprite("PlayerSpeedyToNormal1.bmp",400,400));
-	vSpriteList.push_back(new Sprite("PlayerSpeedy.bmp",400,400));
+		l.push_back(new Sprite("PlayerDefensiveToNormal4.bmp",400,400));
+		l.push_back(new Sprite("PlayerDefensiveToNormal3.bmp",400,400));
+		l.push_back(new Sprite("PlayerDefensiveToNormal2.bmp",400,400));
+		l.push_back(new Sprite("PlayerDefensiveToNormal1.bmp",400,400));
+	l.push_back(new Sprite("PlayerDefensive.bmp",400,400));
 
-		vSpriteList.push_back(new Sprite("PlayerSneakyToNormal4.bmp",400,400));
-		vSpriteList.push_back(new Sprite("PlayerSneakyToNormal3.bmp",400,400));
-		vSpriteList.push_back(new Sprite("PlayerSneakyToNormal2.bmp",400,400));
-		vSpriteList.push_back(new Sprite("PlayerSneakyToNormal1.bmp",400,400));
-	vSpriteList.push_back(new Sprite("PlayerSneaky.bmp",400,400));
+		l.push_back(new Sprite("PlayerSpeedyToNormal4.bmp",400,400));
+		l.push_back(new Sprite("PlayerSpeedyToNormal3.bmp",400,400));
+		l.push_back(new Sprite("PlayerSpeedyToNormal2.bmp",400,400));
+		l.push_back(new Sprite("PlayerSpeedyToNormal1.bmp",400,400));
+	l.push_back(new Sprite("PlayerSpeedy.bmp",400,400));
+
+		l.push_back(new Sprite("PlayerSneakyToNormal4.bmp",400,400));
+		l.push_back(new Sprite("PlayerSneakyToNormal3.bmp",400,400));
+		l.push_back(new Sprite("PlayerSneakyToNormal2.bmp",400,400));
+		l.push_back(new Sprite("PlayerSneakyToNormal1.bmp",400,400));
+	l.push_back(new Sprite("PlayerSneaky.bmp",400,400));
 
 	int size=64;
 
-	BITMAP*s=create_bitmap(size*vSpriteList.size(), size);
+	BITMAP*s=create_bitmap(size*l.size(), size);
 	rectfill(s, 0, 0, s->w, s->h, makecol(255,0,255));
 
-	for(unsigned int i=0;i<vSpriteList.size();i++)
-		vSpriteList[i]->draw(s,0,i*size,0,0.16);
+	for(unsigned int i=0;i<l.size();i++)
+		l[i]->draw(s,0,i*size,0,0.16);
 
 	Sprite* sp=new Sprite(s,size,size);
 
-	BITMAP* sprite=create_bitmap(size*vSpriteList.size(), SPRITE_NUMBER_OF_DIRECTION*size);
+	BITMAP* sprite=create_bitmap(size*l.size(), SPRITE_NUMBER_OF_DIRECTION*size);
 	rectfill(sprite, 0, 0, sprite->w, sprite->h, makecol(255,0,255));
 	for(int k=0; k<SPRITE_NUMBER_OF_DIRECTION; k++)
 	{
 		float angle = k*360/SPRITE_NUMBER_OF_DIRECTION;
 
-		for(unsigned int i=0;i<vSpriteList.size();i++)
+		for(unsigned int i=0;i<l.size();i++)
 			sp->draw(sprite,i,i*size,k*size,1.0,angle+180);
 	}
 
 	save_bitmap("Player.bmp", sprite, NULL);
 
-	while(vSpriteList.size())
+	while(l.size())
 	{
-		delete vSpriteList.back();
-		vSpriteList.pop_back();
+		delete l.back();
+		l.pop_back();
 	}
 	delete sp;
 	delete sprite;
@@ -351,38 +356,47 @@ void Map::createSprite()
 
 
 
-	vSpriteList.push_back(new Sprite("Xp1.bmp",200,200));
-	vSpriteList.push_back(new Sprite("Xp10.bmp",200,200));
-	vSpriteList.push_back(new Sprite("Xp100.bmp",200,200));
-	vSpriteList.push_back(new Sprite("Xp1000.bmp",200,200));
+	l.push_back(new Sprite("Xp1.bmp",200,200));
+	l.push_back(new Sprite("Xp10.bmp",200,200));
+	l.push_back(new Sprite("Xp100.bmp",200,200));
+	l.push_back(new Sprite("Xp1000.bmp",200,200));
 
 	size=12;
-	s=create_bitmap(size*vSpriteList.size(), size);
+	s=create_bitmap(size*l.size(), size);
 	rectfill(s, 0, 0, s->w, s->h, makecol(255,0,255));
 
-	for(unsigned int i=0;i<vSpriteList.size();i++)
-		vSpriteList[i]->draw(s,0,i*size,0,0.06);
+	for(unsigned int i=0;i<l.size();i++)
+		l[i]->draw(s,0,i*size,0,0.06);
 
 	sp=new Sprite(s,size,size);
 
-	sprite=create_bitmap(size*vSpriteList.size(), SPRITE_NUMBER_OF_DIRECTION*size);
+	sprite=create_bitmap(size*l.size(), SPRITE_NUMBER_OF_DIRECTION*size);
 	rectfill(sprite, 0, 0, sprite->w, sprite->h, makecol(255,0,255));
 	for(int k=0; k<SPRITE_NUMBER_OF_DIRECTION; k++)
 	{
 		float angle = k*360/SPRITE_NUMBER_OF_DIRECTION;
 
-		for(unsigned int i=0;i<vSpriteList.size();i++)
+		for(unsigned int i=0;i<l.size();i++)
 			sp->draw(sprite,i,i*size,k*size,1.0,angle+180);
 	}
 
 	save_bitmap("Xp.bmp", sprite, NULL);
 
-	while(vSpriteList.size())
+	while(l.size())
 	{
-		delete vSpriteList.back();
-		vSpriteList.pop_back();
+		delete l.back();
+		l.pop_back();
 	}
 	delete sp;
 	delete sprite;
+}
+
+void Map::loadSound()
+{
+	vSoundList[FIRE]=load_sample("Sound/Fire4.wav");
+	vSoundList[EXPLOSION]=load_sample("Sound/Explosion.wav");
+	vSoundList[SPEED]=load_sample("Sound/Swoosh.wav");
+	vSoundList[XP]=load_sample("Sound/Click.wav");
+	vSoundList[DAMAGE]=load_sample("Sound/Hit2.wav");
 }
 
