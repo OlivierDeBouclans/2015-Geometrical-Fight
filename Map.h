@@ -59,7 +59,7 @@ class Map
 		std::map<int,SAMPLE*> vSoundList;
 
 		enum {PLAYER_SPRITE,XP_SPRITE};
-		enum {FIRE, EXPLOSION, SPEED, XP, DAMAGE};
+		enum {FIRE, EXPLOSION, SPEED, XP, DAMAGE, FORM_OPEN, FORM_CLOSE};
 
 		bool bPause;
 		Decoy* decoy;

@@ -361,6 +361,8 @@ void Player::unchangeAgressive()
 	fireDamage/=agressive_fire_coef;
 	contactDamage/=agressive_contact_coef;
 	defense/=agressive_defense_coef;
+
+	play_sample(pMap->vSoundList[Map::FORM_CLOSE],50,128,SOUND_SPEED,FALSE);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -380,6 +382,8 @@ void Player::unchangeSneaky()
 	contactDamage/=sneaky_contact_coef;
 	defense/=sneaky_defense_coef;
 	maxSpeed/=sneaky_speed_coef;
+
+	play_sample(pMap->vSoundList[Map::FORM_CLOSE],50,128,SOUND_SPEED,FALSE);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -400,6 +404,8 @@ void Player::unchangeSpeedy()
 	maxSpeed/=speedy_speed_coef;
 
 	m_pWeapon->setFireRate(m_pWeapon->fireRate()*PLAYER_SPEEDY_FIRE_RATE_COEF);
+
+	play_sample(pMap->vSoundList[Map::FORM_CLOSE],50,128,SOUND_SPEED,FALSE);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -420,6 +426,8 @@ void Player::unchangeDefensive()
 	defense/=defensive_defense_coef;
 	maxSpeed/=defensive_speed_coef;
 	lifeSteal=0;
+
+	play_sample(pMap->vSoundList[Map::FORM_CLOSE],50,128,SOUND_SPEED,FALSE);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -459,6 +467,8 @@ void Player::changeAgressive()
 	contactDamage*=agressive_contact_coef;
 	defense*=agressive_defense_coef;
 
+	play_sample(pMap->vSoundList[Map::FORM_OPEN],50,128,SOUND_SPEED,FALSE);
+
 	if(fury>FURY_ACTIVE_COST)
 		activeAgressive();
 }
@@ -475,6 +485,8 @@ void Player::changeSneaky()
 	contactDamage*=sneaky_contact_coef;
 	defense*=sneaky_defense_coef;
 	maxSpeed*=sneaky_speed_coef;
+
+	play_sample(pMap->vSoundList[Map::FORM_OPEN],50,128,SOUND_SPEED,FALSE);
 
 	if(fury>FURY_ACTIVE_COST)
 		activeSneaky();
@@ -493,6 +505,8 @@ void Player::changeSpeedy()
 	maxSpeed*=speedy_speed_coef;
 
 	m_pWeapon->setFireRate(m_pWeapon->fireRate()/PLAYER_SPEEDY_FIRE_RATE_COEF);
+
+	play_sample(pMap->vSoundList[Map::FORM_OPEN],50,128,SOUND_SPEED,FALSE);
 	
 	if(fury>FURY_ACTIVE_COST)
 		activeSpeedy();
@@ -511,6 +525,8 @@ void Player::changeDefensive()
 	defense*=defensive_defense_coef;
 	maxSpeed*=defensive_speed_coef;
 	lifeSteal=PLAYER_DEFENSIVE_LIFE_STEAL;
+
+	play_sample(pMap->vSoundList[Map::FORM_OPEN],50,128,SOUND_SPEED,FALSE);
 
 	if(fury>FURY_ACTIVE_COST)		
 		activeDefensive();

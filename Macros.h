@@ -14,6 +14,7 @@
 #define SPRITE_NUMBER_OF_DIRECTION 128
 
 #define ANIMATION_SPEED 25
+#define SOUND_SPEED 3000
 
 /************************************************************************/
 /*SYSTEM MACROS                                                       */

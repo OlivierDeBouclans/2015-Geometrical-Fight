@@ -163,7 +163,7 @@ void Map::hitEnemy(int EnemyIndex, bool fireDamage)
 			cd.launch(HIT_ENEMY);
 		}
 
-	play_sample(vSoundList[DAMAGE],60,128,1000,FALSE);
+	play_sample(vSoundList[DAMAGE],40,128,800,FALSE);
 
 	if(e->health<=0)
 		destroyEnemy(EnemyIndex);
@@ -252,7 +252,7 @@ void Map::destroyEnemy(int EnemyIndex)
 
 	delete vEnemies[EnemyIndex];
 	vEnemies.erase(vEnemies.begin()+EnemyIndex);
-	play_sample(vSoundList[EXPLOSION],40,128,1000,FALSE);
+	play_sample(vSoundList[EXPLOSION],60,128,1000,FALSE);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -270,6 +270,7 @@ void Map::hitPlayer(int damage)
 	if(m_pPlayer->health<=0)
 		exit(0);
 
+	play_sample(vSoundList[DAMAGE],40,128,1200,FALSE);
 	cd.launch(HIT_PLAYER);
 }
 
@@ -398,5 +399,7 @@ void Map::loadSound()
 	vSoundList[SPEED]=load_sample("Sound/Swoosh.wav");
 	vSoundList[XP]=load_sample("Sound/Click.wav");
 	vSoundList[DAMAGE]=load_sample("Sound/Hit2.wav");
+	vSoundList[FORM_OPEN]=load_sample("Sound/Reload.wav");
+	vSoundList[FORM_CLOSE]=load_sample("Sound/Reload2.wav");
 }
 
