@@ -1,5 +1,38 @@
-# Geometrical-Fight
-My geomtry wars's ripp off :P
+# Geometrical Fight
+
+![2015-01-28_23h15_02](https://cloud.githubusercontent.com/assets/10437041/5948313/3421f9e8-a744-11e4-83b6-ba069ca323eb.png)
+
+*  Click here to watch a [short demonstration video](http://youtu.be/-6kIIjLYO9o) 
+*  Click here to see the [commented version]() (in french [here]() )
+*  Feel free to download the [demo version]() to test the project 
+
+---
+
+## Description
+
+#### When
+
+
+#### What
+
+
+#### How
+
+
+---
+
+#### Note
+
+
+##Images
+
+![2015-01-28_23h10_08](https://cloud.githubusercontent.com/assets/10437041/5948308/3407ef08-a744-11e4-9a93-e670b6ac2657.png)
+![2015-01-28_23h10_29](https://cloud.githubusercontent.com/assets/10437041/5948309/3409b98c-a744-11e4-8f1c-de2f48e82b42.png)
+![2015-01-28_23h11_31](https://cloud.githubusercontent.com/assets/10437041/5948310/340e4498-a744-11e4-954a-b87f3a2b938c.png)
+![2015-01-28_23h12_41](https://cloud.githubusercontent.com/assets/10437041/5948312/34105daa-a744-11e4-8e7e-719fba4b8249.png)
+![2015-01-28_23h13_42](https://cloud.githubusercontent.com/assets/10437041/5948311/340f7bba-a744-11e4-9cfa-0bfa1de5c229.png)
+
+
 
 This project is a game I had in mind for a while but never really got to it...
 
