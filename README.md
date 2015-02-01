@@ -4,7 +4,7 @@
 
 *  Click here to watch a [short demonstration video](http://youtu.be/-6kIIjLYO9o) 
 *  Click here to see the [commented version](http://youtu.be/3MNceKLAS8E) (in french [here](http://youtu.be/IdFCsbensbQ) )
-*  Feel free to download the [demo version](https://github.com/OlivierDeBouclans/2013-Geometrical-Fight/raw/master/TryMe-GeometricalFight.rar) to test the project 
+*  Feel free to download the [demo version](https://github.com/OlivierDeBouclans/2015-Geometrical-Fight/raw/master/TryMe-GeometricaFight.rar) to test the project 
 
 ---
 
@@ -16,33 +16,33 @@ This project is a game I had in mind for a while but never really got to it. I j
 
 #### What
 
-This game is my revision of Geometry Wars. I really like this game but I always found that the gameplay was a bit too simple and could have more depth, be more fun. That's why I got the pretty basic idea to add to this game a RPG component, with XP and skills, making worth all this die and retry XD (beside just scoring). Also adding more features to the gameplay than just shooting.
+This game is **my revision of Geometry Wars**. I really like this game but I always found that the gameplay was a bit too simple and could have more depth, be more fun. That's why I got the pretty basic idea to add to this game a RPG component, with XP and skills, making worth all this die and retry XD (beside just scoring). Also adding more features to the gameplay than just shooting.
 
 The main idea is that the ship has 4 different forms you can alternate with. These forms are: Aggressive, Defensive, Speedy and Sneaky. Each form changes how the ship behaves and what ability it can use. There are 4 specific abilities per form: a passive, an active upon changing form, a modification of the main weapon and a special ability.
 
 Aggressive form:
-*Passive: Increased damage
-*Active: Area blast around the ship
-*Main weapon: two row of projectiles
-*Special: Temporally increased fire rate
+* Passive: Increased damage
+* Active: Area blast around the ship
+* Main weapon: two row of projectiles
+* Special: Temporally increased fire rate
 
 Defensive form:
-*Passive: Take less damage
-*Active: Temporary shield
-*Main weapon: Add life steal
-*Special: Can't move, increased life steal
+* Passive: Take less damage
+* Active: Temporary shield
+* Main weapon: Add life steal
+* Special: Can't move, increased life steal
 
 Speedy form:
-*Passive: Increased speed 
-*Active: Speed boost
-*Main weapon: Twice as fast
-*Special: Teleportation on a short distance
+* Passive: Increased speed 
+* Active: Speed boost
+* Main weapon: Twice as fast
+* Special: Teleportation on a short distance
 
 Sneaky form:
-*Passive: Smaller size
-*Active: Pass through enemies, can't shoot
-*Main weapon: bouncing projectiles
-*Special: Create a decoy
+* Passive: Smaller size
+* Active: Pass through enemies, can't shoot
+* Main weapon: bouncing projectiles
+* Special: Create a decoy
 
 To switch between forms, use special ability or even to keep the form, the ship need energy. Energy can be found when destroying enemies.
 
