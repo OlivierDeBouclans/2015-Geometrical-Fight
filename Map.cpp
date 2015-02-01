@@ -29,6 +29,7 @@ Map::Map(int width, int height): m_iWidth(width), m_iHeight(height), m_pPlayer(N
 
 	//createSprite();
 	loadSound();
+	//set_volume(0,0);
 
 	vSpriteList[PLAYER_SPRITE]=new Sprite("Player.bmp",64,64);
 	vSpriteList[XP_SPRITE]=new Sprite("Xp.bmp",12,12);
